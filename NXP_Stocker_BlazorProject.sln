@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXP_Stocker_BlazorProject", "NXP_Stocker_BlazorProject\NXP_Stocker_BlazorProject.csproj", "{185539DC-C8A4-4D12-833D-59AADEE18BBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibraryB_NXP", "..\CommonLibraryB_NXP\CommonLibraryB_NXP\CommonLibraryB_NXP.csproj", "{77D671BA-77D1-4A56-8F4F-D082A094B632}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{185539DC-C8A4-4D12-833D-59AADEE18BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{185539DC-C8A4-4D12-833D-59AADEE18BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{185539DC-C8A4-4D12-833D-59AADEE18BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77D671BA-77D1-4A56-8F4F-D082A094B632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77D671BA-77D1-4A56-8F4F-D082A094B632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77D671BA-77D1-4A56-8F4F-D082A094B632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77D671BA-77D1-4A56-8F4F-D082A094B632}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
