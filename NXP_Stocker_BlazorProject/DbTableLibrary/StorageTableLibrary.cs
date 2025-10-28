@@ -194,17 +194,54 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     //***************************************//
 
+    public partial class StorageTableLibrary
+    {
+        List<int> pierZone { get; set; } = new List<int>()
+        {
+            20, 21
+        };
+
+        List<int> bufferZone { get; set; } = new List<int>()
+        {
+            13, 14
+        };
+
+        List<int> storageZone { get; set; } = new List<int>()
+        {
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+        };
+    }
+
     public partial class StorageTableLibrary : IStorageTableOperate
     {
-        public async Task<(bool status, string msg, List<StorageTable> list)> GetAllStoragePerPier(string PierName)
+        public async Task<(bool status, string msg, List<StorageTable> list)> GetAllStorageAndBuffer(string PierName)
         {
             try
             {
-                List<StorageTable> result = listStorageTable.Where(x => x.PierName == PierName).ToList();
+                List<StorageTable> result = listStorageTable.Where(x => x.PierName == PierName
+                                                                     && !pierZone.Contains(x.Zone))
+                                                            .ToList();
 
                 return (true, "success", result);
             }
             catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
+        public async Task<(bool status, string msg, StorageTable teble)> GetEmptyBuffer(string PierName, int BoardSize)
+        {
+            try
+            {
+                StorageTable result = listStorageTable.FirstOrDefault(x => x.PierName == PierName
+                                                                        && (x.BoardSizeSpec == BoardSize || x.BoardSizeSpec == 2)
+                                                                        && !pierZone.Contains(x.Zone)
+                                                                        && !storageZone.Contains(x.Zone));
+
+                return (true, "success", result);
+            }
+            catch (Exception ex)
             {
                 return (false, ex.Message, null);
             }
@@ -214,7 +251,10 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             try
             {
-                StorageTable result = listStorageTable.FirstOrDefault(x => x.PierName == PierName && x.BoardSizeSpec == BoardSize);
+                StorageTable result = listStorageTable.FirstOrDefault(x => x.PierName == PierName 
+                                                                        && (x.BoardSizeSpec == BoardSize || x.BoardSizeSpec == 2)
+                                                                        && !pierZone.Contains(x.Zone)
+                                                                        && !bufferZone.Contains(x.Zone));
 
                 return (true, "success", result);
             }
@@ -224,7 +264,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, StorageTable teble)> GetTargetStroage(string PierName, string Barcode)
+        public async Task<(bool status, string msg, StorageTable teble)> GetTargetBoard(string PierName, string Barcode)
         {
             try
             {
