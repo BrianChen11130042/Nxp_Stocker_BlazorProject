@@ -4,5 +4,7 @@
     public interface IPierMissionTableOperate
     {
         Task<(bool status, string msg, PierMissionTable table)> AddPierMission(PierMissionTable data);
+
+        Task<(bool status, string msg, PierMissionTable table)> GetNewPierMission(string PierName);
     }
 }

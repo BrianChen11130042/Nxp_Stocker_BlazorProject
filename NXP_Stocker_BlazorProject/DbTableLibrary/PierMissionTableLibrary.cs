@@ -1,4 +1,5 @@
-﻿using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
+﻿using DevExpress.ClipboardSource.SpreadsheetML;
+using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
 
 namespace NXP_Stocker_BlazorProject.DbTableLibrary
 {
@@ -63,6 +64,22 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
                 return (true, string.Empty, table);
 
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
+        public async Task<(bool status, string msg, PierMissionTable table)> GetNewPierMission(string PierName)
+        {
+            try
+            {
+                PierMissionTable table = listPierMissionTable.FirstOrDefault(x => x.PierName == PierName
+                                                                               && x.IsStart == false
+                                                                               && x.IsFinish == false);
+
+                return (true, string.Empty, table);
             }
             catch(Exception ex)
             {

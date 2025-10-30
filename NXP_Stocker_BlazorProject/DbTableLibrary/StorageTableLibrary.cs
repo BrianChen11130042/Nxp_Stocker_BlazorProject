@@ -214,6 +214,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     public partial class StorageTableLibrary : IStorageTableOperate
     {
+
         public async Task<(bool status, string msg, List<StorageTable> list)> GetAllStorageAndBuffer(string PierName)
         {
             try
@@ -230,11 +231,30 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
+        public async Task<(bool status, string msg, StorageTable teble)> GetEmptyPier(string PierName, int BoardSize)
+        {
+            try
+            {
+                StorageTable result = listStorageTable.FirstOrDefault(x => x.PierName == PierName
+                                                                        && x.IsOccupy == false
+                                                                        && (x.BoardSizeSpec == BoardSize || x.BoardSizeSpec == 2)
+                                                                        && !bufferZone.Contains(x.Zone)
+                                                                        && !storageZone.Contains(x.Zone));
+
+                return (true, string.Empty, result);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
         public async Task<(bool status, string msg, StorageTable teble)> GetEmptyBuffer(string PierName, int BoardSize)
         {
             try
             {
                 StorageTable result = listStorageTable.FirstOrDefault(x => x.PierName == PierName
+                                                                        && x.IsOccupy == false
                                                                         && (x.BoardSizeSpec == BoardSize || x.BoardSizeSpec == 2)
                                                                         && !pierZone.Contains(x.Zone)
                                                                         && !storageZone.Contains(x.Zone));
@@ -252,6 +272,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             try
             {
                 StorageTable result = listStorageTable.FirstOrDefault(x => x.PierName == PierName 
+                                                                        && x.IsOccupy == false
                                                                         && (x.BoardSizeSpec == BoardSize || x.BoardSizeSpec == 2)
                                                                         && !pierZone.Contains(x.Zone)
                                                                         && !bufferZone.Contains(x.Zone));

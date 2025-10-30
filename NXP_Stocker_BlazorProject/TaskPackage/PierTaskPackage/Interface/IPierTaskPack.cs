@@ -2,6 +2,16 @@
 {
     public interface IPierTaskPack
     {
+        Task<bool> GetPierName();
 
+        Task<bool> CheckNewMission();
+
+        bool IsInputLargeBoard();
+
+        bool IsInputSmallBoard();
+
+        bool IsOutputLargeBoard();
+
+        bool IsOutputSmallBoard();
     }
 }
