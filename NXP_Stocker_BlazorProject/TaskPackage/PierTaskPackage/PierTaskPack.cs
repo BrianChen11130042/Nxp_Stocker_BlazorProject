@@ -1,7 +1,6 @@
 ﻿using CommonLibraryB.Tools.LogWritter;
 using CommonLibraryB_NXP.Library.PLC;
 using CommonLibraryB_NXP.Library.PLC.Adapter;
-using NLog.Targets;
 using NXP_Stocker_BlazorProject.CommonService.Data;
 using NXP_Stocker_BlazorProject.CommonService.Data.Interface;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
@@ -46,9 +45,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             await INLogObser.NotifyNLog(EStatus.Info, log);
         }
 
-        const string info = "Inform";
+        string info { get; set; } = "Inform";
 
-        const string err = "Error";
+        string err { get; set; } = "Error";
+
+        int pierStatus { get; set; } = 0;
 
         Dictionary<int, string> dcPierMission { get; set; } = new Dictionary<int, string>()
         {
@@ -106,11 +107,40 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
+        public async Task<bool> SetTableMissionFinsih()
+        {
+            IDataService.PierMission.IsFinish = true;
+            IDataService.PierMission.FinishTime = DateTime.Now;
+
+            if(await IDataService.SetPierMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> SetLogMissionStart()
         {
-            string temp = dcPierMission[IDataService.PierMission.ActionCode] + "_任務開始";
+            string temp = IDataService.PierName + dcPierMission[IDataService.PierMission.ActionCode] + "_任務開始";
 
             if (await IDataService.AddLogByPier(info, temp))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetLogMissionFinish()
+        {
+            string temp = IDataService.PierName + dcPierMission[IDataService.PierMission.ActionCode] + "_任務結束";
+
+            if(await IDataService.AddLogByPier(info, temp))
             {
                 return true;
             }
@@ -151,11 +181,67 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
-        public async Task<bool> SetPlcInputLargeBoard()
+        public async Task<bool> SetPlcStartInputLargeBoard()
         {
             pierLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
 
             if (await IPeirOp.SetPierMissionStart(pier))
+            {
+                return true;
+            }
+            else
+            {
+                string nlog = pierLib.Packages[pier].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        Dictionary<int, string> dcInputLargeBoard { get; set; } = new Dictionary<int, string>()
+        {
+            { 0, "NO DATA"},
+            { 1, "等人按鈕1"},
+            { 100, "Shuttle伸出條件不滿足"},
+            { 2, "Shuttle伸出中"},
+            { 3, "等人按鈕2"},
+            { 102, "Shuttle收回條件不滿足"},
+            { 4, "Shuttle收回中"},
+            { 5, "入大板完成"}
+        };
+
+        public async Task<bool> GetPlcInputLargeBoardStatus()
+        {
+            if(await IPeirOp.GetPierStatus(pier))
+            {
+                pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
+                IDataService.PierMission.StepStatus = dcInputLargeBoard[pierStatus];
+                return true;
+            }
+            else
+            {
+                string nlog = pierLib.Packages[pier].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public bool IsInputLargeBoardFinish()
+        {
+            if(pierStatus == 5)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetPlcFinshInputLargeBoard()
+        {
+            pierLib.Packages[pier].property.setPier.missionFinish = 0;
+
+            if(await IPeirOp.SetPierMissionFinish(pier))
             {
                 return true;
             }

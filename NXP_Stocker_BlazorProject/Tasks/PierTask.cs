@@ -15,6 +15,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             interval = 10;
         }
 
+        public Task<bool> GetPlcInputLargeBoardStatus()
+        {
+            return pack.GetPlcInputLargeBoardStatus();
+        }
+
         public Task<bool> GetPlcPierName()
         {
             return pack.GetPlcPierName();
@@ -28,6 +33,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
         public bool IsInputLargeBoard()
         {
             return pack.IsInputLargeBoard();
+        }
+
+        public bool IsInputLargeBoardFinish()
+        {
+            return pack.IsInputLargeBoardFinish();
         }
 
         public bool IsInputSmallBoard()
@@ -45,14 +55,29 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.IsOutputSmallBoard();
         }
 
+        public Task<bool> SetLogMissionFinish()
+        {
+            return pack.SetLogMissionFinish();
+        }
+
         public Task<bool> SetLogMissionStart()
         {
             return pack.SetLogMissionStart();
         }
 
-        public Task<bool> SetPlcInputLargeBoard()
+        public Task<bool> SetPlcFinshInputLargeBoard()
         {
-            return pack.SetPlcInputLargeBoard();
+            return pack.SetPlcFinshInputLargeBoard();
+        }
+
+        public Task<bool> SetPlcStartInputLargeBoard()
+        {
+            return pack.SetPlcStartInputLargeBoard();
+        }
+
+        public Task<bool> SetTableMissionFinsih()
+        {
+            return pack.SetTableMissionFinsih();
         }
 
         public Task<bool> SetTableMissionStart()
@@ -150,7 +175,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch (S3)
                     {
                         case 0:
-                            if (await SetPlcInputLargeBoard())
+                            if (await SetPlcStartInputLargeBoard())
                             {
                                 Set(10);
                             }
@@ -179,6 +204,68 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdateUIPierLog();
                                 Set(30);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 30:
+                            if(await GetPlcInputLargeBoardStatus())
+                            {
+                                await UpdateUIPierMission();
+                                Set(40);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 40:
+                            if(IsInputLargeBoardFinish())
+                            {
+                                Set(50);
+                            }
+                            else
+                            {
+                                Set(30);
+                            }
+                            break;
+
+                        case 50:
+                            if(await SetPlcFinshInputLargeBoard())
+                            {
+                                Set(60);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 60:
+                            if(await SetTableMissionFinsih())
+                            {
+                                await UpdateUIPierMission();
+                                Set(70);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 70:
+                            if(await SetLogMissionFinish())
+                            {
+                                await UpdateUIPierLog();
+                                Set(EPierAction.CheckMission, 0);
                             }
                             else
                             {
