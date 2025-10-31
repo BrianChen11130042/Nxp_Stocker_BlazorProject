@@ -6,10 +6,18 @@
 
         Task<bool> GetTableNewMission();
 
+        Task<bool> SetTableMissionStart();
+
+        Task UpdateUIPierMission();
+
+        Task UpdateUIPierLog();
+
         //入大板
         bool IsInputLargeBoard();
 
         Task<bool> SetPlcInputLargeBoard();
+
+        Task<bool> SetLogMissionStart();
 
 
 

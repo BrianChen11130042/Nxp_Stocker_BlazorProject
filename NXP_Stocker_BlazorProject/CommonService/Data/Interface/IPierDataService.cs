@@ -8,6 +8,14 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         PierMissionTable PierMission { get; set; }
 
+        List<LogTable> ListPierLog { get; set; }
+
+        //PierMissionTable
         Task<bool> GetNewPierMissionTable();
+
+        Task<bool> SetPierMissionTable();
+
+        //LogTable
+        Task<bool> AddLogByPier(string type, string log);
     }
 }

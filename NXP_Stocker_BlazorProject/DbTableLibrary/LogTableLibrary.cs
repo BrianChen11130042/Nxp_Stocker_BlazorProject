@@ -1,4 +1,5 @@
-﻿using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
+﻿using System.Collections.Generic;
+using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
 
 namespace NXP_Stocker_BlazorProject.DbTableLibrary
 {
@@ -45,7 +46,9 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             {
                 listLogTable.Add(data);
 
-                return (true, string.Empty, listLogTable);
+                List<LogTable> list = listLogTable.Where(x => x.Equipment == data.Equipment).ToList();
+
+                return (true, string.Empty, list);
 
             }
             catch(Exception ex)

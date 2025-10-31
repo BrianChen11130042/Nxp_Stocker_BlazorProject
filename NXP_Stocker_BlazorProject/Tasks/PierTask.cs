@@ -45,9 +45,29 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.IsOutputSmallBoard();
         }
 
+        public Task<bool> SetLogMissionStart()
+        {
+            return pack.SetLogMissionStart();
+        }
+
         public Task<bool> SetPlcInputLargeBoard()
         {
             return pack.SetPlcInputLargeBoard();
+        }
+
+        public Task<bool> SetTableMissionStart()
+        {
+            return pack.SetTableMissionStart();
+        }
+
+        public Task UpdateUIPierLog()
+        {
+            return pack.UpdateUIPierLog();
+        }
+
+        public Task UpdateUIPierMission()
+        {
+            return pack.UpdateUIPierMission();
         }
     }
 
@@ -91,6 +111,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 10:
                             if(await GetTableNewMission())
                             {
+                                await UpdateUIPierMission();
                                 Set(20);
                             }
                             else
@@ -126,12 +147,38 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     break;
 
                 case EPierAction.InputLargeBoard:
-                    switch(S3)
+                    switch (S3)
                     {
                         case 0:
-                            if(await SetPlcInputLargeBoard())
+                            if (await SetPlcInputLargeBoard())
                             {
                                 Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(await SetTableMissionStart())
+                            {
+                                await UpdateUIPierMission();
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if(await SetLogMissionStart())
+                            {
+                                await UpdateUIPierLog();
+                                Set(30);
                             }
                             else
                             {

@@ -64,6 +64,20 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 _pierMission = value;
             }
         }
+
+        List<LogTable> _listPierLog { get; set; } = new List<LogTable>();
+
+        public List<LogTable> ListPierLog
+        {
+            get
+            {
+                return _listPierLog;
+            }
+            set
+            {
+                _listPierLog = value;
+            }
+        }
     }
 
     public partial class PierDataService
@@ -90,6 +104,62 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 await writeNLogError(result.msg);
                 return result.status;
             }
+        }
+
+        public async Task<bool> SetPierMissionTable()
+        {
+            var result = await IPierMissionTableOp.UpdatePierMission(PierMission);
+
+            if(result.status)
+            {
+                PierMission = result.table;
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+    }
+
+    public partial class PierDataService
+    {
+        string _pierLog { get; set; } = string.Empty; 
+
+        public async Task<bool> AddLogByPier(string type, string log)
+        {
+            if (_pierLog == log)
+                return true;
+            else
+                _pierLog = log;
+
+            var table = _getLogTable(PierName, type, log);
+            var result = await ILogTableOp.AddLogData(table);
+
+            if(result.status)
+            {
+                ListPierLog = result.list;
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
+        LogTable _getLogTable(string equip, string logType, string msg)
+        {
+            LogTable table = new LogTable()
+            {
+                LogType = logType,
+                Equipment = equip,
+                Msg = msg,
+                RecordTime = DateTime.Now,
+            };
+
+            return table;
         }
     }
 }
