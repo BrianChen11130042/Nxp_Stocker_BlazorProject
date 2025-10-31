@@ -2,11 +2,16 @@
 {
     public interface IPierTaskPack
     {
-        Task<bool> GetPierName();
+        Task<bool> GetPlcPierName();
 
-        Task<bool> CheckNewMission();
+        Task<bool> GetTableNewMission();
 
+        //入大板
         bool IsInputLargeBoard();
+
+        Task<bool> SetPlcInputLargeBoard();
+
+
 
         bool IsInputSmallBoard();
 

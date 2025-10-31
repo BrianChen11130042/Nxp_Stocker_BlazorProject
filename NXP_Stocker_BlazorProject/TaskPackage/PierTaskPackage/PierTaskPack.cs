@@ -42,16 +42,9 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
         }
     }
 
-    public partial class PierTaskPack<EPLC>
-    {
-
-
-    }
-
     public partial class PierTaskPack<EPLC> : IPierTaskPack
     {
-
-        public async Task<bool> GetPierName()
+        public async Task<bool> GetPlcPierName()
         {
             if(await IPeirOp.GetDeviceName(pier))
             {
@@ -66,23 +59,9 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
-        public async Task<bool> CheckNewMission()
+        public async Task<bool> GetTableNewMission()
         {
             if(await IDataService.GetNewPierMissionTable())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool IsInputLargeBoard()
-        {
-            if (!string.IsNullOrEmpty(IDataService.PierMission.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.PierMission.Barcode) 
-                && IDataService.PierMission.ActionCode == 1)
             {
                 return true;
             }
@@ -130,6 +109,39 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
             else
             {
+                return false;
+            }
+        }
+    }
+
+    public partial class PierTaskPack<EPLC>
+    {
+        public bool IsInputLargeBoard()
+        {
+            if (!string.IsNullOrEmpty(IDataService.PierMission.MissionSerialNumber)
+                && !string.IsNullOrEmpty(IDataService.PierMission.Barcode)
+                && IDataService.PierMission.ActionCode == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetPlcInputLargeBoard()
+        {
+            pierLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
+
+            if (await IPeirOp.SetPierMissionStart(pier))
+            {
+                return true;
+            }
+            else
+            {
+                string nlog = pierLib.Packages[pier].errorLog;
+                await writeNLogError(nlog);
                 return false;
             }
         }

@@ -15,14 +15,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
             interval = 10;
         }
 
-        public async Task<bool> GetPierName()
+        public Task<bool> GetPlcPierName()
         {
-            return await pack.GetPierName();
+            return pack.GetPlcPierName();
         }
 
-        public async Task<bool> CheckNewMission()
+        public Task<bool> GetTableNewMission()
         {
-            return await pack.CheckNewMission();
+            return pack.GetTableNewMission();
         }
 
         public bool IsInputLargeBoard()
@@ -43,6 +43,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
         public bool IsOutputSmallBoard()
         {
             return pack.IsOutputSmallBoard();
+        }
+
+        public Task<bool> SetPlcInputLargeBoard()
+        {
+            return pack.SetPlcInputLargeBoard();
         }
     }
 
@@ -72,7 +77,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            if(await GetPierName())
+                            if(await GetPlcPierName())
                             {
                                 Set(10);
                             }
@@ -84,7 +89,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(await CheckNewMission())
+                            if(await GetTableNewMission())
                             {
                                 Set(20);
                             }
@@ -115,6 +120,23 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             else
                             {
                                 Set(EPierAction.CheckMission, 0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case EPierAction.InputLargeBoard:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await SetPlcInputLargeBoard())
+                            {
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
                             }
                             break;
                     }
