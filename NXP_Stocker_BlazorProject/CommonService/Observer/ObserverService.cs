@@ -84,5 +84,16 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 }
             }
         }
+
+        public async Task NotifyPierTable(string pier, WarehouseTable pierTable)
+        {
+            if(osPier != null)
+            {
+                foreach(var o in osPier)
+                {
+                    await o.UpdatePierTable(pier, pierTable);
+                }
+            }
+        }
     }
 }

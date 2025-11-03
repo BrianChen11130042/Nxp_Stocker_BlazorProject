@@ -10,17 +10,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     {
         readonly ILogTableOperate ILogTableOp;
         readonly IPierMissionTableOperate IPierMissionTableOp;
-        readonly IStorageTableOperate IStorageTableOp;
+        readonly IWarehouseTableOperate IWarehouseTableOp;
         readonly INLogWritterObservable INLogWritter;
 
         public PierDataService(ILogTableOperate ILogTableOp,
                                IPierMissionTableOperate IPierMissionTableOp,
-                               IStorageTableOperate IStorageTableOp,
+                               IWarehouseTableOperate IWarehouseTableOp,
                                ObserverService observerService)
         {
             this.ILogTableOp = ILogTableOp;
             this.IPierMissionTableOp = IPierMissionTableOp;
-            this.IStorageTableOp = IStorageTableOp;
+            this.IWarehouseTableOp = IWarehouseTableOp;
             this.INLogWritter = observerService;
         }
 
@@ -78,6 +78,20 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 _listPierLog = value;
             }
         }
+
+        WarehouseTable _pierTable { get; set; } = new WarehouseTable();
+
+        public WarehouseTable PierTable
+        {
+            get
+            {
+                return _pierTable;
+            }
+            set
+            {
+                _pierTable = value;
+            }
+        }
     }
 
     public partial class PierDataService
@@ -119,6 +133,110 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             {
                 await writeNLogError(result.msg);
                 return result.status;
+            }
+        }
+    }
+
+    public partial class PierDataService
+    {
+        public async Task<bool> GetPierTaget()
+        {
+            int sizeSpec = getBoardSize(PierMission.ActionCode);
+            bool occupy = getIsOccupy(PierMission.ActionCode);
+
+            var result = await IWarehouseTableOp.GetPierTarget(PierMission.PierName, sizeSpec, occupy);
+
+            if(result.status)
+            {
+                PierTable = result.table;
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
+        int getBoardSize(int actionCode)
+        {
+            switch(actionCode)
+            {
+                case 1:
+                case 2:
+                    return 0;
+
+                case 3:
+                case 4:
+                    return 1;
+
+                default:
+                    return 2;
+            }
+        }
+
+        bool getIsOccupy(int actionCode)
+        {
+            switch (actionCode)
+            {
+                case 1:
+                case 3:
+                    return false;
+
+                case 2:
+                case 4:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        public async Task<bool> SetPierTaget()
+        {
+            SetPierTable(PierMission.ActionCode);
+
+            var result = await IWarehouseTableOp.SetPierTarget(PierTable);
+
+            if (result.status)
+            {
+                PierTable = result.table;
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
+        void SetPierTable(int actionCode)
+        {
+            switch(actionCode)
+            {
+                case 1:
+                    PierTable.IsOccupy = true;
+                    PierTable.Barcode = PierMission.Barcode;
+                    PierTable.BoardSize = 0;
+                    break;
+
+                case 2:
+                    PierTable.IsOccupy = false;
+                    PierTable.Barcode = string.Empty;
+                    PierTable.BoardSize = 999;
+                    break;
+
+                case 3:
+                    PierTable.IsOccupy = true;
+                    PierTable.Barcode = PierMission.Barcode;
+                    PierTable.BoardSize = 1;
+                    break;
+
+                case 4:
+                    PierTable.IsOccupy = false;
+                    PierTable.Barcode = string.Empty;
+                    PierTable.BoardSize = 999;
+                    break;
             }
         }
     }

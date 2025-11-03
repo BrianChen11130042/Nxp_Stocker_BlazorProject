@@ -10,6 +10,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         List<LogTable> ListPierLog { get; set; }
 
+        WarehouseTable PierTable { get; set; }
+
         //PierMissionTable
         Task<bool> GetNewPierMissionTable();
 
@@ -17,5 +19,10 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         //LogTable
         Task<bool> AddLogByPier(string type, string log);
+
+        //WharehouseTable
+        Task<bool> GetPierTaget();
+
+        Task<bool> SetPierTaget();
     }
 }
