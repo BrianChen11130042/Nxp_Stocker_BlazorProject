@@ -85,13 +85,71 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyPierTable(string pier, WarehouseTable pierTable)
+        public async Task NotifyPierPortTable(string pier, WarehouseTable pierTable)
         {
             if(osPier != null)
             {
                 foreach(var o in osPier)
                 {
-                    await o.UpdatePierTable(pier, pierTable);
+                    await o.UpdatePierPortTable(pier, pierTable);
+                }
+            }
+        }
+    }
+
+    public partial class ObserverService : IRobotUIObserverable
+    {
+
+        List<IRobotUIObserver> osRobot { get; set; }
+
+        public void AddRobotUIObserver(IRobotUIObserver o)
+        {
+            if(osRobot == null)
+                osRobot = new List<IRobotUIObserver>();
+
+            if(!osRobot.Contains(o))
+            {
+                osRobot.Add(o);
+            }
+        }
+
+        public void RemoveRobotUIObserver(IRobotUIObserver o)
+        {
+            if(osRobot != null && osRobot.Contains(o))
+            {
+                osRobot.Remove(o);
+            }
+        }
+
+        public async Task NotifyRobotLog(string pier, List<LogTable> list)
+        {
+            if(osRobot != null)
+            {
+                foreach(var o in osRobot)
+                {
+                    await o.UpdateRobotLog(pier, list);
+                }
+            }
+        }
+
+        public async Task NotifyRobotMission(string pier, RobotMissionTable table)
+        {
+            if(osRobot != null)
+            {
+                foreach(var o in osRobot)
+                {
+                    await o.UpdateRobotMission(pier, table);
+                }
+            }
+        }
+
+        public async Task NotifyStorgePortTable(string pier, WarehouseTable pickPort, WarehouseTable dropPort)
+        {
+            if(osRobot != null)
+            {
+                foreach(var o in osRobot)
+                {
+                    await o.UpdateStoragePortTable(pier, pickPort, dropPort);
                 }
             }
         }

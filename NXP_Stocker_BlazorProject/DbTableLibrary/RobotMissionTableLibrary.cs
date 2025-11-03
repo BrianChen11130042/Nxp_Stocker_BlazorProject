@@ -46,6 +46,8 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         public DateTime StartTime { get; set; }
 
+        public string Status { get; set; }
+
         public bool IsError { get; set; }
 
         public int ErrorCode { get; set; }

@@ -12,7 +12,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         Task NotifyPierLog(string pier, List<LogTable> list);
 
-        Task NotifyPierTable(string pier, WarehouseTable pierTable);
+        Task NotifyPierPortTable(string pier, WarehouseTable pierTable);
     }
 
 
@@ -22,6 +22,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         Task UpdatePierLog(string pier, List<LogTable> list);
 
-        Task UpdatePierTable(string pier, WarehouseTable pierTable);
+        Task UpdatePierPortTable(string pier, WarehouseTable pierTable);
     }
 }

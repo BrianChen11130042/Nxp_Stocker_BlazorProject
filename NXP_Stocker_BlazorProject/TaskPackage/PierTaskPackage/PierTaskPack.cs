@@ -186,7 +186,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task UpdateUIPierTable()
         {
-            await IPierObser.NotifyPierTable(IDataService.PierName, IDataService.PierTable);
+            await IPierObser.NotifyPierPortTable(IDataService.PierName, IDataService.PierTable);
         }
     }
 
