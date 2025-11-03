@@ -3,6 +3,14 @@
 
     public interface IRobotTaskPack
     {
+        Task<bool> GetRobotStatus();
 
+        bool IsRobotError();
+
+        Task<bool> GetTableNewMission();
+
+        Task UpdateUIRobotMission();
+
+        bool IsGetNewMission();
     }
 }

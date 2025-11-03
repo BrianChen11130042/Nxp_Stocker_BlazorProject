@@ -11,8 +11,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         List<LogTable> ListRobotLog { get; set; }
 
-        WarehouseTable PickPort { get; set; }
-
-        WarehouseTable DropPort { get; set; }
+        //RobotMissionTable
+        Task<bool> GetNewRobotMissionTable();
     }
 }

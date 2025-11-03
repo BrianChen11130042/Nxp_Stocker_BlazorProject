@@ -84,17 +84,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 }
             }
         }
-
-        public async Task NotifyPierPortTable(string pier, WarehouseTable pierTable)
-        {
-            if(osPier != null)
-            {
-                foreach(var o in osPier)
-                {
-                    await o.UpdatePierPortTable(pier, pierTable);
-                }
-            }
-        }
     }
 
     public partial class ObserverService : IRobotUIObserverable
@@ -139,17 +128,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 foreach(var o in osRobot)
                 {
                     await o.UpdateRobotMission(pier, table);
-                }
-            }
-        }
-
-        public async Task NotifyStorgePortTable(string pier, WarehouseTable pickPort, WarehouseTable dropPort)
-        {
-            if(osRobot != null)
-            {
-                foreach(var o in osRobot)
-                {
-                    await o.UpdateStoragePortTable(pier, pickPort, dropPort);
                 }
             }
         }

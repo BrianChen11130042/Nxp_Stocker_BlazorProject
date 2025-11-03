@@ -52,7 +52,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         public int ErrorCode { get; set; }
 
-        bool IsFinish { get; set; }
+        public bool IsFinish { get; set; }
 
         public DateTime FinishTime { get; set; }
     }
@@ -70,6 +70,21 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 RobotMissionTable table = listRobotMissionTable.FirstOrDefault(x => x.PierName == data.PierName 
                                                                                  && x.MissionSerialNumber == data.MissionSerialNumber
                                                                                  && x.Barcode == data.Barcode);
+
+                return (true, string.Empty, table);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
+        public async Task<(bool status, string msg, RobotMissionTable table)> GetNewRobotMission()
+        {
+            try
+            {
+                RobotMissionTable table = listRobotMissionTable.FirstOrDefault(x => x.IsStart == false
+                                                                                 && x.IsFinish == false);
 
                 return (true, string.Empty, table);
             }

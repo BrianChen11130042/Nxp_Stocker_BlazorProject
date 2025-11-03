@@ -11,8 +11,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         Task NotifyRobotMission(string pier, RobotMissionTable table);
 
         Task NotifyRobotLog(string pier, List<LogTable> list);
-
-        Task NotifyStorgePortTable(string pier, WarehouseTable pickPort, WarehouseTable dropPort);
     }
 
     public interface IRobotUIObserver
@@ -20,7 +18,5 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         Task UpdateRobotMission(string pier, RobotMissionTable table);
 
         Task UpdateRobotLog(string pier, List<LogTable> list);
-
-        Task UpdateStoragePortTable(string pier, WarehouseTable pickPort, WarehouseTable dropPort);
     }
 }

@@ -13,8 +13,6 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary.Interface
 
         Task<(bool status, string msg, WarehouseTable table)> SetPierTarget(WarehouseTable data);
 
-        Task<(bool status, string msg, WarehouseTable table)> GetTargetBoard(string PierName, string Barcode);
-
-        Task<(bool status, string msg, List<WarehouseTable> list)> GetAllStorageAndBuffer(string PierName);
+        Task<(bool status, string msg, WarehouseTable table)> GetPickTarget(string PierName, string Barcode);
     }
 }

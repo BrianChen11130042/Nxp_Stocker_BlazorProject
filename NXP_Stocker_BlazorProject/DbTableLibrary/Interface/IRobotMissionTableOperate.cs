@@ -4,5 +4,7 @@
     public interface IRobotMissionTableOperate
     {
         Task<(bool status, string msg, RobotMissionTable table)> AddRobotMission(RobotMissionTable data);
+
+        Task<(bool status, string msg, RobotMissionTable table)> GetNewRobotMission();
     }
 }

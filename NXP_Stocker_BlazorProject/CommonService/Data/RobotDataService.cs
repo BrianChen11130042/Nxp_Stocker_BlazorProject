@@ -11,17 +11,14 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     {
         readonly ILogTableOperate ILogTableOp;
         readonly IRobotMissionTableOperate IRobotTableOp;
-        readonly IWarehouseTableOperate IWarehouseTableOp;
         readonly INLogWritterObservable INLogWritter;
 
         public RobotDataService(ILogTableOperate ILogTableOp,
                                 IRobotMissionTableOperate IRobotTableOp,
-                                IWarehouseTableOperate IWarehouseTableOp,
                                 ObserverService observerService)
         {
             this.ILogTableOp = ILogTableOp;
             this.IRobotTableOp = IRobotTableOp;
-            this.IWarehouseTableOp = IWarehouseTableOp;
             this.INLogWritter = observerService;
         }
 
@@ -79,32 +76,33 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 _listRobotLog = value;
             }
         }
+    }
 
-        WarehouseTable _pickPort { get; set; } = new WarehouseTable();
-
-        public WarehouseTable PickPort
+    public partial class RobotDataService
+    {
+        public async Task<bool> GetNewRobotMissionTable()
         {
-            get
-            {
-                return _pickPort;
-            }
-            set
-            {
-                _pickPort = value;
-            }
-        }
+            var result = await IRobotTableOp.GetNewRobotMission();
 
-        WarehouseTable _dropPort { get; set; } = new WarehouseTable();
+            if(result.status)
+            {
+                if(result.table != null)
+                {
+                    RobotMission = result.table;
+                    PierName = result.table.PierName;
+                }
+                else
+                {
+                    RobotMission = new RobotMissionTable();
+                    PierName = string.Empty;
+                }
 
-        public WarehouseTable DropPort
-        {
-            get
-            {
-                return _dropPort;
+                return result.status;
             }
-            set
+            else
             {
-                _dropPort = value;
+                await writeNLogError(result.msg);
+                return result.status;
             }
         }
     }

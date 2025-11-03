@@ -214,23 +214,6 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     public partial class WarehouseTableLibrary : IWarehouseTableOperate
     {
-
-        public async Task<(bool status, string msg, List<WarehouseTable> list)> GetAllStorageAndBuffer(string PierName)
-        {
-            try
-            {
-                List<WarehouseTable> result = listWarehouseTable.Where(x => x.PierName == PierName
-                                                                     && !pierZone.Contains(x.Zone))
-                                                            .ToList();
-
-                return (true, "success", result);
-            }
-            catch(Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
-
         public async Task<(bool status, string msg, WarehouseTable table)> GetPierTarget(string PierName, int BoardSizeSpec, bool IsOccupy)
         {
             try
@@ -306,7 +289,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, WarehouseTable table)> GetTargetBoard(string PierName, string Barcode)
+        public async Task<(bool status, string msg, WarehouseTable table)> GetPickTarget(string PierName, string Barcode)
         {
             try
             {

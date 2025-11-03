@@ -54,6 +54,52 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
     public partial class RobotTaskPack<EPLC> : IRobotTaskPack
     {
+        //目前電控還沒給規格 先放著
 
+        public async Task<bool> GetRobotStatus()
+        {
+            return true;
+        }
+
+        public bool IsRobotError()
+        {
+            return false;
+        }
+
+        ///////////////////////////
+    }
+
+    public partial class RobotTaskPack<EPLC>
+    {
+        public async Task<bool> GetTableNewMission()
+        {
+            if(await IDataService.GetNewRobotMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsGetNewMission()
+        {
+            if (!string.IsNullOrEmpty(IDataService.PierName)
+               && !string.IsNullOrEmpty(IDataService.RobotMission.MissionSerialNumber)
+               && !string.IsNullOrEmpty(IDataService.RobotMission.Barcode))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task UpdateUIRobotMission()
+        {
+            await IRobotObser.NotifyRobotMission(IDataService.PierName, IDataService.RobotMission);
+        }
     }
 }

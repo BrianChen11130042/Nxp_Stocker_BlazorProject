@@ -92,30 +92,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
-        public async Task<bool> GetTablePierTarget()
-        {
-            if (await IDataService.GetPierTaget())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> SetTablePierTarge()
-        {
-            if(await IDataService.SetPierTaget())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public async Task<bool> SetTableMissionStart()
         {
             IDataService.PierMission.IsStart = true;
@@ -182,11 +158,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
         public async Task UpdateUIPierLog()
         {
             await IPierObser.NotifyPierLog(IDataService.PierName, IDataService.ListPierLog);
-        }
-
-        public async Task UpdateUIPierTable()
-        {
-            await IPierObser.NotifyPierPortTable(IDataService.PierName, IDataService.PierTable);
         }
     }
 
