@@ -132,4 +132,29 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
     }
+
+    public partial class ObserverService : IMissionAssignUIObserverable
+    {
+
+        List<IMissionAssignUIObserver> osMissionAssign { get; set; }
+
+        public void AddMissionAssignUIObserver(IMissionAssignUIObserver o)
+        {
+            if (osMissionAssign == null)
+                osMissionAssign = new List<IMissionAssignUIObserver>();
+
+            if(!osMissionAssign.Contains(o))
+            {
+                osMissionAssign.Add(o);
+            }
+        }
+
+        public void RemoveMissionAssignUIObserver(IMissionAssignUIObserver o)
+        {
+            if(osMissionAssign != null && osMissionAssign.Contains(o))
+            {
+                osMissionAssign.Remove(o);
+            }
+        }
+    }
 }
