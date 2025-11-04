@@ -13,5 +13,10 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         //RobotMissionTable
         Task<bool> GetNewRobotMissionTable();
+
+        Task<bool> SetRobotMissionTable();
+
+        //LogTable
+        Task<bool> AddLogByRobot(string type, string log);
     }
 }

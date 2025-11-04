@@ -14,6 +14,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             interval = 10;
         }
 
+        public Task<bool> GetPlcRobotStatus()
+        {
+            return pack.GetPlcRobotStatus();
+        }
+
         public Task<bool> GetRobotStatus()
         {
             return pack.GetRobotStatus();
@@ -34,6 +39,51 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.IsRobotError();
         }
 
+        public bool IsRobotFinish()
+        {
+            return pack.IsRobotFinish();
+        }
+
+        public Task<bool> SetLogMissionFinish()
+        {
+            return pack.SetLogMissionFinish();
+        }
+
+        public Task<bool> SetLogMissionStart()
+        {
+            return pack.SetLogMissionStart();
+        }
+
+        public Task<bool> SetPlcRobotFinish()
+        {
+            return pack.SetPlcRobotFinish();
+        }
+
+        public Task<bool> SetPlcRobotMission()
+        {
+            return pack.SetPlcRobotMission();
+        }
+
+        public Task<bool> SetPlcRobotStart()
+        {
+            return pack.SetPlcRobotStart();
+        }
+
+        public Task<bool> SetTableMissionFinish()
+        {
+            return pack.SetTableMissionFinish();
+        }
+
+        public Task<bool> SetTableMissionStart()
+        {
+            return pack.SetTableMissionStart();
+        }
+
+        public Task UpdateUIRobotLog()
+        {
+            return pack.UpdateUIRobotLog();
+        }
+
         public Task UpdateUIRobotMission()
         {
             return pack.UpdateUIRobotMission();
@@ -46,9 +96,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
         CheckError,
         CheckMission,
         Start,
-        Result,
-        Success,
-        Fail,
+        GetResult,
+        Finish,
+        Error,
     }
 
     public partial class RobotTask : FSMBase<ERobotAction, int>
@@ -106,11 +156,149 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 10:
                             if(IsGetNewMission())
                             {
-                                Set(20);
+                                Set(ERobotAction.Start, 0);
                             }
                             else
                             {
                                 Set(ERobotAction.CheckError, 0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case ERobotAction.Start:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await SetPlcRobotMission())
+                            {
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(await SetPlcRobotStart())
+                            {
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if(await SetTableMissionStart())
+                            {
+                                await UpdateUIRobotMission();
+                                Set(30);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+
+                        case 30:
+                            if(await SetLogMissionStart())
+                            {
+                                await UpdateUIRobotLog();
+                                Set(ERobotAction.GetResult, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case ERobotAction.GetResult:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await GetPlcRobotStatus())
+                            {
+                                await UpdateUIRobotMission();
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(IsRobotError())
+                            {
+                                //待處理
+                            }
+                            else
+                            {
+                                Set(20);
+                            }
+                            break;
+
+                        case 20:
+                            if(IsRobotFinish())
+                            {
+                                Set(ERobotAction.Finish, 0);
+                            }
+                            else
+                            {
+                                Set(0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case ERobotAction.Finish:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await SetPlcRobotFinish())
+                            {
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(await SetTableMissionFinish())
+                            {
+                                await UpdateUIRobotMission();
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if(await SetLogMissionFinish())
+                            {
+                                await UpdateUIRobotLog();
+                                Set(ERobotAction.CheckError, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
                             }
                             break;
                     }

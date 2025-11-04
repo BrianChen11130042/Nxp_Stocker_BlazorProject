@@ -11,6 +11,26 @@
 
         Task UpdateUIRobotMission();
 
+        Task UpdateUIRobotLog();
+
         bool IsGetNewMission();
+
+        Task<bool> SetPlcRobotMission();
+
+        Task<bool> SetPlcRobotStart();
+
+        Task<bool> SetTableMissionStart();
+
+        Task<bool> SetLogMissionStart();
+
+        Task<bool> GetPlcRobotStatus();
+
+        bool IsRobotFinish();
+
+        Task<bool> SetPlcRobotFinish();
+
+        Task<bool> SetTableMissionFinish();
+
+        Task<bool> SetLogMissionFinish();
     }
 }

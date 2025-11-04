@@ -46,7 +46,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         public DateTime StartTime { get; set; }
 
-        public string Status { get; set; }
+        public string Status { get; set; } //只是給UI看的狀態, 表示現在Pier動作做到哪(不用在資料庫中操作)
 
         public bool IsError { get; set; }
 
@@ -87,6 +87,35 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                                                                                  && x.IsFinish == false);
 
                 return (true, string.Empty, table);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
+        public async Task<(bool status, string msg, RobotMissionTable table)> UpdateRobotMission(RobotMissionTable data)
+        {
+            try
+            {
+                int index = listRobotMissionTable.FindIndex(x => x.PierName == data.PierName
+                                                              && x.MissionSerialNumber == data.MissionSerialNumber
+                                                              && x.Barcode == data.Barcode
+                                                              && x.BoardSize == data.BoardSize
+                                                              && x.PickZone == data.PickZone
+                                                              && x.PickLayer == data.PickLayer
+                                                              && x.DropZone == data.DropZone
+                                                              && x.DropLayer == data.DropLayer
+                                                              && x.EstablishTime == data.EstablishTime);
+
+                listRobotMissionTable[index].IsStart = data.IsStart;
+                listRobotMissionTable[index].StartTime = data.StartTime;
+                listRobotMissionTable[index].IsError = data.IsError;
+                listRobotMissionTable[index].ErrorCode = data.ErrorCode;
+                listRobotMissionTable[index].IsFinish = data.IsFinish;
+                listRobotMissionTable[index].FinishTime = data.FinishTime;
+
+                return (true, string.Empty, listRobotMissionTable[index]);
             }
             catch(Exception ex)
             {

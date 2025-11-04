@@ -105,5 +105,64 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 return result.status;
             }
         }
+
+        public async Task<bool> SetRobotMissionTable()
+        {
+            var result = await IRobotTableOp.UpdateRobotMission(RobotMission);
+
+            if(result.status)
+            {
+                RobotMission = result.table;
+                PierName = result.table.PierName;
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+    }
+
+    public partial class RobotDataService
+    {
+        string _robotLog { get; set; } = string.Empty;
+
+        public async Task<bool> AddLogByRobot(string type, string log)
+        {
+            if (_robotLog == log)
+                return true;
+            else
+                _robotLog = log;
+
+            string equip = "Robot_" + PierName;
+
+            var table = _getLogTable(equip, type, log);
+            var result = await ILogTableOp.AddLogData(table);
+
+            if(result.status)
+            {
+                ListRobotLog = result.list;
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
+        LogTable _getLogTable(string equip, string logType, string msg)
+        {
+            LogTable table = new LogTable()
+            {
+                LogType = logType,
+                Equipment = equip,
+                Msg = msg,
+                RecordTime = DateTime.Now,
+            };
+
+            return table;
+        }
     }
 }

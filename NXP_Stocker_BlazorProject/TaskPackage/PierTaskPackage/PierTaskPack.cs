@@ -28,8 +28,10 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
         {
             this.pier = pier;
             this.IPeirOp = pierLib;
+            this.pierLib = pierLib;
 
             this.IDataService = dataService;
+            this.IDataService.PierName = pier.ToString();
 
             this.INLogObser = observerService;
             this.IPierObser = observerService;
