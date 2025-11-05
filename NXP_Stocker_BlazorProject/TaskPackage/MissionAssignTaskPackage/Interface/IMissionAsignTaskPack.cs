@@ -3,6 +3,16 @@
 
     public interface IMissionAsignTaskPack
     {
+        Task<bool> GetPlcPierName();
 
+        Task<bool> GetTableNewMissionAsign();
+
+        Task UpdateUIMissionAsign();
+
+        bool IsInputWarehouse();
+
+        bool IsOutputWarehouse();
+
+        bool IsTransformWarehouse();
     }
 }

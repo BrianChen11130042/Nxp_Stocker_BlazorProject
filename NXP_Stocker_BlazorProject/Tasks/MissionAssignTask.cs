@@ -1,4 +1,5 @@
 ﻿using CommonLibraryB.Base.FiniteStateMachine;
+using DevExpress.XtraExport.Xls;
 using NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage.Interface;
 
 namespace NXP_Stocker_BlazorProject.Tasks
@@ -13,10 +14,38 @@ namespace NXP_Stocker_BlazorProject.Tasks
             interval = 10;
         }
 
-        
+        public Task<bool> GetPlcPierName()
+        {
+            return pack.GetPlcPierName();
+        }
+
+        public Task<bool> GetTableNewMissionAsign()
+        {
+            return pack.GetTableNewMissionAsign();
+        }
+
+        public bool IsInputWarehouse()
+        {
+            return pack.IsInputWarehouse();
+        }
+
+        public bool IsOutputWarehouse()
+        {
+            return pack.IsOutputWarehouse();
+        }
+
+        public bool IsTransformWarehouse()
+        {
+            return pack.IsTransformWarehouse();
+        }
+
+        public Task UpdateUIMissionAsign()
+        {
+            return pack.UpdateUIMissionAsign();
+        }
     }
 
-    public enum EMission
+    public enum EMissionAssign
     {
         None,
         CheckMission,
@@ -25,31 +54,91 @@ namespace NXP_Stocker_BlazorProject.Tasks
         TransformWarehouse
     }
 
-    public partial class MissionAssignTask : FSMBase<EMission, int>
+    public partial class MissionAssignTask : FSMBase<EMissionAssign, int>
     {
-        public override Task Action()
+        public async override Task Action()
         {
-            throw new NotImplementedException();
+            key = EHandshakeKey.Run;
+
+            switch(S2)
+            {
+                case EMissionAssign.None:
+                    Set(ES1.Finish, EMissionAssign.None, 0);
+                    break;
+
+                case EMissionAssign.CheckMission:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await GetPlcPierName())
+                            {
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(await GetTableNewMissionAsign())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if(IsInputWarehouse())
+                            {
+                                Set(EMissionAssign.InputWarehouse, 0);
+                            }
+                            else if(IsOutputWarehouse())
+                            {
+                                Set(EMissionAssign.OutputWarehouse, 0);
+                            }
+                            else if(IsTransformWarehouse())
+                            {
+                                Set(EMissionAssign.TransformWarehouse, 0);
+                            }
+                            else
+                            {
+                                Set(0);
+                            }
+                            break;
+                    }
+                    break;
+            }
         }
 
-        public override Task Error()
+        public async override Task Error()
         {
-            throw new NotImplementedException();
+            isError = true;
+            key = EHandshakeKey.Finish;
+            Set(ES1.Idle, EMissionAssign.None, 0);
         }
 
-        public override Task Finish()
+        public async override Task Finish()
         {
-            throw new NotImplementedException();
+            isError = false;
+            key = EHandshakeKey.Finish;
+            Set(ES1.Idle, EMissionAssign.None, 0);
         }
 
-        public override Task Idle()
+        public async override Task Idle()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
-        public override Task Init()
+        public async override Task Init()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

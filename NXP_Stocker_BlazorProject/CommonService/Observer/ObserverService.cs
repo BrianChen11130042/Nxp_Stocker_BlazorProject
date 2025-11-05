@@ -156,5 +156,16 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 osMissionAssign.Remove(o);
             }
         }
+
+        public async Task NotifyMissionAsign(string pier, MissionAsignTable missionAsign)
+        {
+            if(osMissionAssign != null)
+            {
+                foreach(var o in osMissionAssign)
+                {
+                    await o.UpdateMissionAsign(pier, missionAsign);
+                }
+            }
+        }
     }
 }

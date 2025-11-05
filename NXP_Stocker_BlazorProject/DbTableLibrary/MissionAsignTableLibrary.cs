@@ -2,26 +2,26 @@
 
 namespace NXP_Stocker_BlazorProject.DbTableLibrary
 {
-    public partial class MainMissionTableLibrary
+    public partial class MissionAsignTableLibrary
     {
 
         readonly IServiceProvider serviceProvider;
 
-        public MainMissionTableLibrary(IServiceProvider serviceProvider)
+        public MissionAsignTableLibrary(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
         }
 
         //*************下面砍掉*************//
 
-        List<MainMissionTable> listMainMissionTable { get; set; } = new List<MainMissionTable>();
+        List<MissionAsignTable> listMainMissionTable { get; set; } = new List<MissionAsignTable>();
 
         //**********************************//
     }
 
     //**********下面先取代DB 要砍掉*************//
 
-    public class MainMissionTable
+    public class MissionAsignTable
     {
         //public int Id { get; set; } 到時候DB要加上這個讓它自動增加
 
@@ -60,17 +60,33 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     //***************************************//
 
-    public partial class MainMissionTableLibrary : IMainMissionTableOperate
+    public partial class MissionAsignTableLibrary : IMissionAssignTableOperate
     {
-        public async Task<(bool status, string msg, MainMissionTable table)> AddMainMissionTable(MainMissionTable data)
+        public async Task<(bool status, string msg, MissionAsignTable table)> AddMainMission(MissionAsignTable data)
         {
             try
             {
                 listMainMissionTable.Add(data);
 
-                MainMissionTable table = listMainMissionTable.FirstOrDefault(x => x.PierName == data.PierName
+                MissionAsignTable table = listMainMissionTable.FirstOrDefault(x => x.PierName == data.PierName
                                                                                && x.MissionSerialNumber == data.MissionSerialNumber
                                                                                && x.Barcode == data.Barcode);
+
+                return (true, string.Empty, table);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
+        public async Task<(bool status, string msg, MissionAsignTable table)> GetNewMainMission(string PierName)
+        {
+            try
+            {
+                MissionAsignTable table = listMainMissionTable.FirstOrDefault(x => x.PierName == PierName
+                                                                               && x.IsStart == false
+                                                                               && x.IsFinish == false);
 
                 return (true, string.Empty, table);
             }
