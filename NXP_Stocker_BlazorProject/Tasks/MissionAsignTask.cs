@@ -3,11 +3,11 @@ using NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage.Interface;
 
 namespace NXP_Stocker_BlazorProject.Tasks
 {
-    public partial class MissionAssignTask : IMissionAsignTaskPack
+    public partial class MissionAsignTask : IMissionAsignTaskPack
     {
         readonly IMissionAsignTaskPack pack;
 
-        public MissionAssignTask(IMissionAsignTaskPack pack)
+        public MissionAsignTask(IMissionAsignTaskPack pack)
         {
             this.pack = pack;
             interval = 10;
@@ -53,7 +53,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
         TransformWarehouse
     }
 
-    public partial class MissionAssignTask : FSMBase<EMissionAssign, int>
+    public partial class MissionAsignTask : FSMBase<EMissionAssign, int>
     {
         public async override Task Action()
         {
