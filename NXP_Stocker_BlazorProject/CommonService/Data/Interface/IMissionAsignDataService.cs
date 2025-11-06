@@ -14,14 +14,31 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         PierMissionTable PierMission { get; set; }
 
+        RobotMissionTable RobotMission { get; set; }
+
+        List<LogTable> ListMissionAsignLog { get; set; }
+
+        //MissionAsignTable
         Task<bool> GetNewMissionAsignTable();
 
         Task<bool> SetMissionAsignTable();
 
+        //WarehouseTable
         Task<bool> GetWarehousePickTable();
 
         Task<bool> GetWarehouseDropTable();
 
+        Task<bool> SetWarehousePickTable();
+
+        //PierMissionTable
         Task<bool> SetNewPierMissionTable();
+
+        Task<bool> GetTargetPierMissionTable();
+
+        //RobotMissionTable
+        Task<bool> SetNewRobotMissionTable();
+
+        //LogTable
+        Task<bool> AddLogByMissionAsign(string type, string log);
     }
 }

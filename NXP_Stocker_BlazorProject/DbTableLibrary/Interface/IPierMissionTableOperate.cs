@@ -8,5 +8,7 @@
         Task<(bool status, string msg, PierMissionTable table)> GetNewPierMission(string PierName);
 
         Task<(bool status, string msg, PierMissionTable table)> UpdatePierMission(PierMissionTable data);
+
+        Task<(bool status, string msg, PierMissionTable table)> GetTargetPierMission(PierMissionTable data);
     }
 }

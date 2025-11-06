@@ -114,6 +114,34 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
+        List<LogTable> _listMissionAsignLog { get; set; } = new List<LogTable>();
+
+        public List<LogTable> ListMissionAsignLog
+        {
+            get
+            {
+                return _listMissionAsignLog;
+            }
+            set
+            {
+                _listMissionAsignLog = value;
+            }
+        }
+
+        RobotMissionTable _robotMission { get; set; } = new RobotMissionTable();
+
+        public RobotMissionTable RobotMission
+        {
+            get
+            {
+                return _robotMission;
+            }
+            set
+            {
+                _robotMission = value;
+            }
+        }
+
     }
 
     public partial class MissionAsignDataService
@@ -180,9 +208,60 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
+        public async Task<bool> SetWarehousePickTable()
+        {
+            var result = await IWarehouseTableOp.SetWHTarget(PickPort);
+
+            if(result.status)
+            {
+                PickPort = result.table;
+
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
         public async Task<bool> SetNewPierMissionTable()
         {
             var result = await IPierMissionTableOp.AddPierMission(PierMission);
+
+            if(result.status)
+            {
+                PierMission = result.table;
+
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
+        public async Task<bool> SetNewRobotMissionTable()
+        {
+            var result = await IRobotMissionTableOp.AddRobotMission(RobotMission);
+
+            if(result.status)
+            {
+                RobotMission = result.table;
+
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
+        public async Task<bool> GetTargetPierMissionTable()
+        {
+            var result = await IPierMissionTableOp.GetTargetPierMission(PierMission);
 
             if(result.status)
             {
@@ -212,6 +291,52 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 await writeNLogError(result.msg);
                 return result.status;
             }
+        }
+
+    }
+
+    public partial class MissionAsignDataService
+    {
+        string _missionAsignLog { get; set; } = string.Empty;
+
+
+        public async Task<bool> AddLogByMissionAsign(string type, string log)
+        {
+            if (_missionAsignLog == log)
+                return true;
+            else
+                _missionAsignLog = log;
+
+            string equip = "MissionAsign_" + PierName;
+
+            var table = _getLogTable(equip, type, log);
+            var result = await ILogTableOp.AddLogData(table);
+
+            if(result.status)
+            {
+                ListMissionAsignLog = result.list;
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+
+        }
+
+
+        LogTable _getLogTable(string equip, string logType, string msg)
+        {
+            LogTable table = new LogTable()
+            {
+                LogType = logType,
+                Equipment = equip,
+                Msg = msg,
+                RecordTime = DateTime.Now,
+            };
+
+            return table;
         }
     }
 }

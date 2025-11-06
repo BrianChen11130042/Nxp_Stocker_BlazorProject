@@ -56,6 +56,13 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             { 2, "出庫"},
             { 3, "儲位轉移"}
         };
+
+        Dictionary<int, string> dcBoardSize { get; set; } = new Dictionary<int, string>()
+        {
+            { 0, "大板"},
+            { 1, "小板"}
+        };
+
     }
 
     public partial class MissionAsignTaskPack<EPLC> : IMissionAsignTaskPack
@@ -169,6 +176,57 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
+        public async Task<bool> GetTablePierMissionStatus()
+        {
+            if(await IDataService.GetTargetPierMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsPierMissionFinish()
+        {
+            if(IDataService.PierMission.IsFinish == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetTableNewRobotMission()
+        {
+            RobotMissionTable robot = new RobotMissionTable()
+            {
+                PierName = IDataService.MissionAsign.PierName,
+                MissionSerialNumber = IDataService.MissionAsign.MissionSerialNumber,
+                Barcode = IDataService.MissionAsign.Barcode,
+                BoardSize = IDataService.MissionAsign.BoardSize,
+                PickZone = IDataService.MissionAsign.PickZone,
+                PickLayer = IDataService.MissionAsign.PickLayer,
+                DropZone = IDataService.MissionAsign.DropZone,
+                DropLayer = IDataService.MissionAsign.DropLayer,
+                EstablishTime = DateTime.Now
+            };
+
+            IDataService.RobotMission = robot;
+
+            if(await IDataService.SetNewRobotMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> SetTableMissionAsignStart()
         {
             IDataService.MissionAsign.IsStart = true;
@@ -184,9 +242,30 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
+        public async Task<bool> SetLogMissionAsignStart()
+        {
+            string temp = IDataService.MissionAsign.PierName 
+                          + dcBoardSize[IDataService.MissionAsign.BoardSize]
+                          + dcMissionAssign[IDataService.MissionAsign.ActionCode] + "_任務開始";
+
+            if(await IDataService.AddLogByMissionAsign(info, temp))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task UpdateUIMissionAsign()
         {
             await IMissionAsignObser.NotifyMissionAsign(IDataService.PierName, IDataService.MissionAsign);
+        }
+
+        public async Task UpdateUIMissionAsignLog()
+        {
+            await IMissionAsignObser.NotifyMissionAsignLog(IDataService.PierName, IDataService.ListMissionAsignLog);
         }
     }
 
@@ -204,6 +283,23 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             {
                 return false;
             }
+        }
+
+        public async Task<bool> SetTableWarehouseInputPickPort()
+        {
+            IDataService.PickPort.IsOccupy = true;
+            IDataService.PickPort.Barcode = IDataService.MissionAsign.Barcode;
+            IDataService.PickPort.BoardSize = IDataService.MissionAsign.BoardSize;
+
+            if(await IDataService.SetWarehousePickTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 

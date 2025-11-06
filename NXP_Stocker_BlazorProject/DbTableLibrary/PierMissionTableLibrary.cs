@@ -115,5 +115,23 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 return (false, ex.Message, null);
             }
         }
+
+        public async Task<(bool status, string msg, PierMissionTable table)> GetTargetPierMission(PierMissionTable data)
+        {
+            try
+            {
+                int index = listPierMissionTable.FindIndex(x => x.PierName == data.PierName
+                                                             && x.MissionSerialNumber == data.MissionSerialNumber
+                                                             && x.Barcode == data.Barcode
+                                                             && x.ActionCode == data.ActionCode
+                                                             && x.EstablishTime == data.EstablishTime);
+
+                return (true, string.Empty, listPierMissionTable[index]);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
     }
 }
