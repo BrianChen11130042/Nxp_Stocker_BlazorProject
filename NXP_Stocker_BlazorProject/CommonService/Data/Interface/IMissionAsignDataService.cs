@@ -30,6 +30,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         Task<bool> SetWarehousePickTable();
 
+        Task<bool> SetWarehouseDropTable();
+
         //PierMissionTable
         Task<bool> SetNewPierMissionTable();
 
@@ -37,6 +39,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         //RobotMissionTable
         Task<bool> SetNewRobotMissionTable();
+
+        Task<bool> GetTargetRobotMissionTable();
 
         //LogTable
         Task<bool> AddLogByMissionAsign(string type, string log);

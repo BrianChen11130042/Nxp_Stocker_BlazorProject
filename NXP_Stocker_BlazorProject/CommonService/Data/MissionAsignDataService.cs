@@ -225,6 +225,23 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
+        public async Task<bool> SetWarehouseDropTable()
+        {
+            var result = await IWarehouseTableOp.SetWHTarget(DropPort);
+
+            if(result.status)
+            {
+                DropPort = result.table;
+
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
         public async Task<bool> SetNewPierMissionTable()
         {
             var result = await IPierMissionTableOp.AddPierMission(PierMission);
@@ -266,6 +283,23 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             if(result.status)
             {
                 PierMission = result.table;
+
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
+            }
+        }
+
+        public async Task<bool> GetTargetRobotMissionTable()
+        {
+            var result = await IRobotMissionTableOp.GetTargetRobotMission(RobotMission);
+
+            if(result.status)
+            {
+                RobotMission = result.table;
 
                 return result.status;
             }

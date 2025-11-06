@@ -92,6 +92,41 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.SetTableNewRobotMission();
         }
+
+        public Task<bool> GetTableRobotMissionStatus()
+        {
+            return pack.GetTableRobotMissionStatus();
+        }
+
+        public bool IsRobotMissionError()
+        {
+            return pack.IsRobotMissionError();
+        }
+
+        public bool IsRobotMissionFinish()
+        {
+            return pack.IsRobotMissionFinish();
+        }
+
+        public Task<bool> SetTableWarehouseOutputPickPort()
+        {
+            return pack.SetTableWarehouseOutputPickPort();
+        }
+
+        public Task<bool> SetTableWarehouseInputDropPort()
+        {
+            return pack.SetTableWarehouseInputDropPort();
+        }
+
+        public Task<bool> SetTableMissionAsignFinsih()
+        {
+            return pack.SetTableMissionAsignFinsih();
+        }
+
+        public Task<bool> SetLogMissionAsignFinish()
+        {
+            return pack.SetLogMissionAsignFinish();
+        }
     }
 
     public enum EMissionAssign
@@ -272,7 +307,81 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             break;
 
-                        
+                        case 80:
+                            if(await GetTableRobotMissionStatus())
+                            {
+                                if(IsRobotMissionFinish())
+                                {
+                                    if(IsRobotMissionError())
+                                    {
+                                        //後續跟電控討論
+                                    }
+                                    else
+                                    {
+                                        Set(90);
+                                    }
+                                }
+                                else
+                                {
+                                    Set(80);
+                                }
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 90:
+                            if(await SetTableWarehouseOutputPickPort())
+                            {
+                                Set(100);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 100:
+                            if(await SetTableWarehouseInputDropPort())
+                            {
+                                Set(110);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 110:
+                            if(await SetTableMissionAsignFinsih())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(120);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 120:
+                            if(await SetLogMissionAsignFinish())
+                            {
+                                await UpdateUIMissionAsignLog();
+                                Set(EMissionAssign.CheckMission, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
                     }
                     break;
             }

@@ -128,6 +128,28 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 return (false, ex.Message, null);
             }
         }
+
+        public async Task<(bool status, string msg, RobotMissionTable table)> GetTargetRobotMission(RobotMissionTable data)
+        {
+            try
+            {
+                int index = listRobotMissionTable.FindIndex(x => x.PierName == data.PierName
+                                                              && x.MissionSerialNumber == data.MissionSerialNumber
+                                                              && x.Barcode == data.Barcode
+                                                              && x.BoardSize == data.BoardSize
+                                                              && x.PickZone == data.PickZone
+                                                              && x.PickLayer == data.PickLayer
+                                                              && x.DropZone == data.DropZone
+                                                              && x.DropLayer == data.DropLayer
+                                                              && x.EstablishTime == data.EstablishTime);
+
+                return (true, string.Empty, listRobotMissionTable[index]);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
     }
 
 }

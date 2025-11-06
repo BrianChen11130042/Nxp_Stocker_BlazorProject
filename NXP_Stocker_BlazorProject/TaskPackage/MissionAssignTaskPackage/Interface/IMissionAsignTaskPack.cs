@@ -18,6 +18,10 @@
 
         Task<bool> SetTableWarehouseInputPickPort();
 
+        Task<bool> SetTableWarehouseOutputPickPort();
+
+        Task<bool> SetTableWarehouseInputDropPort();
+
         Task<bool> SetTableNewPierMission();
 
         Task<bool> GetTablePierMissionStatus();
@@ -28,7 +32,17 @@
 
         Task<bool> SetLogMissionAsignStart();
 
+        Task<bool> SetTableMissionAsignFinsih();
+
+        Task<bool> SetLogMissionAsignFinish();
+
         Task<bool> SetTableNewRobotMission();
+
+        Task<bool> GetTableRobotMissionStatus();
+
+        bool IsRobotMissionError();
+
+        bool IsRobotMissionFinish();
 
         //入庫
         bool IsInputWarehouse();

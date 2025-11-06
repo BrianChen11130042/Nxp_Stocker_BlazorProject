@@ -227,6 +227,35 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
+        public async Task<bool> GetTableRobotMissionStatus()
+        {
+            if(await IDataService.GetTargetRobotMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsRobotMissionError()
+        {
+            return false; //待跟電控討論
+        }
+
+        public bool IsRobotMissionFinish()
+        {
+            if(IDataService.RobotMission.IsFinish == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> SetTableMissionAsignStart()
         {
             IDataService.MissionAsign.IsStart = true;
@@ -242,11 +271,42 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
+        public async Task<bool> SetTableMissionAsignFinsih()
+        {
+            IDataService.MissionAsign.IsFinish = true;
+            IDataService.MissionAsign.FinishTime = DateTime.Now;
+
+            if(await IDataService.SetMissionAsignTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> SetLogMissionAsignStart()
         {
             string temp = IDataService.MissionAsign.PierName 
                           + dcBoardSize[IDataService.MissionAsign.BoardSize]
                           + dcMissionAssign[IDataService.MissionAsign.ActionCode] + "_任務開始";
+
+            if(await IDataService.AddLogByMissionAsign(info, temp))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetLogMissionAsignFinish()
+        {
+            string temp = IDataService.MissionAsign.PierName
+                         + dcBoardSize[IDataService.MissionAsign.BoardSize]
+                         + dcMissionAssign[IDataService.MissionAsign.ActionCode] + "_任務結束";
 
             if(await IDataService.AddLogByMissionAsign(info, temp))
             {
@@ -300,6 +360,38 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
                 return false;
             }
 
+        }
+
+        public async Task<bool> SetTableWarehouseOutputPickPort()
+        {
+            IDataService.PickPort.IsOccupy = false;
+            IDataService.PickPort.Barcode = string.Empty;
+            IDataService.PickPort.BoardSize = 999;
+
+            if(await IDataService.SetWarehousePickTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetTableWarehouseInputDropPort()
+        {
+            IDataService.DropPort.IsOccupy = true;
+            IDataService.DropPort.Barcode = IDataService.MissionAsign.Barcode;
+            IDataService.DropPort.BoardSize = IDataService.MissionAsign.BoardSize;
+
+            if(await IDataService.SetWarehouseDropTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
