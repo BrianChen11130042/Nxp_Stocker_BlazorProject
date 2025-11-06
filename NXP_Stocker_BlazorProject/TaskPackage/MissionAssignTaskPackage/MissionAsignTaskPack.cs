@@ -1,8 +1,6 @@
 ﻿using CommonLibraryB.Tools.LogWritter;
 using CommonLibraryB_NXP.Library.PLC;
 using CommonLibraryB_NXP.Library.PLC.Adapter;
-using DevExpress.Blazor.Office;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using NXP_Stocker_BlazorProject.CommonService.Data;
 using NXP_Stocker_BlazorProject.CommonService.Data.Interface;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
