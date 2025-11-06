@@ -14,7 +14,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //*************下面砍掉*************//
 
-        List<MissionAsignTable> listMainMissionTable { get; set; } = new List<MissionAsignTable>();
+        List<MissionAsignTable> listMissionAsignTable { get; set; } = new List<MissionAsignTable>();
 
         //**********************************//
     }
@@ -60,15 +60,15 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     //***************************************//
 
-    public partial class MissionAsignTableLibrary : IMissionAssignTableOperate
+    public partial class MissionAsignTableLibrary : IMissionAsignTableOperate
     {
-        public async Task<(bool status, string msg, MissionAsignTable table)> AddMainMission(MissionAsignTable data)
+        public async Task<(bool status, string msg, MissionAsignTable table)> AddMissionAsign(MissionAsignTable data)
         {
             try
             {
-                listMainMissionTable.Add(data);
+                listMissionAsignTable.Add(data);
 
-                MissionAsignTable table = listMainMissionTable.FirstOrDefault(x => x.PierName == data.PierName
+                MissionAsignTable table = listMissionAsignTable.FirstOrDefault(x => x.PierName == data.PierName
                                                                                && x.MissionSerialNumber == data.MissionSerialNumber
                                                                                && x.Barcode == data.Barcode);
 
@@ -80,15 +80,45 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, MissionAsignTable table)> GetNewMainMission(string PierName)
+        public async Task<(bool status, string msg, MissionAsignTable table)> GetNewMissionAsign(string PierName)
         {
             try
             {
-                MissionAsignTable table = listMainMissionTable.FirstOrDefault(x => x.PierName == PierName
+                MissionAsignTable table = listMissionAsignTable.FirstOrDefault(x => x.PierName == PierName
                                                                                && x.IsStart == false
                                                                                && x.IsFinish == false);
 
                 return (true, string.Empty, table);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
+        public async Task<(bool status, string msg, MissionAsignTable table)> UpdateMissionAsign(MissionAsignTable data)
+        {
+            try
+            {
+                int index = listMissionAsignTable.FindIndex(x => x.PierName == data.PierName
+                                                              && x.MissionSerialNumber == data.MissionSerialNumber
+                                                              && x.ActionCode == data.ActionCode
+                                                              && x.Barcode == data.Barcode
+                                                              && x.BoardSize == data.BoardSize
+                                                              && x.PickZone == data.PickZone
+                                                              && x.PickLayer == data.PickLayer
+                                                              && x.DropZone == data.DropZone
+                                                              && x.DropLayer == data.DropLayer
+                                                              && x.EstablishTime == data.EstablishTime);
+
+                listMissionAsignTable[index].IsStart = data.IsStart;
+                listMissionAsignTable[index].StartTime = data.StartTime;
+                listMissionAsignTable[index].IsError = data.IsError;
+                listMissionAsignTable[index].ErrorCode = data.ErrorCode;
+                listMissionAsignTable[index].IsFinish = data.IsFinish;
+                listMissionAsignTable[index].FinishTime = data.FinishTime;
+
+                return (true, string.Empty, listMissionAsignTable[index]);
             }
             catch(Exception ex)
             {

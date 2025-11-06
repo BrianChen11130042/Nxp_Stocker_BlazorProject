@@ -13,6 +13,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             interval = 10;
         }
 
+        public Task<bool> GetTableWarehousePickPort()
+        {
+            return pack.GetTableWarehousePickPort();
+        }
+
         public Task<bool> GetPlcPierName()
         {
             return pack.GetPlcPierName();
@@ -41,6 +46,21 @@ namespace NXP_Stocker_BlazorProject.Tasks
         public Task UpdateUIMissionAsign()
         {
             return pack.UpdateUIMissionAsign();
+        }
+
+        public Task<bool> GetTableWarehouseDropPort()
+        {
+            return pack.GetTableWarehouseDropPort();
+        }
+
+        public Task<bool> SetTableNewPierMission()
+        {
+            return pack.SetTableNewPierMission();
+        }
+
+        public Task<bool> SetTableMissionAsignStart()
+        {
+            return pack.SetTableMissionAsignStart();
         }
     }
 
@@ -109,6 +129,58 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             else
                             {
                                 Set(0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case EMissionAssign.InputWarehouse:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await GetTableWarehousePickPort())
+                            {
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(await GetTableWarehouseDropPort())
+                            {
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if(await SetTableNewPierMission())
+                            {
+                                Set(30);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 30:
+                            if(await SetTableMissionAsignStart())
+                            {
+
+                            }
+                            else
+                            {
+
                             }
                             break;
                     }

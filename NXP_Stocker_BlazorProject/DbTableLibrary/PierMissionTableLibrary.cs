@@ -62,7 +62,9 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
                 PierMissionTable table = listPierMissionTable.FirstOrDefault(x => x.PierName == data.PierName
                                                                                && x.MissionSerialNumber == data.MissionSerialNumber
-                                                                               && x.Barcode == data.Barcode);
+                                                                               && x.Barcode == data.Barcode
+                                                                               && x.ActionCode == data.ActionCode
+                                                                               && x.EstablishTime == data.EstablishTime);
 
                 return (true, string.Empty, table);
 

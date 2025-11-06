@@ -1,10 +1,13 @@
 ﻿using CommonLibraryB.Tools.LogWritter;
 using CommonLibraryB_NXP.Library.PLC;
 using CommonLibraryB_NXP.Library.PLC.Adapter;
+using DevExpress.Blazor.Office;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using NXP_Stocker_BlazorProject.CommonService.Data;
 using NXP_Stocker_BlazorProject.CommonService.Data.Interface;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
+using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage.Interface;
 
 namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
@@ -17,13 +20,13 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         readonly PlcLibrary<EPLC> pierLib;
 
-        readonly IMissionAssignDataService IDataService;
+        readonly IMissionAsignDataService IDataService;
 
         readonly INLogWritterObservable INLogObser;
         readonly IMissionAssignUIObserverable IMissionAsignObser;
 
         public MissionAsignTaskPack(EPLC pier, PlcLibrary<EPLC> pierLib,
-                                    MissionAssignDataService dataService, ObserverService observerService)
+                                    MissionAsignDataService dataService, ObserverService observerService)
         {
             this.pier = pier;
             this.IPeirOp = pierLib;
@@ -59,6 +62,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
     public partial class MissionAsignTaskPack<EPLC> : IMissionAsignTaskPack
     {
+
         public async Task<bool> GetPlcPierName()
         {
             if (await IPeirOp.GetDeviceName(pier))
@@ -77,6 +81,102 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
         public async Task<bool> GetTableNewMissionAsign()
         {
             if(await IDataService.GetNewMissionAsignTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> GetTableWarehousePickPort()
+        {
+            if (await IDataService.GetWarehousePickTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> GetTableWarehouseDropPort()
+        {
+            if(await IDataService.GetWarehouseDropTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetTableNewPierMission()
+        {
+            int pierActionCode = getPierActionCode(IDataService.MissionAsign.ActionCode, 
+                                                   IDataService.MissionAsign.BoardSize);
+
+            PierMissionTable pier = new PierMissionTable()
+            {
+                PierName = IDataService.MissionAsign.PierName,
+                MissionSerialNumber = IDataService.MissionAsign.MissionSerialNumber,
+                Barcode = IDataService.MissionAsign.Barcode,
+                ActionCode = pierActionCode,
+                EstablishTime = DateTime.Now,
+            };
+
+            IDataService.PierMission = pier;
+
+            if(await IDataService.SetNewPierMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        int getPierActionCode(int missionAsignActionCode, int boardSize)
+        {
+            switch(missionAsignActionCode)
+            {
+                //入庫
+                case 1:
+                    if(boardSize == 0) //大板
+                    {
+                        return 1;
+                    }
+                    else //小板
+                    {
+                        return 3;
+                    }
+
+                //出庫
+                case 2:
+                    if(boardSize == 0) //大板
+                    {
+                        return 2;
+                    }
+                    else //小板
+                    {
+                        return 4;
+                    }
+
+                default:
+                    return 0;
+            }
+        }
+
+        public async Task<bool> SetTableMissionAsignStart()
+        {
+            IDataService.MissionAsign.IsStart = true;
+            IDataService.MissionAsign.StartTime = DateTime.Now;
+
+            if (await IDataService.SetMissionAsignTable())
             {
                 return true;
             }

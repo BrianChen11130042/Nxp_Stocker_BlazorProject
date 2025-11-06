@@ -9,10 +9,21 @@
 
         Task UpdateUIMissionAsign();
 
+        Task<bool> GetTableWarehousePickPort();
+
+        Task<bool> GetTableWarehouseDropPort();
+
+        Task<bool> SetTableNewPierMission();
+
+        Task<bool> SetTableMissionAsignStart();
+
+        //入庫
         bool IsInputWarehouse();
 
+        //出庫
         bool IsOutputWarehouse();
 
+        //庫位轉移
         bool IsTransformWarehouse();
     }
 }

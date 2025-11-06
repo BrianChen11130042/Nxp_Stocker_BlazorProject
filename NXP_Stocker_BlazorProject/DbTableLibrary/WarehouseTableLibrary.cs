@@ -214,12 +214,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     public partial class WarehouseTableLibrary : IWarehouseTableOperate
     {
-        public async Task<(bool status, string msg, WarehouseTable table)> GetPierTarget(string PierName, int BoardSizeSpec, bool IsOccupy)
+        public async Task<(bool status, string msg, WarehouseTable table)> GetEmptyPier(string PierName, int BoardSizeSpec)
         {
             try
             {
                 WarehouseTable result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName
-                                                                        && x.IsOccupy == IsOccupy
                                                                         && (x.BoardSizeSpec == BoardSizeSpec || x.BoardSizeSpec == 2)
                                                                         && !bufferZone.Contains(x.Zone)
                                                                         && !storageZone.Contains(x.Zone));
@@ -232,7 +231,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, WarehouseTable table)> SetPierTarget(WarehouseTable data)
+        public async Task<(bool status, string msg, WarehouseTable table)> SetWHTarget(WarehouseTable data)
         {
             try
             {
@@ -296,6 +295,22 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 WarehouseTable result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName && x.Barcode == Barcode);
 
                 return (true, "success", result);
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
+            }
+        }
+
+        public async Task<(bool status, string msg, WarehouseTable table)> GetWHTarget(string pierName, int zone, int layer)
+        {
+            try
+            {
+                WarehouseTable result = listWarehouseTable.FirstOrDefault(x => x.PierName == pierName
+                                                                            && x.Zone == zone
+                                                                            && x.Layer == layer);
+
+                return (true, string.Empty, result);
             }
             catch(Exception ex)
             {
