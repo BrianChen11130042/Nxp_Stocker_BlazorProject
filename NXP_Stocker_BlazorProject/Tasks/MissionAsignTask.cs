@@ -575,6 +575,149 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
                     }
                     break;
+
+                case EMissionAssign.TransformWarehouse:
+                    switch(S3)
+                    {
+                        case 0:
+                            if (await GetTableWarehousePickPort())
+                            {
+                                Set(10); //更新UI
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if (await GetTableWarehouseDropPort())
+                            {
+                                Set(20);//更新UI
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if (await SetTableNewRobotMission())
+                            {
+                                Set(30);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 30:
+                            if (await SetTableMissionAsignStart())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(40);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 40:
+                            if (await SetLogMissionAsignStart())
+                            {
+                                await UpdateUIMissionAsignLog();
+                                Set(50);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 50:
+                            if (await GetTableRobotMissionStatus())
+                            {
+                                if (IsRobotMissionFinish())
+                                {
+                                    if (IsRobotMissionError())
+                                    {
+                                        //後續跟電控討論
+                                    }
+                                    else
+                                    {
+                                        Set(60);
+                                    }
+                                }
+                                else
+                                {
+                                    Set(50);
+                                }
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 60:
+                            if (await SetTableWarehouseOutputPickPort())
+                            {
+                                Set(70);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 70:
+                            if (await SetTableWarehouseInputDropPort())
+                            {
+                                Set(80);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 80:
+                            if (await SetTableMissionAsignFinsih())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(90);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 90:
+                            if (await SetLogMissionAsignFinish())
+                            {
+                                await UpdateUIMissionAsignLog();
+                                Set(EMissionAssign.CheckMission, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+                    }
+                    break;
             }
         }
 
