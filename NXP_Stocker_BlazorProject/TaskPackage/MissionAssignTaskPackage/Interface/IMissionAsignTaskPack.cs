@@ -22,6 +22,8 @@
 
         Task<bool> SetTableWarehouseInputDropPort();
 
+        Task<bool> SetTableWarehouseOutputDropPort();
+
         Task<bool> SetTableNewPierMission();
 
         Task<bool> GetTablePierMissionStatus();

@@ -331,20 +331,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
     public partial class MissionAsignTaskPack<EPLC>
     {
-        public bool IsInputWarehouse()
-        {
-            if (!string.IsNullOrEmpty(IDataService.MissionAsign.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
-                && IDataService.MissionAsign.ActionCode == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public async Task<bool> SetTableWarehouseInputPickPort()
         {
             IDataService.PickPort.IsOccupy = true;
@@ -393,10 +379,40 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
                 return false;
             }
         }
+
+        public async Task<bool> SetTableWarehouseOutputDropPort()
+        {
+            IDataService.DropPort.IsOccupy = false;
+            IDataService.DropPort.Barcode = string.Empty;
+            IDataService.DropPort.BoardSize = 999;
+
+            if(await IDataService.SetWarehouseDropTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     public partial class MissionAsignTaskPack<EPLC>
     {
+        public bool IsInputWarehouse()
+        {
+            if (!string.IsNullOrEmpty(IDataService.MissionAsign.MissionSerialNumber)
+                && !string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
+                && IDataService.MissionAsign.ActionCode == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool IsOutputWarehouse()
         {
             if(!string.IsNullOrEmpty(IDataService.MissionAsign.MissionSerialNumber)
@@ -410,13 +426,10 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
                 return false;
             }
         }
-    }
 
-    public partial class MissionAsignTaskPack<EPLC>
-    {
         public bool IsTransformWarehouse()
         {
-            if(!string.IsNullOrEmpty(IDataService.MissionAsign.MissionSerialNumber)
+            if (!string.IsNullOrEmpty(IDataService.MissionAsign.MissionSerialNumber)
                 && !string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
                 && IDataService.MissionAsign.ActionCode == 3)
             {
