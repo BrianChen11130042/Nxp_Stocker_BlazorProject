@@ -83,6 +83,35 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
+        int _reset { get; set; } = 0;
+
+        public async Task<bool> GetPlcIsReset()
+        {
+            if(await IPeirOp.GetDeviceIsReset(pier))
+            {
+                _reset = pierLib.Packages[pier].property.getPier.isReset;
+                return true;
+            }
+            else
+            {
+                string nlog = pierLib.Packages[pier].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public bool IsPlcReset()
+        {
+            if(_reset == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> GetTableNewMissionAsign()
         {
             if(await IDataService.GetNewMissionAsignTable())

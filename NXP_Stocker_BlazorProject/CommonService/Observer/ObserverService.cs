@@ -179,4 +179,39 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
     }
+
+    public partial class ObserverService : IMainUIObserverable
+    {
+        List<IMainUIObserver> osMain { get; set; }
+
+        public void AddMainUIObserver(IMainUIObserver o)
+        {
+            if (osMain == null)
+                osMain = new List<IMainUIObserver>();
+
+            if(!osMain.Contains(o))
+            {
+                osMain.Add(o);
+            }
+        }
+
+        public void RemoveMainUIObserver(IMainUIObserver o)
+        {
+            if(osMain != null && osMain.Contains(o))
+            {
+                osMain.Remove(o);
+            }
+        }
+
+        public async Task NotifyPopUpMessage(bool popUp, string msg)
+        {
+            if(osMain != null)
+            {
+                foreach(var o in osMain)
+                {
+                    await o.UpdatePopUpMessage(popUp, msg);
+                }
+            }
+        }
+    }
 }

@@ -132,6 +132,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.SetTableWarehouseOutputDropPort();
         }
+
+        public Task<bool> GetPlcIsReset()
+        {
+            return pack.GetPlcIsReset();
+        }
+
+        public bool IsPlcReset()
+        {
+            return pack.IsPlcReset();
+        }
     }
 
     public enum EMissionAssign
@@ -171,10 +181,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(await GetTableNewMissionAsign())
+                            if(await GetPlcIsReset())
                             {
-                                await UpdateUIMissionAsign();
-                                Set(20);
+                                if(IsPlcReset())
+                                {
+                                    Set(20);
+                                }
+                                else
+                                {
+                                    Set(0);
+                                }
                             }
                             else
                             {
@@ -184,6 +200,19 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
+                            if(await GetTableNewMissionAsign())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(30);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 30:
                             if(IsInputWarehouse())
                             {
                                 Set(EMissionAssign.InputWarehouse, 0);

@@ -6,6 +6,10 @@
         //公用
         Task<bool> GetPlcPierName();
 
+        Task<bool> GetPlcIsReset();
+
+        bool IsPlcReset();
+
         Task<bool> GetTableNewMissionAsign();
 
         Task UpdateUIMissionAsign();
