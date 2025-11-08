@@ -213,5 +213,16 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 }
             }
         }
+
+        public async Task NotifyMainLog(List<LogTable> list)
+        {
+            if(osMain != null)
+            {
+                foreach(var o in osMain)
+                {
+                    await o.UpdateMainLog(list);
+                }
+            }
+        }
     }
 }

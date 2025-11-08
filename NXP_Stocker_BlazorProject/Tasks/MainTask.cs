@@ -41,6 +41,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.CheckPlcConnect();
         }
 
+        public Task<bool> SetLogConnectFail()
+        {
+            return pack.SetLogConnectFail();
+        }
+
         public Task<bool> SetLogInitFail()
         {
             return pack.SetLogInitFail();
@@ -51,14 +56,29 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.SetLogInitSuccess();
         }
 
-        public Task UpdateUIInitFail()
+        public Task<bool> SetPlcHeartBeat()
         {
-            return pack.UpdateUIInitFail();
+            return pack.SetPlcHeartBeat();
         }
 
-        public Task UpdateUIInitSuccess()
+        public Task UpdateUIPopConnectFail()
         {
-            return pack.UpdateUIInitSuccess();
+            return pack.UpdateUIPopConnectFail();
+        }
+
+        public Task UpdateUIPopInitFail()
+        {
+            return pack.UpdateUIPopInitFail();
+        }
+
+        public Task UpdateUIPopInitSuccess()
+        {
+            return pack.UpdateUIPopInitSuccess();
+        }
+
+        public Task UpdateUIMainLog()
+        {
+            return pack.UpdateUIMainLog();
         }
     }
 
@@ -79,6 +99,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                 case 0:
                     if (await CheckDbConnect())
                     {
+                        await UpdateUIMainLog();
                         Set(10);
                     }
                     else
@@ -101,7 +122,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                 case 20:
                     if(await SetLogInitSuccess())
                     {
-                        await UpdateUIInitSuccess();
+                        await UpdateUIMainLog();
+                        await UpdateUIPopInitSuccess();
 
                         pier1AsignTask.Set(ES1.Action, EMissionAssign.CheckMission, 0);
                         pier2AsignTask.Set(ES1.Action, EMissionAssign.CheckMission, 0);
@@ -121,21 +143,175 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                 case 30:
                     await SetLogInitFail();
-                    await UpdateUIInitFail();
+                    await UpdateUIMainLog();
+                    await UpdateUIPopInitFail();
 
                     Set(ES1.None, EMain.None, 0);
                     break;
             }
         }
 
-        public override Task Action()
+        public override async Task Action()
         {
-            throw new NotImplementedException();
+            key = EHandshakeKey.Run;
+
+            switch(S2)
+            {
+                case EMain.None:
+                    Set(ES1.Finish, EMain.None, 0);
+                    break;
+
+                case EMain.HeartBeat:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await SetPlcHeartBeat())
+                            {
+                                Set(EMain.MissionAsign, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMain.None, 0);
+                            }
+                            break;  
+                    }
+                    break;
+
+                case EMain.MissionAsign:
+                    switch(S3)
+                    {
+                        case 0:
+                            await pier1AsignTask.Run();
+
+                            if(pier1AsignTask.key == EHandshakeKey.Finish)
+                            {
+                                if(pier1AsignTask.isError)
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, EMain.None, 0);
+                                }
+                                else
+                                {
+                                    Set(10);
+                                }
+                            }
+                            else
+                            {
+                                Set(10);
+                            }
+                            break;
+
+                        case 10:
+                            await pier2AsignTask.Run();
+
+                            if(pier2AsignTask.key == EHandshakeKey.Finish)
+                            {
+                                if(pier2AsignTask.isError)
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, EMain.None, 0);
+                                }
+                                else
+                                {
+                                    Set(EMain.Mission, 0);
+                                }
+                            }
+                            else
+                            {
+                                Set(EMain.Mission, 0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case EMain.Mission:
+                    switch(S3)
+                    {
+                        case 0:
+                            await pier1Task.Run();
+
+                            if(pier1Task.key == EHandshakeKey.Finish)
+                            {
+                                if(pier1Task.isError)
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, EMain.None, 0);
+                                }
+                                else
+                                {
+                                    Set(10);
+                                }
+                            }
+                            else
+                            {
+                                Set(10);
+                            }
+                            break;
+
+                        case 10:
+                            await pier2Task.Run();
+
+                            if(pier2Task.key == EHandshakeKey.Finish)
+                            {
+                                if(pier2Task.isError)
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, EMain.None, 0);
+                                }
+                                else
+                                {
+                                    Set(20);
+                                }
+                            }
+                            else
+                            {
+                                Set(20);
+                            }
+                            break;
+
+                        case 20:
+                            await robotTask.Run();
+
+                            if (robotTask.key == EHandshakeKey.Finish)
+                            {
+                                if(robotTask.isError)
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, EMain.None, 0);
+                                }
+                                else
+                                {
+                                    Set(EMain.HeartBeat, 0);
+                                }
+                            }
+                            else
+                            {
+                                Set(EMain.HeartBeat, 0);
+                            }
+                            break;
+                    }
+                    break;
+            }
         }
 
-        public override Task Error()
+        public override async Task Error()
         {
-            throw new NotImplementedException();
+            switch(S3)
+            {
+                case 0:
+                    await SetLogConnectFail();
+                    Set(10);
+                    break;
+
+                case 10:
+                    await UpdateUIMainLog();
+                    await UpdateUIPopConnectFail();
+
+                    key = EHandshakeKey.Finish;
+                    Set(ES1.Idle, EMain.None, 0);
+                    break;
+            }
         }
 
         public async override Task Finish()

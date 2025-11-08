@@ -1,8 +1,13 @@
-﻿namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
+﻿using NXP_Stocker_BlazorProject.DbTableLibrary;
+
+namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 {
 
     public interface IMainDataService
     {
+        List<LogTable> ListMainLog { get; set; }
+
+
         //LogTable
         Task<bool> AddLogByMainTask(string type, string log);
     }

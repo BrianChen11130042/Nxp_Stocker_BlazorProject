@@ -15,23 +15,23 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage
         readonly EPLC Pier2;
         readonly EPLC Robot;
 
-        readonly IPlcOperate<EPLC> IPeirOp;
-        readonly PlcLibrary<EPLC> pierLib;
+        readonly IPlcOperate<EPLC> IPlcOp;
+        readonly PlcLibrary<EPLC> plcLib;
 
         readonly IMainDataService IDataService;
 
         readonly INLogWritterObservable INLogObser;
         readonly IMainUIObserverable IMainObser;
 
-        public MainTaskPack(EPLC pier1, EPLC pier2, EPLC Robot, PlcLibrary<EPLC> pierLib,
+        public MainTaskPack(EPLC pier1, EPLC pier2, EPLC Robot, PlcLibrary<EPLC> plcLib,
                             MainDataService dataService, ObserverService observerService)
         {
             this.Pier1 = pier1;
             this.Pier2 = pier2;
             this.Robot = Robot;
 
-            this.IPeirOp = pierLib;
-            this.pierLib = pierLib;
+            this.IPlcOp = plcLib;
+            this.plcLib = plcLib;
 
             this.IDataService = dataService;
 
@@ -88,15 +88,31 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage
 
         public async Task<bool> CheckPlcConnect()
         {
-            pierLib.Packages[Robot].property.setRobot.heartBeat = _getHeartBeat();
+            plcLib.Packages[Robot].property.setRobot.heartBeat = _getHeartBeat();
 
-            if (await IPeirOp.SetHeartBeat(Robot))
+            if (await IPlcOp.SetHeartBeat(Robot))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[Robot].errorLog;
+                string nlog = plcLib.Packages[Robot].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public async Task<bool> SetPlcHeartBeat()
+        {
+            plcLib.Packages[Robot].property.setRobot.heartBeat = _getHeartBeat();
+
+            if(await IPlcOp.SetHeartBeat(Robot))
+            {
+                return true;
+            }
+            else
+            {
+                string nlog = plcLib.Packages[Robot].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -130,14 +146,38 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage
             }
         }
 
-        public async Task UpdateUIInitSuccess()
+        public async Task<bool> SetLogConnectFail()
+        {
+            string temp = "連線失敗";
+
+            if(await IDataService.AddLogByMainTask(err, temp))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task UpdateUIPopInitSuccess()
         {
             await IMainObser.NotifyPopUpMessage(true, "初始化成功");
         }
 
-        public async Task UpdateUIInitFail()
+        public async Task UpdateUIPopInitFail()
         {
             await IMainObser.NotifyPopUpMessage(true, "初始化失敗");
+        }
+
+        public async Task UpdateUIPopConnectFail()
+        {
+            await IMainObser.NotifyPopUpMessage(true, "連線失敗");
+        }
+
+        public async Task UpdateUIMainLog()
+        {
+            await IMainObser.NotifyMainLog(IDataService.ListMainLog);
         }
     }
 }

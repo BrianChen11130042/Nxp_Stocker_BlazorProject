@@ -69,6 +69,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
             else
             {
+                ListMainLog.Add(table);
                 await writeNLogError(result.msg);
                 return result.status;
             }

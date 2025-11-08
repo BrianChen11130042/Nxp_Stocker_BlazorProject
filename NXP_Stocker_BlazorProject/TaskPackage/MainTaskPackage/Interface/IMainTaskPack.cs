@@ -10,8 +10,16 @@
 
         Task<bool> SetLogInitFail();
 
-        Task UpdateUIInitSuccess();
+        Task UpdateUIPopInitSuccess();
 
-        Task UpdateUIInitFail();
+        Task UpdateUIPopInitFail();
+
+        Task<bool> SetPlcHeartBeat();
+
+        Task<bool> SetLogConnectFail();
+
+        Task UpdateUIPopConnectFail();
+
+        Task UpdateUIMainLog();
     }
 }
