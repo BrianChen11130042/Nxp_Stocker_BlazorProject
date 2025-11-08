@@ -30,9 +30,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
     public partial class MainDataService
     {
-        List<LogTable> _listMainLog { get; set; } = new List<LogTable>();
+        List<LogTable_stub> _listMainLog { get; set; } = new List<LogTable_stub>();
 
-        public List<LogTable> ListMainLog
+        public List<LogTable_stub> ListMainLog
         {
             get
             {
@@ -75,9 +75,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        LogTable _getLogTable(string equip, string logType, string msg)
+        LogTable_stub _getLogTable(string equip, string logType, string msg)
         {
-            LogTable table = new LogTable()
+            LogTable_stub table = new LogTable_stub()
             {
                 LogType = logType,
                 Equipment = equip,

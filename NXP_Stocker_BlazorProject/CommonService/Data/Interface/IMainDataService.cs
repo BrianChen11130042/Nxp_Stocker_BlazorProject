@@ -5,7 +5,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
     public interface IMainDataService
     {
-        List<LogTable> ListMainLog { get; set; }
+        List<LogTable_stub> ListMainLog { get; set; }
 
 
         //LogTable

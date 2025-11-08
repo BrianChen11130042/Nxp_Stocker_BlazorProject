@@ -49,9 +49,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        RobotMissionTable _robotMission { get; set; } = new RobotMissionTable();
+        RobotMissionTable_stub _robotMission { get; set; } = new RobotMissionTable_stub();
 
-        public RobotMissionTable RobotMission
+        public RobotMissionTable_stub RobotMission
         {
             get
             {
@@ -63,9 +63,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        List<LogTable> _listRobotLog { get; set; } = new List<LogTable>();
+        List<LogTable_stub> _listRobotLog { get; set; } = new List<LogTable_stub>();
 
-        public List<LogTable> ListRobotLog
+        public List<LogTable_stub> ListRobotLog
         {
             get
             {
@@ -93,7 +93,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 }
                 else
                 {
-                    RobotMission = new RobotMissionTable();
+                    RobotMission = new RobotMissionTable_stub();
                     PierName = string.Empty;
                 }
 
@@ -152,9 +152,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        LogTable _getLogTable(string equip, string logType, string msg)
+        LogTable_stub _getLogTable(string equip, string logType, string msg)
         {
-            LogTable table = new LogTable()
+            LogTable_stub table = new LogTable_stub()
             {
                 LogType = logType,
                 Equipment = equip,

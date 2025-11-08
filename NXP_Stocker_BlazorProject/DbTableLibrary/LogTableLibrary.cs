@@ -16,14 +16,14 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //*************下面砍掉*************//
 
-        List<LogTable> listLogTable { get; set; } = new List<LogTable>();
+        List<LogTable_stub> listLogTable { get; set; } = new List<LogTable_stub>();
 
         //**********************************//
     }
 
     //**********下面先取代DB 要砍掉*************//
 
-    public class LogTable
+    public class LogTable_stub
     {
         //public int Id { get; set; } 到時候DB要加上這個讓它自動增加
 
@@ -40,13 +40,13 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     public partial class LogTableLibrary : ILogTableOperate
     {
-        public async Task<(bool status, string msg, List<LogTable> list)> AddLogData(LogTable data)
+        public async Task<(bool status, string msg, List<LogTable_stub> list)> AddLogData(LogTable_stub data)
         {
             try
             {
                 listLogTable.Add(data);
 
-                List<LogTable> list = listLogTable.Where(x => x.Equipment == data.Equipment).ToList();
+                List<LogTable_stub> list = listLogTable.Where(x => x.Equipment == data.Equipment).ToList();
 
                 return (true, string.Empty, list);
 

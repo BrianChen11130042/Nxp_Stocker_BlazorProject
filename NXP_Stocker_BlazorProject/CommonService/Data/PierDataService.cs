@@ -47,9 +47,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        PierMissionTable _pierMission { get; set; } = new PierMissionTable();
+        PierMissionTable_stub _pierMission { get; set; } = new PierMissionTable_stub();
 
-        public PierMissionTable PierMission
+        public PierMissionTable_stub PierMission
         {
             get
             {
@@ -61,9 +61,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        List<LogTable> _listPierLog { get; set; } = new List<LogTable>();
+        List<LogTable_stub> _listPierLog { get; set; } = new List<LogTable_stub>();
 
-        public List<LogTable> ListPierLog
+        public List<LogTable_stub> ListPierLog
         {
             get
             {
@@ -90,7 +90,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 }
                 else
                 {
-                    PierMission = new PierMissionTable();
+                    PierMission = new PierMissionTable_stub();
                 }
 
                 return result.status;
@@ -145,9 +145,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        LogTable _getLogTable(string equip, string logType, string msg)
+        LogTable_stub _getLogTable(string equip, string logType, string msg)
         {
-            LogTable table = new LogTable()
+            LogTable_stub table = new LogTable_stub()
             {
                 LogType = logType,
                 Equipment = equip,

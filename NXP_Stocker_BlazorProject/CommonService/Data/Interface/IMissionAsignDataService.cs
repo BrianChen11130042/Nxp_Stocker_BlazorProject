@@ -6,17 +6,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
     {
         string PierName { get; set; }
 
-        MissionAsignTable MissionAsign { get; set; }
+        MissionAsignTable_stub MissionAsign { get; set; }
 
-        WarehouseTable PickPort { get; set; }
+        WarehouseTable_stub PickPort { get; set; }
 
-        WarehouseTable DropPort { get; set; }
+        WarehouseTable_stub DropPort { get; set; }
 
-        PierMissionTable PierMission { get; set; }
+        PierMissionTable_stub PierMission { get; set; }
 
-        RobotMissionTable RobotMission { get; set; }
+        RobotMissionTable_stub RobotMission { get; set; }
 
-        List<LogTable> ListMissionAsignLog { get; set; }
+        List<LogTable_stub> ListMissionAsignLog { get; set; }
 
         //MissionAsignTable
         Task<bool> GetNewMissionAsignTable();

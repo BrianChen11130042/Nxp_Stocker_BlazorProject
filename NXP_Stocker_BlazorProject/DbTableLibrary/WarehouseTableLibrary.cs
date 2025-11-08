@@ -16,7 +16,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //*************下面砍掉*************//
 
-        List<WarehouseTable> listWarehouseTable { get; set; } = new List<WarehouseTable>();
+        List<WarehouseTable_stub> listWarehouseTable { get; set; } = new List<WarehouseTable_stub>();
 
         void Init_Delete()
         {
@@ -30,7 +30,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             {
                 for(int j = 1 ; j <= 18 ; j++)
                 {
-                    WarehouseTable data = new WarehouseTable()
+                    WarehouseTable_stub data = new WarehouseTable_stub()
                     {
                         PierName = "Pier1",
                         Zone = i,
@@ -47,7 +47,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
             for(int i = 1 ; i <= 13 ; i++)
             {
-                WarehouseTable data = new WarehouseTable()
+                WarehouseTable_stub data = new WarehouseTable_stub()
                 {
                     PierName = "Pier1",
                     Zone = 6,
@@ -63,7 +63,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
             for (int i = 1; i <= 5; i++)
             {
-                WarehouseTable data = new WarehouseTable()
+                WarehouseTable_stub data = new WarehouseTable_stub()
                 {
                     PierName = "Pier1",
                     Zone = 13,
@@ -79,7 +79,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
             for(int i = 1; i <= 1; i++)
             {
-                WarehouseTable data = new WarehouseTable()
+                WarehouseTable_stub data = new WarehouseTable_stub()
                 {
                     PierName = "Pier1",
                     Zone = 20,
@@ -100,7 +100,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             {
                 for (int j = 1; j <= 18; j++)
                 {
-                    WarehouseTable data = new WarehouseTable()
+                    WarehouseTable_stub data = new WarehouseTable_stub()
                     {
                         PierName = "Pier2",
                         Zone = i,
@@ -119,7 +119,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             {
                 for (int j = 1; j <= 13; j++)
                 {
-                    WarehouseTable data = new WarehouseTable()
+                    WarehouseTable_stub data = new WarehouseTable_stub()
                     {
                         PierName = "Pier2",
                         Zone = i,
@@ -136,7 +136,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
             for (int i = 1; i <= 5; i++)
             {
-                WarehouseTable data = new WarehouseTable()
+                WarehouseTable_stub data = new WarehouseTable_stub()
                 {
                     PierName = "Pier2",
                     Zone = 14,
@@ -152,7 +152,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
             for (int i = 1; i <= 1; i++)
             {
-                WarehouseTable data = new WarehouseTable()
+                WarehouseTable_stub data = new WarehouseTable_stub()
                 {
                     PierName = "Pier2",
                     Zone = 21,
@@ -173,7 +173,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     //**********下面先取代DB 要砍掉*************//
 
-    public class WarehouseTable
+    public class WarehouseTable_stub
     {
         //public int Id { get; set; } 到時候DB要加上這個讓它自動增加
 
@@ -214,11 +214,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     public partial class WarehouseTableLibrary : IWarehouseTableOperate
     {
-        public async Task<(bool status, string msg, WarehouseTable table)> GetEmptyPier(string PierName, int BoardSizeSpec)
+        public async Task<(bool status, string msg, WarehouseTable_stub table)> GetEmptyPier(string PierName, int BoardSizeSpec)
         {
             try
             {
-                WarehouseTable result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName
+                WarehouseTable_stub result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName
                                                                         && (x.BoardSizeSpec == BoardSizeSpec || x.BoardSizeSpec == 2)
                                                                         && !bufferZone.Contains(x.Zone)
                                                                         && !storageZone.Contains(x.Zone));
@@ -231,7 +231,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, WarehouseTable table)> SetWHTarget(WarehouseTable data)
+        public async Task<(bool status, string msg, WarehouseTable_stub table)> SetWHTarget(WarehouseTable_stub data)
         {
             try
             {
@@ -252,11 +252,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, WarehouseTable table)> GetEmptyBuffer(string PierName, int BoardSize)
+        public async Task<(bool status, string msg, WarehouseTable_stub table)> GetEmptyBuffer(string PierName, int BoardSize)
         {
             try
             {
-                WarehouseTable result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName
+                WarehouseTable_stub result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName
                                                                         && x.IsOccupy == false
                                                                         && (x.BoardSizeSpec == BoardSize || x.BoardSizeSpec == 2)
                                                                         && !pierZone.Contains(x.Zone)
@@ -270,11 +270,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, WarehouseTable table)> GetEmptyStorage(string PierName, int BoardSize)
+        public async Task<(bool status, string msg, WarehouseTable_stub table)> GetEmptyStorage(string PierName, int BoardSize)
         {
             try
             {
-                WarehouseTable result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName 
+                WarehouseTable_stub result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName 
                                                                         && x.IsOccupy == false
                                                                         && (x.BoardSizeSpec == BoardSize || x.BoardSizeSpec == 2)
                                                                         && !pierZone.Contains(x.Zone)
@@ -288,11 +288,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, WarehouseTable table)> GetPickTarget(string PierName, string Barcode)
+        public async Task<(bool status, string msg, WarehouseTable_stub table)> GetPickTarget(string PierName, string Barcode)
         {
             try
             {
-                WarehouseTable result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName && x.Barcode == Barcode);
+                WarehouseTable_stub result = listWarehouseTable.FirstOrDefault(x => x.PierName == PierName && x.Barcode == Barcode);
 
                 return (true, "success", result);
             }
@@ -302,11 +302,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, WarehouseTable table)> GetWHTarget(string pierName, int zone, int layer)
+        public async Task<(bool status, string msg, WarehouseTable_stub table)> GetWHTarget(string pierName, int zone, int layer)
         {
             try
             {
-                WarehouseTable result = listWarehouseTable.FirstOrDefault(x => x.PierName == pierName
+                WarehouseTable_stub result = listWarehouseTable.FirstOrDefault(x => x.PierName == pierName
                                                                             && x.Zone == zone
                                                                             && x.Layer == layer);
 

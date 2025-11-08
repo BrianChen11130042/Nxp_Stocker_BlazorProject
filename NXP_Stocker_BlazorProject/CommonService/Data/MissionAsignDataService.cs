@@ -58,9 +58,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        MissionAsignTable _missionAsign { get; set; } = new MissionAsignTable();
+        MissionAsignTable_stub _missionAsign { get; set; } = new MissionAsignTable_stub();
 
-        public MissionAsignTable MissionAsign
+        public MissionAsignTable_stub MissionAsign
         {
             get
             {
@@ -72,9 +72,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        WarehouseTable _pickPort { get; set; } = new WarehouseTable();
+        WarehouseTable_stub _pickPort { get; set; } = new WarehouseTable_stub();
 
-        public WarehouseTable PickPort
+        public WarehouseTable_stub PickPort
         {
             get
             {
@@ -86,9 +86,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        WarehouseTable _dropPort { get; set; } = new WarehouseTable();
+        WarehouseTable_stub _dropPort { get; set; } = new WarehouseTable_stub();
 
-        public WarehouseTable DropPort
+        public WarehouseTable_stub DropPort
         {
             get
             {
@@ -100,9 +100,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        PierMissionTable _pierMission { get; set; } = new PierMissionTable();
+        PierMissionTable_stub _pierMission { get; set; } = new PierMissionTable_stub();
 
-        public PierMissionTable PierMission
+        public PierMissionTable_stub PierMission
         {
             get
             {
@@ -114,9 +114,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        List<LogTable> _listMissionAsignLog { get; set; } = new List<LogTable>();
+        List<LogTable_stub> _listMissionAsignLog { get; set; } = new List<LogTable_stub>();
 
-        public List<LogTable> ListMissionAsignLog
+        public List<LogTable_stub> ListMissionAsignLog
         {
             get
             {
@@ -128,9 +128,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        RobotMissionTable _robotMission { get; set; } = new RobotMissionTable();
+        RobotMissionTable_stub _robotMission { get; set; } = new RobotMissionTable_stub();
 
-        public RobotMissionTable RobotMission
+        public RobotMissionTable_stub RobotMission
         {
             get
             {
@@ -158,7 +158,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 }
                 else
                 {
-                    MissionAsign = new MissionAsignTable();
+                    MissionAsign = new MissionAsignTable_stub();
                 }
 
                 return result.status;
@@ -360,9 +360,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
         }
 
 
-        LogTable _getLogTable(string equip, string logType, string msg)
+        LogTable_stub _getLogTable(string equip, string logType, string msg)
         {
-            LogTable table = new LogTable()
+            LogTable_stub table = new LogTable_stub()
             {
                 LogType = logType,
                 Equipment = equip,

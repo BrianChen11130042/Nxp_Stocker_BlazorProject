@@ -153,7 +153,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             int pierActionCode = getPierActionCode(IDataService.MissionAsign.ActionCode, 
                                                    IDataService.MissionAsign.BoardSize);
 
-            PierMissionTable pier = new PierMissionTable()
+            PierMissionTable_stub pier = new PierMissionTable_stub()
             {
                 PierName = IDataService.MissionAsign.PierName,
                 MissionSerialNumber = IDataService.MissionAsign.MissionSerialNumber,
@@ -231,7 +231,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetTableNewRobotMission()
         {
-            RobotMissionTable robot = new RobotMissionTable()
+            RobotMissionTable_stub robot = new RobotMissionTable_stub()
             {
                 PierName = IDataService.MissionAsign.PierName,
                 MissionSerialNumber = IDataService.MissionAsign.MissionSerialNumber,

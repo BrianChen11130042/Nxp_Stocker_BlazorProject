@@ -14,14 +14,14 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //*************下面砍掉*************//
 
-        List<MissionAsignTable> listMissionAsignTable { get; set; } = new List<MissionAsignTable>();
+        List<MissionAsignTable_stub> listMissionAsignTable { get; set; } = new List<MissionAsignTable_stub>();
 
         //**********************************//
     }
 
     //**********下面先取代DB 要砍掉*************//
 
-    public class MissionAsignTable
+    public class MissionAsignTable_stub
     {
         //public int Id { get; set; } 到時候DB要加上這個讓它自動增加
 
@@ -62,13 +62,13 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
     public partial class MissionAsignTableLibrary : IMissionAsignTableOperate
     {
-        public async Task<(bool status, string msg, MissionAsignTable table)> AddMissionAsign(MissionAsignTable data)
+        public async Task<(bool status, string msg, MissionAsignTable_stub table)> AddMissionAsign(MissionAsignTable_stub data)
         {
             try
             {
                 listMissionAsignTable.Add(data);
 
-                MissionAsignTable table = listMissionAsignTable.FirstOrDefault(x => x.PierName == data.PierName
+                MissionAsignTable_stub table = listMissionAsignTable.FirstOrDefault(x => x.PierName == data.PierName
                                                                                && x.MissionSerialNumber == data.MissionSerialNumber
                                                                                && x.Barcode == data.Barcode);
 
@@ -80,11 +80,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, MissionAsignTable table)> GetNewMissionAsign(string PierName)
+        public async Task<(bool status, string msg, MissionAsignTable_stub table)> GetNewMissionAsign(string PierName)
         {
             try
             {
-                MissionAsignTable table = listMissionAsignTable.FirstOrDefault(x => x.PierName == PierName
+                MissionAsignTable_stub table = listMissionAsignTable.FirstOrDefault(x => x.PierName == PierName
                                                                                && x.IsStart == false
                                                                                && x.IsFinish == false);
 
@@ -96,7 +96,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, MissionAsignTable table)> UpdateMissionAsign(MissionAsignTable data)
+        public async Task<(bool status, string msg, MissionAsignTable_stub table)> UpdateMissionAsign(MissionAsignTable_stub data)
         {
             try
             {

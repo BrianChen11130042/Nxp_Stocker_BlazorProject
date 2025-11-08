@@ -8,15 +8,15 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         void RemoveRobotUIObserver(IRobotUIObserver o);
 
-        Task NotifyRobotMission(string pier, RobotMissionTable table);
+        Task NotifyRobotMission(string pier, RobotMissionTable_stub table);
 
-        Task NotifyRobotLog(string pier, List<LogTable> list);
+        Task NotifyRobotLog(string pier, List<LogTable_stub> list);
     }
 
     public interface IRobotUIObserver
     {
-        Task UpdateRobotMission(string pier, RobotMissionTable table);
+        Task UpdateRobotMission(string pier, RobotMissionTable_stub table);
 
-        Task UpdateRobotLog(string pier, List<LogTable> list);
+        Task UpdateRobotLog(string pier, List<LogTable_stub> list);
     }
 }
