@@ -7,6 +7,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
     {
         List<LogTable_stub> ListMainLog { get; set; }
 
+        bool IsModbusConnect { get; set; }
 
         //LogTable
         Task<bool> AddLogByMainTask(string type, string log);

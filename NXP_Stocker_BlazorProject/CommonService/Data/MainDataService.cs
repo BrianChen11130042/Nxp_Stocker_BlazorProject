@@ -30,6 +30,21 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
     public partial class MainDataService
     {
+        bool _isModbusConnect { get; set; } = false;
+
+        public bool IsModbusConnect
+        {
+            get
+            {
+                return _isModbusConnect;
+            }
+            set
+            {
+                _isModbusConnect = value;
+            }
+        }
+
+
         List<LogTable_stub> _listMainLog { get; set; } = new List<LogTable_stub>();
 
         public List<LogTable_stub> ListMainLog
