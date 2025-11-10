@@ -47,7 +47,7 @@ builder.Services.AddSingleton<IWarehouseTableOperate, WarehouseTableLibrary>();
 
 #endregion
 
-#region CommonSerice
+#region CommonService
 
 builder.Services.AddSingleton<ObserverService>();
 
