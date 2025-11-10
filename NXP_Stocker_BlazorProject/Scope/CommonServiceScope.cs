@@ -3,7 +3,7 @@ using NXP_Stocker_BlazorProject.CommonService.Observer;
 
 namespace NXP_Stocker_BlazorProject.Scope
 {
-    public partial class Scope
+    public partial class MachineScope
     {
         public ObserverService observerService;
 

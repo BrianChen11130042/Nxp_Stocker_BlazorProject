@@ -75,7 +75,13 @@ builder.Services.AddSingleton<PlcLibrary<EPLC>>();
 
 #region Scope
 
-builder.Services.AddSingleton<Scope>();
+builder.Services.AddSingleton<MachineScope>();
+
+#endregion
+
+#region Service
+
+builder.Services.AddSingleton<MachineService>();
 
 #endregion
 

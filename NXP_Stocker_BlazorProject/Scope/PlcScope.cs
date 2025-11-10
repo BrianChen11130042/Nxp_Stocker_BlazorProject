@@ -6,7 +6,7 @@ using NXP_Stocker_BlazorProject.DeviceName.PLC;
 
 namespace NXP_Stocker_BlazorProject.Scope
 {
-    public partial class Scope
+    public partial class MachineScope
     {
         public PlcConfigManager<EPLC> plcConfig;
         public PlcPropertyManager<EPLC> plcProperty;

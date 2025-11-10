@@ -8,7 +8,7 @@ using NXP_Stocker_BlazorProject.Tasks;
 
 namespace NXP_Stocker_BlazorProject.Scope
 {
-    public partial class Scope
+    public partial class MachineScope
     {
         public PierTaskPack<EPLC> pier1TaskPack;
         public PierTaskPack<EPLC> pier2TaskPack;
