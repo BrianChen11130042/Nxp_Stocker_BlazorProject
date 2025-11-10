@@ -1,5 +1,25 @@
-﻿<h3>ConnectSetting</h3>
+﻿@page "/ConnectConfig"
+@rendermode InteractiveServer
+@using CommonLibraryB_NXP.Manager.ModbusTcp.Master
+@using NXP_Stocker_BlazorProject.Services
+@inject MachineService service
+
+
+<h3>ConnectSetting</h3>
 
 @code {
+
+	//連線參數
+	List<ModbusTcpMasterConfig> listModbusTcp;
+
+	protected override async Task OnInitializedAsync()
+	{
+		
+	}
+
+	async Task ReadPage()
+	{
+
+	}
 
 }

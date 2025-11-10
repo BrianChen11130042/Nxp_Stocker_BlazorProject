@@ -1,4 +1,4 @@
-﻿using CommonLibraryB.Tools.LogWritter;
+﻿using CommonLibraryB_NXP.Tools.LogWritter;
 using CommonLibraryB_NXP.Library.PLC;
 using CommonLibraryB_NXP.Library.PLC.Adapter;
 using NXP_Stocker_BlazorProject.CommonService.Data;

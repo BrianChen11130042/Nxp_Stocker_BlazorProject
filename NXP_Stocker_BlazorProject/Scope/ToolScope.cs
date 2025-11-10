@@ -1,4 +1,4 @@
-﻿using CommonLibraryB.Tools.LogWritter;
+﻿using CommonLibraryB_NXP.Tools.LogWritter;
 
 namespace NXP_Stocker_BlazorProject.Scope
 {

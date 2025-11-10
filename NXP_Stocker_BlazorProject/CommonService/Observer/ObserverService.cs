@@ -1,4 +1,4 @@
-﻿using CommonLibraryB.Tools.LogWritter;
+﻿using CommonLibraryB_NXP.Tools.LogWritter;
 using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
 using NXP_Stocker_BlazorProject.DbTableLibrary;
 
