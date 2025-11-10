@@ -10,16 +10,16 @@
 @code {
 
 	//連線參數
-	List<ModbusTcpMasterConfig> listModbusTcp;
+	List<ModbusTcpMasterConfig> listModbusTcp { get; set; } = new List<ModbusTcpMasterConfig>();
 
 	protected override async Task OnInitializedAsync()
 	{
-		
+		await ReadPage();
 	}
 
 	async Task ReadPage()
 	{
-
+		listModbusTcp = await service.GetModbusTcpConfig();
 	}
 
 }
