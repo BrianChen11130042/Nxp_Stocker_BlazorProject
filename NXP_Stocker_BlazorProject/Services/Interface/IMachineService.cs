@@ -1,4 +1,5 @@
-﻿using CommonLibraryB_NXP.Manager.ModbusTcp.Master;
+﻿using CommonLibraryB_NXP.Library.PLC.Config;
+using CommonLibraryB_NXP.Manager.ModbusTcp.Master;
 
 namespace NXP_Stocker_BlazorProject.Services.Interface
 {
@@ -7,5 +8,9 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
     {
         //Config
         Task<List<ModbusTcpMasterConfig>> GetModbusTcpConfig();
+        Task SetModbusTcpConfig(ModbusTcpMasterConfig config);
+
+        Task<List<PlcConfig>> GetPlcConfig();
+        Task SetPlcConfig(PlcConfig config);
     }
 }

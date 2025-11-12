@@ -1,4 +1,6 @@
-﻿using CommonLibraryB_NXP.Manager.ModbusTcp.Master;
+﻿using CommonLibraryB_NXP.Library.PLC.Config;
+using CommonLibraryB_NXP.Manager.ModbusTcp.Master;
+using NXP_Stocker_BlazorProject.DeviceName.PLC;
 using NXP_Stocker_BlazorProject.Scope;
 using NXP_Stocker_BlazorProject.Services.Interface;
 
@@ -31,6 +33,35 @@ namespace NXP_Stocker_BlazorProject.Services
             }
 
             return list;
+        }
+
+        public async Task SetModbusTcpConfig(ModbusTcpMasterConfig config)
+        {
+            scope.modbusTcpMasterManager.Set(config.device, config);
+            scope.modbusTcpMasterManager.Save();
+        }
+
+        public async Task<List<PlcConfig>> GetPlcConfig()
+        {
+            List<PlcConfig> list = new List<PlcConfig>();
+
+            foreach(string dev in Enum.GetNames(typeof(EPLC)))
+            {
+                PlcConfig config = scope.plcConfig.Get(dev);
+
+                if(config != null)
+                {
+                    list.Add(config);
+                }
+            }
+
+            return list;
+        }
+
+        public async Task SetPlcConfig(PlcConfig config)
+        {
+            scope.plcConfig.Set(config.device, config);
+            scope.plcConfig.Save();
         }
     }
 }

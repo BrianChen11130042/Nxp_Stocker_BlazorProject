@@ -1,16 +1,54 @@
 ﻿@page "/ConnectConfig"
 @rendermode InteractiveServer
 @using CommonLibraryB_NXP.Manager.ModbusTcp.Master
+@using CommonLibraryB_NXP.Library.PLC.Config
 @using NXP_Stocker_BlazorProject.Services.Interface
 @inject IMachineService IService
 
 
-<h3>ConnectSetting</h3>
+<h3 class="section-title">ModbusTcp Setting</h3>
+
+<DxGrid Data="listModbusTcp"
+PageSize="12"
+ShowGroupPanel="false"
+EditMode="GridEditMode.EditCell"
+EditModelSaving="editModbusTcpConfig"
+KeyFieldName="@nameof(ModbusTcpMasterConfig.device)">
+
+	<Columns>
+		<DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.device) Caption="ModbusTcp" ReadOnly="true" MinWidth="150" />
+		<DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Ip) Caption="Ip" ReadOnly="false" MinWidth="150" />
+		<DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Port) Caption="Port" ReadOnly="false" MinWidth="150" />
+		<DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Enable) Caption="Enalbe" ReadOnly="false" MinWidth="150" />
+	</Columns>
+
+</DxGrid>
+
+<br/>
+
+<h3 class="section-title">PLC Setting</h3>
+
+<DxGrid Data="listPlcConfig"
+PageSize="12"
+ShowGroupPanel="false"
+EditMode="GridEditMode.EditCell"
+EditModelSaving="editPlcConfig"
+KeyFieldName="@nameof(PlcConfig.device)">
+
+	<Columns>
+		<DxGridDataColumn FieldName=@nameof(PlcConfig.device) Caption="PLC" ReadOnly="true" MinWidth="150" />
+		<DxGridDataColumn FieldName=@nameof(PlcConfig.master) Caption="ModbusTcp" ReadOnly="false" MinWidth="150" />
+		<DxGridDataColumn FieldName=@nameof(PlcConfig.supplier) Caption="Supplier" ReadOnly="false" MinWidth="150" />
+	</Columns>
+
+</DxGrid>
 
 @code {
 
 	//連線參數
 	List<ModbusTcpMasterConfig> listModbusTcp { get; set; } = new List<ModbusTcpMasterConfig>();
+
+	List<PlcConfig> listPlcConfig { get; set; } = new List<PlcConfig>();
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -20,6 +58,24 @@
 	async Task ReadPage()
 	{
 		listModbusTcp = await IService.GetModbusTcpConfig();
+		listPlcConfig = await IService.GetPlcConfig();
 	}
 
+	public async Task editModbusTcpConfig(GridEditModelSavingEventArgs e)
+	{
+		ModbusTcpMasterConfig editData = (ModbusTcpMasterConfig)e.EditModel;
+
+		await IService.SetModbusTcpConfig(editData);
+
+		await ReadPage();
+	}
+
+	public async Task editPlcConfig(GridEditModelSavingEventArgs e)
+	{
+		PlcConfig editData = (PlcConfig)e.EditModel;
+
+		await IService.SetPlcConfig(editData);
+
+		await ReadPage();
+	}
 }
