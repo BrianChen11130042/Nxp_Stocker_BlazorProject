@@ -11,6 +11,7 @@ using CommonLibraryB_NXP.Library.PLC.Property;
 using CommonLibraryB_NXP.Library.PLC;
 using NXP_Stocker_BlazorProject.Scope;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
+using NXP_Stocker_BlazorProject.Services.Interface;
 
 //var builder = WebApplication.CreateBuilder(args);
 
@@ -81,7 +82,7 @@ builder.Services.AddSingleton<MachineScope>();
 
 #region Service
 
-builder.Services.AddSingleton<MachineService>();
+builder.Services.AddSingleton<IMachineService, MachineService>();
 
 #endregion
 

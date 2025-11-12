@@ -1,8 +1,8 @@
 ﻿@page "/ConnectConfig"
 @rendermode InteractiveServer
 @using CommonLibraryB_NXP.Manager.ModbusTcp.Master
-@using NXP_Stocker_BlazorProject.Services
-@inject MachineService service
+@using NXP_Stocker_BlazorProject.Services.Interface
+@inject IMachineService IService
 
 
 <h3>ConnectSetting</h3>
@@ -19,7 +19,7 @@
 
 	async Task ReadPage()
 	{
-		listModbusTcp = await service.GetModbusTcpConfig();
+		listModbusTcp = await IService.GetModbusTcpConfig();
 	}
 
 }
