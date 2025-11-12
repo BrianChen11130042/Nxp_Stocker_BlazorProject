@@ -43,6 +43,32 @@ KeyFieldName="@nameof(PlcConfig.device)">
 
 </DxGrid>
 
+<div class="text-center mt-3">
+	<button class="btn btn-danger btn-lg" @onclick="initial">初始化連線</button>
+</div>
+
+<DxPopup Width="430px"
+HorizontalAlignment="HorizontalAlignment.Center"
+VerticalAlignment="VerticalAlignment.Center"
+@bind-Visible="@popUpSysMsg"
+CloseOnEscape="false"
+CloseOnOutsideClick="false"
+ShowCloseButton="false"
+ShowFooter="true"
+HeaderText="系統訊息">
+
+	<BodyContentTemplate>
+
+		<h4 class="text-center">@sysmsg</h4>
+
+	</BodyContentTemplate>
+
+	<FooterTemplate>
+		<DxButton Text="確認" RenderStyle="ButtonRenderStyle.Primary" Click="@clickPopupConfirm" />
+	</FooterTemplate>
+
+</DxPopup>
+
 @code {
 
 	//連線參數
@@ -52,6 +78,8 @@ KeyFieldName="@nameof(PlcConfig.device)">
 
 	protected override async Task OnInitializedAsync()
 	{
+		IService.dgInitMsg += updateMsg;
+
 		await ReadPage();
 	}
 
@@ -78,4 +106,26 @@ KeyFieldName="@nameof(PlcConfig.device)">
 
 		await ReadPage();
 	}
+
+	async Task initial()
+	{
+		await IService.Initial();
+	}
+
+	//pop up 視窗
+	bool popUpSysMsg { get; set; } = false;
+	string sysmsg { get; set; } = string.Empty;
+
+	async Task updateMsg(bool popUp, string msg)
+	{
+		popUpSysMsg = popUp;
+		sysmsg = msg;
+		await InvokeAsync(StateHasChanged);
+	}
+
+	async Task clickPopupConfirm()
+	{
+		popUpSysMsg = false;
+	}
+
 }

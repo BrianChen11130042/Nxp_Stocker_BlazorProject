@@ -6,11 +6,17 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
 
     public interface IMachineService
     {
-        //Config
+        //連線初始化
         Task<List<ModbusTcpMasterConfig>> GetModbusTcpConfig();
+
         Task SetModbusTcpConfig(ModbusTcpMasterConfig config);
 
         Task<List<PlcConfig>> GetPlcConfig();
+
         Task SetPlcConfig(PlcConfig config);
+
+        Task Initial();
+
+        event dgInitMessage dgInitMsg;
     }
 }

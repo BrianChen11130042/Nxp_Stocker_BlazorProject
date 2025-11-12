@@ -1,23 +1,31 @@
 ﻿using CommonLibraryB_NXP.Library.PLC.Config;
 using CommonLibraryB_NXP.Manager.ModbusTcp.Master;
+using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
+using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.DeviceName.PLC;
 using NXP_Stocker_BlazorProject.Scope;
 using NXP_Stocker_BlazorProject.Services.Interface;
 
 namespace NXP_Stocker_BlazorProject.Services
 {
-    public partial class MachineService
+    public partial class MachineService : IMachineService
     {
         public MachineScope scope;
 
         public MachineService(MachineScope scope)
         {
             this.scope = scope;
+
+            scope.observerService.AddMainUIObserver(this);
         }
     }
 
-    public partial class MachineService : IMachineService
+    public delegate Task dgInitMessage(bool popUp, string msg);
+
+    public partial class MachineService : IMainUIObserver
     {
+        public event dgInitMessage dgInitMsg;
+
         public async Task<List<ModbusTcpMasterConfig>> GetModbusTcpConfig()
         {
             List<ModbusTcpMasterConfig> list = new List<ModbusTcpMasterConfig>();
@@ -62,6 +70,21 @@ namespace NXP_Stocker_BlazorProject.Services
         {
             scope.plcConfig.Set(config.device, config);
             scope.plcConfig.Save();
+        }
+
+        public async Task Initial()
+        {
+            scope.initAll();
+        }
+
+        public async Task UpdateMainLog(List<LogTable_stub> list)
+        {
+
+        }
+
+        public async Task UpdatePopUpMessage(bool popUp, string msg)
+        {
+            dgInitMsg?.Invoke(popUp, msg);
         }
     }
 }
