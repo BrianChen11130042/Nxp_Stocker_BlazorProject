@@ -98,7 +98,7 @@ namespace NXP_Stocker_BlazorProject.Scope
                 {
                     await mainTask.Run(); // 你的主邏輯
 
-                    await Task.Delay(10, token); // 可取消的 delay
+                    await Task.Delay(1, token); // 可取消的 delay
                 }
                 catch (TaskCanceledException)
                 {

@@ -11,7 +11,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
         public RobotTask(IRobotTaskPack pack)
         {
             this.pack = pack;
-            interval = 10;
+            interval = 1;
         }
 
         public Task<bool> GetPlcRobotStatus()

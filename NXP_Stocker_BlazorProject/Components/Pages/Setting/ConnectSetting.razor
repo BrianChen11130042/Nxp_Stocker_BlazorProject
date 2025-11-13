@@ -126,6 +126,7 @@ HeaderText="系統訊息">
 	async Task clickPopupConfirm()
 	{
 		popUpSysMsg = false;
+		await InvokeAsync(StateHasChanged);
 	}
 
 }

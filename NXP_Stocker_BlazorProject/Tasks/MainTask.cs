@@ -203,6 +203,18 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
+                            if (await SetPlcHeartBeat())
+                            {
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMain.None, 0);
+                            }
+                            break;  
+
+                        case 20:
                             await pier2AsignTask.Run();
 
                             if(pier2AsignTask.key == EHandshakeKey.Finish)
@@ -214,12 +226,24 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
-                                    Set(EMain.Mission, 0);
+                                    Set(30);
                                 }
                             }
                             else
                             {
+                                Set(30);
+                            }
+                            break;
+
+                        case 30:
+                            if (await SetPlcHeartBeat())
+                            {
                                 Set(EMain.Mission, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMain.None, 0);
                             }
                             break;
                     }
@@ -250,6 +274,18 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
+                            if (await SetPlcHeartBeat())
+                            {
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMain.None, 0);
+                            }
+                            break;
+
+                        case 20:
                             await pier2Task.Run();
 
                             if(pier2Task.key == EHandshakeKey.Finish)
@@ -261,16 +297,28 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
-                                    Set(20);
+                                    Set(30);
                                 }
                             }
                             else
                             {
-                                Set(20);
+                                Set(30);
                             }
                             break;
 
-                        case 20:
+                        case 30:
+                            if (await SetPlcHeartBeat())
+                            {
+                                Set(40);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMain.None, 0);
+                            }
+                            break;
+
+                        case 40:
                             await robotTask.Run();
 
                             if (robotTask.key == EHandshakeKey.Finish)
