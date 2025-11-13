@@ -12,6 +12,8 @@ using CommonLibraryB_NXP.Library.PLC;
 using NXP_Stocker_BlazorProject.Scope;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.Services.Interface;
+using CommonLibraryB_NXP;
+using NXP_Stocker_BlazorProject;
 
 //var builder = WebApplication.CreateBuilder(args);
 
@@ -38,53 +40,9 @@ builder.Services.AddMvc();
 
 string filePath = System.AppDomain.CurrentDomain.BaseDirectory;
 
-#region DB Table
+builder.AddCommonLibraryB<EPLC>(filePath);
 
-builder.Services.AddSingleton<ILogTableOperate, LogTableLibrary>();
-builder.Services.AddSingleton<IMissionAsignTableOperate, MissionAsignTableLibrary>();
-builder.Services.AddSingleton<IPierMissionTableOperate, PierMissionTableLibrary>();
-builder.Services.AddSingleton<IRobotMissionTableOperate, RobotMissionTableLibrary>();
-builder.Services.AddSingleton<IWarehouseTableOperate, WarehouseTableLibrary>();
-
-#endregion
-
-#region CommonService
-
-builder.Services.AddSingleton<ObserverService>();
-
-#endregion
-
-#region Tools
-
-builder.Services.AddSingleton<LogWritter>(provider => new LogWritter(filePath));
-
-#endregion
-
-#region Manager
-
-builder.Services.AddSingleton<ModbusTcpMasterManager>(provider => new ModbusTcpMasterManager(filePath));
-
-#endregion
-
-#region Library
-
-builder.Services.AddSingleton<PlcConfigManager<EPLC>>(provider => new PlcConfigManager<EPLC>(filePath));
-builder.Services.AddSingleton<PlcPropertyManager<EPLC>>(provider => new PlcPropertyManager<EPLC>(filePath));
-builder.Services.AddSingleton<PlcLibrary<EPLC>>();
-
-#endregion
-
-#region Scope
-
-builder.Services.AddSingleton<MachineScope>();
-
-#endregion
-
-#region Service
-
-builder.Services.AddSingleton<IMachineService, MachineService>();
-
-#endregion
+builder.AddNxpServiceB();
 
 var app = builder.Build();
 
