@@ -87,9 +87,9 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> GetPlcIsReset()
         {
-            if(await IPeirOp.GetDeviceIsReset(pier))
+            if(await IPeirOp.GetDeviceIsReady(pier))
             {
-                _reset = pierLib.Packages[pier].property.getPier.isReset;
+                _reset = pierLib.Packages[pier].property.getPier.isReady;
                 return true;
             }
             else
