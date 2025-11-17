@@ -156,7 +156,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             PierMissionTable_stub pier = new PierMissionTable_stub()
             {
                 PierName = IDataService.MissionAsign.PierName,
-                MissionSerialNumber = IDataService.MissionAsign.MissionSerialNumber,
+                AsignId = IDataService.MissionAsign.Id,
                 Barcode = IDataService.MissionAsign.Barcode,
                 ActionCode = pierActionCode,
                 EstablishTime = DateTime.Now,
@@ -234,7 +234,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             RobotMissionTable_stub robot = new RobotMissionTable_stub()
             {
                 PierName = IDataService.MissionAsign.PierName,
-                MissionSerialNumber = IDataService.MissionAsign.MissionSerialNumber,
+                AsignId = IDataService.MissionAsign.Id,
                 Barcode = IDataService.MissionAsign.Barcode,
                 BoardSize = IDataService.MissionAsign.BoardSize,
                 PickZone = IDataService.MissionAsign.PickZone,
@@ -430,8 +430,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
     {
         public bool IsInputWarehouse()
         {
-            if (!string.IsNullOrEmpty(IDataService.MissionAsign.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
+            if (!string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
                 && IDataService.MissionAsign.ActionCode == 1)
             {
                 return true;
@@ -444,8 +443,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public bool IsOutputWarehouse()
         {
-            if(!string.IsNullOrEmpty(IDataService.MissionAsign.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
+            if(!string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
                 && IDataService.MissionAsign.ActionCode == 2)
             {
                 return true;
@@ -458,8 +456,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public bool IsTransformWarehouse()
         {
-            if (!string.IsNullOrEmpty(IDataService.MissionAsign.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
+            if (!string.IsNullOrEmpty(IDataService.MissionAsign.Barcode)
                 && IDataService.MissionAsign.ActionCode == 3)
             {
                 return true;

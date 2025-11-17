@@ -96,7 +96,7 @@ namespace NXP_Stocker_BlazorProject.Services
             MissionAsignTable_stub missionAsignTable = new MissionAsignTable_stub()
             {
                 PierName = mission.pier.ToString(),
-                MissionSerialNumber = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                Id = new Guid(),
                 ActionCode = mission.action,
                 Barcode = mission.barcode,
                 BoardSize = mission.size,

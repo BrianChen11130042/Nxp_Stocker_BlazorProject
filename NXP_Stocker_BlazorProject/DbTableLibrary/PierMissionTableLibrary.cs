@@ -19,39 +19,6 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         //**********************************//
     }
 
-    //**********下面先取代DB 要砍掉*************//
-
-    public class PierMissionTable_stub
-    {
-        //public int Id { get; set; } 到時候DB要加上這個讓它自動增加
-
-        public string PierName { get; set; }
-
-        public string MissionSerialNumber { get; set; }
-
-        public string Barcode { get; set; }
-
-        public int ActionCode { get; set; }
-
-        public DateTime EstablishTime { get; set; }
-
-        public bool IsStart { get; set; }
-
-        public DateTime StartTime { get; set; }
-
-        public string StepStatus { get; set; } //只是給UI看的狀態, 表示現在Pier動作做到哪(不用在資料庫中操作)
-
-        public bool IsError { get; set; }
-
-        public int ErrorCode { get; set; }
-
-        public bool IsFinish { get; set; }
-
-        public DateTime FinishTime { get; set; }
-    }
-
-    //***************************************//
-
     public partial class PierMissionTableLibrary : IPierMissionTableOperate
     {
         public async Task<(bool status, string msg, PierMissionTable_stub table)> AddPierMission(PierMissionTable_stub data)
@@ -61,7 +28,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 listPierMissionTable.Add(data);
 
                 PierMissionTable_stub table = listPierMissionTable.FirstOrDefault(x => x.PierName == data.PierName
-                                                                               && x.MissionSerialNumber == data.MissionSerialNumber
+                                                                               && x.AsignId == data.AsignId
                                                                                && x.Barcode == data.Barcode
                                                                                && x.ActionCode == data.ActionCode
                                                                                && x.EstablishTime == data.EstablishTime);
@@ -96,7 +63,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             try
             {
                 int index = listPierMissionTable.FindIndex(x => x.PierName == data.PierName
-                                                             && x.MissionSerialNumber == data.MissionSerialNumber
+                                                             && x.AsignId == data.AsignId
                                                              && x.Barcode == data.Barcode
                                                              && x.ActionCode == data.ActionCode
                                                              && x.EstablishTime == data.EstablishTime);
@@ -121,7 +88,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             try
             {
                 int index = listPierMissionTable.FindIndex(x => x.PierName == data.PierName
-                                                             && x.MissionSerialNumber == data.MissionSerialNumber
+                                                             && x.AsignId == data.AsignId
                                                              && x.Barcode == data.Barcode
                                                              && x.ActionCode == data.ActionCode
                                                              && x.EstablishTime == data.EstablishTime);

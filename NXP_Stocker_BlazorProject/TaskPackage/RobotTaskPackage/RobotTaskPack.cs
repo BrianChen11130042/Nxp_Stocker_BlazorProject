@@ -88,7 +88,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
         public bool IsGetNewMission()
         {
             if (!string.IsNullOrEmpty(IDataService.PierName)
-               && !string.IsNullOrEmpty(IDataService.RobotMission.MissionSerialNumber)
                && !string.IsNullOrEmpty(IDataService.RobotMission.Barcode))
             {
                 return true;

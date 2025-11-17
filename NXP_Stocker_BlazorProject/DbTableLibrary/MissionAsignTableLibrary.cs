@@ -2,32 +2,13 @@
 
 namespace NXP_Stocker_BlazorProject.DbTableLibrary
 {
-    public partial class MissionAsignTableLibrary
-    {
-
-        readonly IServiceProvider serviceProvider;
-
-        public MissionAsignTableLibrary(IServiceProvider serviceProvider)
-        {
-            this.serviceProvider = serviceProvider;
-        }
-
-        //*************下面砍掉*************//
-
-        List<MissionAsignTable_stub> listMissionAsignTable { get; set; } = new List<MissionAsignTable_stub>();
-
-        //**********************************//
-    }
-
     //**********下面先取代DB 要砍掉*************//
 
     public class MissionAsignTable_stub
     {
-        //public int Id { get; set; } 到時候DB要加上這個讓它自動增加
+        public string PierName { get; set; } //int
 
-        public string PierName { get; set; }
-
-        public string MissionSerialNumber { get; set; }
+        public Guid Id { get; set; }
 
         public int ActionCode { get; set; }
 
@@ -45,7 +26,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         public DateTime EstablishTime { get; set; }
 
-        public bool IsStart { get; set; }
+        public bool IsStart { get; set; } //砍
 
         public DateTime StartTime { get; set; }
 
@@ -53,12 +34,80 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         public int ErrorCode { get; set; }
 
-        public bool IsFinish { get; set; }
+        public bool IsFinish { get; set; } //砍
 
         public DateTime FinishTime { get; set; }
+
+        public bool IsCancel { get; set; }
+
+        public virtual ICollection<MissionBase_stub> ListMission { get; set; } = new List<MissionBase_stub>();
+    }
+
+    public class MissionBase_stub
+    {
+        public string PierName { get; set; } //int
+
+        public Guid Id { get; set; }
+
+        public Guid AsignId { get; set; }
+
+        public string Barcode { get; set; }
+
+        public DateTime EstablishTime { get; set; }
+
+        public bool IsStart { get; set; } //砍
+
+        public DateTime StartTime { get; set; }
+
+        public string Status { get; set; } //int
+
+        public bool IsError { get; set; } 
+
+        public int ErrorCode { get; set; }
+
+        public bool IsFinish { get; set; } //砍
+
+        public DateTime FinishTime { get; set; }
+
+        public virtual MissionAsignTable_stub Asign { get; set; }
+    }
+
+    public class PierMissionTable_stub : MissionBase_stub
+    {
+        public int ActionCode { get; set; }
+    }
+
+    public class RobotMissionTable_stub : MissionBase_stub
+    {
+        public int BoardSize { get; set; }
+
+        public int PickZone { get; set; }
+
+        public int PickLayer { get; set; }
+
+        public int DropZone { get; set; }
+
+        public int DropLayer { get; set; }
     }
 
     //***************************************//
+
+    public partial class MissionAsignTableLibrary
+    {
+
+        readonly IServiceProvider serviceProvider;
+
+        public MissionAsignTableLibrary(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+        }
+
+        //*************下面砍掉*************//
+
+        List<MissionAsignTable_stub> listMissionAsignTable { get; set; } = new List<MissionAsignTable_stub>();
+
+        //**********************************//
+    }
 
     public partial class MissionAsignTableLibrary : IMissionAsignTableOperate
     {
@@ -69,7 +118,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 listMissionAsignTable.Add(data);
 
                 MissionAsignTable_stub table = listMissionAsignTable.FirstOrDefault(x => x.PierName == data.PierName
-                                                                               && x.MissionSerialNumber == data.MissionSerialNumber
+                                                                               && x.Id == data.Id
                                                                                && x.Barcode == data.Barcode);
 
                 return (true, string.Empty, table);
@@ -101,7 +150,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             try
             {
                 int index = listMissionAsignTable.FindIndex(x => x.PierName == data.PierName
-                                                              && x.MissionSerialNumber == data.MissionSerialNumber
+                                                              && x.Id == data.Id
                                                               && x.ActionCode == data.ActionCode
                                                               && x.Barcode == data.Barcode
                                                               && x.BoardSize == data.BoardSize

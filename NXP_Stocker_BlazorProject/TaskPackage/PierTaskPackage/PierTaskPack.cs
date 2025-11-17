@@ -171,8 +171,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
     {
         public bool IsInputLargeBoard()
         {
-            if (!string.IsNullOrEmpty(IDataService.PierMission.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.PierMission.Barcode)
+            if (!string.IsNullOrEmpty(IDataService.PierMission.Barcode)
                 && IDataService.PierMission.ActionCode == 1)
             {
                 return true;
@@ -216,7 +215,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             if(await IPeirOp.GetPierStatus(pier))
             {
                 pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
-                IDataService.PierMission.StepStatus = dcInputLargeBoard[pierStatus];
+                IDataService.PierMission.Status = dcInputLargeBoard[pierStatus];
                 return true;
             }
             else
@@ -264,8 +263,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
     {
         public bool IsInputSmallBoard()
         {
-            if (!string.IsNullOrEmpty(IDataService.PierMission.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.PierMission.Barcode)
+            if (!string.IsNullOrEmpty(IDataService.PierMission.Barcode)
                 && IDataService.PierMission.ActionCode == 3)
             {
                 return true;
@@ -309,7 +307,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             if(await IPeirOp.GetPierStatus(pier))
             {
                 pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
-                IDataService.PierMission.StepStatus = dcInputSmallBoard[pierStatus];
+                IDataService.PierMission.Status = dcInputSmallBoard[pierStatus];
                 return true;
             }
             else
@@ -358,8 +356,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
     {
         public bool IsOutputLargeBoard()
         {
-            if (!string.IsNullOrEmpty(IDataService.PierMission.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.PierMission.Barcode)
+            if (!string.IsNullOrEmpty(IDataService.PierMission.Barcode)
                 && IDataService.PierMission.ActionCode == 2)
             {
                 return true;
@@ -403,7 +400,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             if (await IPeirOp.GetPierStatus(pier))
             {
                 pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
-                IDataService.PierMission.StepStatus = dcOutputLargeBoard[pierStatus];
+                IDataService.PierMission.Status = dcOutputLargeBoard[pierStatus];
                 return true;
             }
             else
@@ -451,8 +448,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
     {
         public bool IsOutputSmallBoard()
         {
-            if (!string.IsNullOrEmpty(IDataService.PierMission.MissionSerialNumber)
-                && !string.IsNullOrEmpty(IDataService.PierMission.Barcode)
+            if (!string.IsNullOrEmpty(IDataService.PierMission.Barcode)
                 && IDataService.PierMission.ActionCode == 4)
             {
                 return true;
@@ -496,7 +492,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             if (await IPeirOp.GetPierStatus(pier))
             {
                 pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
-                IDataService.PierMission.StepStatus = dcOutputSmallBoard[pierStatus];
+                IDataService.PierMission.Status = dcOutputSmallBoard[pierStatus];
                 return true;
             }
             else
