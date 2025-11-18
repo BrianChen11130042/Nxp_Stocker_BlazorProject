@@ -14,7 +14,7 @@ namespace NXP_Stocker_BlazorProject
             #region DB Table
 
             builder.Services.AddSingleton<ILogTableOperate, LogTableLibrary>();
-            builder.Services.AddSingleton<IMissionAsignTableOperate, MissionAsignTableLibrary>();
+            builder.Services.AddSingleton<IMissionTableOperate, MissionTableLibrary>();
             builder.Services.AddSingleton<IPierMissionTableOperate, PierMissionTableLibrary>();
             builder.Services.AddSingleton<IRobotMissionTableOperate, RobotMissionTableLibrary>();
             builder.Services.AddSingleton<IWarehouseTableOperate, WarehouseTableLibrary>();

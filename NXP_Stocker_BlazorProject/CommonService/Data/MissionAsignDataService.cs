@@ -11,7 +11,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     public partial class MissionAsignDataService : IMissionAsignDataService
     {
         readonly ILogTableOperate ILogTableOp;
-        readonly IMissionAsignTableOperate IMissionAsignTableOp;
+        readonly IMissionTableOperate IMissionAsignTableOp;
         readonly IPierMissionTableOperate IPierMissionTableOp;
         readonly IRobotMissionTableOperate IRobotMissionTableOp;
         readonly IWarehouseTableOperate IWarehouseTableOp;
@@ -19,7 +19,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
         readonly INLogWritterObservable INLogWritter;
 
 
-        public MissionAsignDataService(ILogTableOperate ILogTableOp, IMissionAsignTableOperate IMissionAsignTableOp,
+        public MissionAsignDataService(ILogTableOperate ILogTableOp, IMissionTableOperate IMissionAsignTableOp,
                                         IPierMissionTableOperate IPierMissionTableOp, IRobotMissionTableOperate IRobotMissionTableOp,
                                         IWarehouseTableOperate IWarehouseTableOp, ObserverService observerService)
         {

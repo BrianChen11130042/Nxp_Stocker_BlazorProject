@@ -21,7 +21,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         //**********************************//
     }
 
-    public partial class MissionAsignTableLibrary : IMissionAsignTableOperate
+    public partial class MissionAsignTableLibrary : IMissionTableOperate
     {
         public async Task<(bool status, string msg, MissionAsignTable table)> AddMissionAsign(MissionAsignTable data)
         {

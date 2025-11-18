@@ -8,7 +8,7 @@ namespace NXP_Stocker_BlazorProject.Scope
     public partial class MachineScope
     {
         public ILogTableOperate ILogTableOp;
-        public IMissionAsignTableOperate IMissionAsignTableOp;
+        public IMissionTableOperate IMissionAsignTableOp;
         public IPierMissionTableOperate IPierMissionTableOp;
         public IRobotMissionTableOperate IRobotMissionTalbeOp;
         public IWarehouseTableOperate IWarehouseTableOp;
@@ -16,7 +16,7 @@ namespace NXP_Stocker_BlazorProject.Scope
         void createDbTable()
         {
             ILogTableOp = provider.GetRequiredService<ILogTableOperate>();
-            IMissionAsignTableOp = provider.GetRequiredService<IMissionAsignTableOperate>();
+            IMissionAsignTableOp = provider.GetRequiredService<IMissionTableOperate>();
             IPierMissionTableOp = provider.GetRequiredService<IPierMissionTableOperate>();
             IRobotMissionTalbeOp = provider.GetRequiredService<IRobotMissionTableOperate>();
             IWarehouseTableOp = provider.GetRequiredService<IWarehouseTableOperate>();
