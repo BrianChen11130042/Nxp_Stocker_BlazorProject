@@ -2,7 +2,7 @@
 
 namespace NXP_Stocker_BlazorProject.DbTableLibrary.Interface
 {
-    public interface IMissionAsignTableOperate
+    public interface IMissionTableOperate
     {
         Task<(bool status, string msg, MissionAsignTable table)> AddMissionAsign(MissionAsignTable data);
 

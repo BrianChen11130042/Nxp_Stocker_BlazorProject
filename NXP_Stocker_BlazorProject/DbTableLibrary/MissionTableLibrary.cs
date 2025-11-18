@@ -4,12 +4,12 @@ using NXP_Stocker_BlazorProject.EFModel;
 namespace NXP_Stocker_BlazorProject.DbTableLibrary
 {
 
-    public partial class MissionAsignTableLibrary
+    public partial class MissionTableLibrary
     {
 
         readonly IServiceProvider serviceProvider;
 
-        public MissionAsignTableLibrary(IServiceProvider serviceProvider)
+        public MissionTableLibrary(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
         }
@@ -21,7 +21,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         //**********************************//
     }
 
-    public partial class MissionAsignTableLibrary : IMissionTableOperate
+    public partial class MissionTableLibrary : IMissionTableOperate
     {
         public async Task<(bool status, string msg, MissionAsignTable table)> AddMissionAsign(MissionAsignTable data)
         {
