@@ -18,9 +18,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.GetTableWarehousePickPort();
         }
 
-        public Task<bool> GetPlcPierName()
+        public Task<bool> GetPlcPierNo()
         {
-            return pack.GetPlcPierName();
+            return pack.GetPlcPierNo();
         }
 
         public Task<bool> GetTableNewMissionAsign()
@@ -133,14 +133,24 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.SetTableWarehouseOutputDropPort();
         }
 
-        public Task<bool> GetPlcIsReset()
+        public Task<bool> GetPlcIsReady()
         {
-            return pack.GetPlcIsReset();
+            return pack.GetPlcIsReady();
         }
 
-        public bool IsPlcReset()
+        public bool IsPlcReady()
         {
-            return pack.IsPlcReset();
+            return pack.IsPlcReady();
+        }
+
+        public Task UpdateUIPickPortWarehouse()
+        {
+            return pack.UpdateUIPickPortWarehouse();
+        }
+
+        public Task UpdateUIDropPortWarehouse()
+        {
+            return pack.UpdateUIDropPortWarehouse();
         }
     }
 
@@ -169,7 +179,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            if(await GetPlcPierName())
+                            if(await GetPlcPierNo())
                             {
                                 Set(10);
                             }
@@ -181,9 +191,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(await GetPlcIsReset())
+                            if(await GetPlcIsReady())
                             {
-                                if(IsPlcReset())
+                                if(IsPlcReady())
                                 {
                                     Set(20);
                                 }
@@ -239,7 +249,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 0:
                             if(await GetTableWarehousePickPort())
                             {
-                                Set(10); //更新UI
+                                await UpdateUIPickPortWarehouse();
+                                Set(10);
                             }
                             else
                             {
@@ -251,7 +262,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 10:
                             if(await GetTableWarehouseDropPort())
                             {
-                                Set(20);//更新UI
+                                await UpdateUIDropPortWarehouse();
+                                Set(20);
                             }
                             else
                             {
@@ -320,7 +332,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 60:
                             if(await SetTableWarehouseInputPickPort())
                             {
-                                Set(70);//更新UI
+                                await UpdateUIPickPortWarehouse();
+                                Set(70);
                             }
                             else
                             {
@@ -370,6 +383,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 90:
                             if(await SetTableWarehouseOutputPickPort())
                             {
+                                await UpdateUIPickPortWarehouse();
                                 Set(100);
                             }
                             else
@@ -382,6 +396,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 100:
                             if(await SetTableWarehouseInputDropPort())
                             {
+                                await UpdateUIDropPortWarehouse();
                                 Set(110);
                             }
                             else
@@ -425,7 +440,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 0:
                             if (await GetTableWarehousePickPort())
                             {
-                                Set(10); //更新UI
+                                await UpdateUIPickPortWarehouse();
+                                Set(10);
                             }
                             else
                             {
@@ -437,7 +453,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 10:
                             if (await GetTableWarehouseDropPort())
                             {
-                                Set(20);//更新UI
+                                await UpdateUIDropPortWarehouse();
+                                Set(20);
                             }
                             else
                             {
@@ -513,6 +530,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 60:
                             if (await SetTableWarehouseOutputPickPort())
                             {
+                                await UpdateUIPickPortWarehouse();
                                 Set(70);
                             }
                             else
@@ -525,6 +543,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 70:
                             if (await SetTableWarehouseInputDropPort())
                             {
+                                await UpdateUIDropPortWarehouse();
                                 Set(80);
                             }
                             else
@@ -568,6 +587,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 100:
                             if(await SetTableWarehouseOutputDropPort())
                             {
+                                await UpdateUIDropPortWarehouse();
                                 Set(110);
                             }
                             else
@@ -611,7 +631,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 0:
                             if (await GetTableWarehousePickPort())
                             {
-                                Set(10); //更新UI
+                                await UpdateUIPickPortWarehouse();
+                                Set(10);
                             }
                             else
                             {
@@ -623,7 +644,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 10:
                             if (await GetTableWarehouseDropPort())
                             {
-                                Set(20);//更新UI
+                                await UpdateUIDropPortWarehouse();
+                                Set(20);
                             }
                             else
                             {
@@ -699,6 +721,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 60:
                             if (await SetTableWarehouseOutputPickPort())
                             {
+                                await UpdateUIPickPortWarehouse();
                                 Set(70);
                             }
                             else
@@ -711,6 +734,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 70:
                             if (await SetTableWarehouseInputDropPort())
                             {
+                                await UpdateUIDropPortWarehouse();
                                 Set(80);
                             }
                             else

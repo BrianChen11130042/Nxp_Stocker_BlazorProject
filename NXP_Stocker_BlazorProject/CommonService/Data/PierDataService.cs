@@ -35,16 +35,16 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
     public partial class PierDataService
     {
-        string _pierName { get; set; } = string.Empty;
-        public string PierName
+        int _pierNo { get; set; } = 0;
+        public int PierNo
         {
             get
             {
-                return _pierName;
+                return _pierNo;
             }
             set
             {
-                _pierName = value;
+                _pierNo = value;
             }
         }
 
@@ -81,7 +81,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     {
         public async Task<bool> GetNewPierMissionTable()
         {
-            var result = await IPierMissionTableOp.GetNewPierMission(PierName);
+            var result = await IPierMissionTableOp.GetNewPierMission(PierNo);
 
             if(result.status)
             {
@@ -131,7 +131,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             else
                 _pierLog = log;
 
-            var table = _getLogTable(PierName, type, log);
+            string equip = "Pier" + PierNo.ToString();
+
+            var table = _getLogTable(equip, type, log);
             var result = await ILogTableOp.AddLogData(table);
 
             if(result.status)

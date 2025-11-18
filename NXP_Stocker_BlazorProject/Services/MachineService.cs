@@ -96,8 +96,9 @@ namespace NXP_Stocker_BlazorProject.Services
         {
             MissionAsignTable missionAsignTable = new MissionAsignTable()
             {
-                PierName = mission.pier.ToString(),
                 Id = new Guid(),
+
+                PierNo = mission.pierNo,
                 ActionCode = mission.action,
                 Barcode = mission.barcode,
                 BoardSize = mission.size,

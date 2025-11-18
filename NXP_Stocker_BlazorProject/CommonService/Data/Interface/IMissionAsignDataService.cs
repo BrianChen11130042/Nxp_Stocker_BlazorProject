@@ -1,17 +1,18 @@
 ﻿using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.EFModel;
+using NXP_Stocker_BlazorProject.MachineModel;
 
 namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 {
     public interface IMissionAsignDataService
     {
-        string PierName { get; set; }
+        int PierNo { get; set; }
 
         MissionAsignTable MissionAsign { get; set; }
 
-        WarehouseTable_stub PickPort { get; set; }
+        WarehouseInform PickPort { get; set; }
 
-        WarehouseTable_stub DropPort { get; set; }
+        WarehouseInform DropPort { get; set; }
 
         PierMissionTable PierMission { get; set; }
 
@@ -23,15 +24,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
         Task<bool> GetNewMissionAsignTable();
 
         Task<bool> SetMissionAsignTable();
-
-        //WarehouseTable
-        Task<bool> GetWarehousePickTable();
-
-        Task<bool> GetWarehouseDropTable();
-
-        Task<bool> SetWarehousePickTable();
-
-        Task<bool> SetWarehouseDropTable();
 
         //PierMissionTable
         Task<bool> SetNewPierMissionTable();

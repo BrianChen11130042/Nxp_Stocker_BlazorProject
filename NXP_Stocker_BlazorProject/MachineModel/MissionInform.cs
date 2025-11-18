@@ -1,14 +1,8 @@
 ﻿namespace NXP_Stocker_BlazorProject.MachineModel
 {
-    public enum EPier
-    {
-        Pier1,
-        Pier2
-    }
-
     public class MissionInform
     {
-        public EPier pier { get; set; }
+        public int pierNo { get; set; } // 1:pier1 , 2:pier2 
 
         public int action { get; set; } // 1:入倉儲 , 2:出倉儲 , 3:儲位至Buffer
 

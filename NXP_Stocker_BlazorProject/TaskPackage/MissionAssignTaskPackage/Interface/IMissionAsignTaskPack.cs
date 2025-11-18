@@ -4,17 +4,21 @@
     public interface IMissionAsignTaskPack
     {
         //公用
-        Task<bool> GetPlcPierName();
+        Task<bool> GetPlcPierNo();
 
-        Task<bool> GetPlcIsReset();
+        Task<bool> GetPlcIsReady();
 
-        bool IsPlcReset();
+        bool IsPlcReady();
 
         Task<bool> GetTableNewMissionAsign();
 
         Task UpdateUIMissionAsign();
 
         Task UpdateUIMissionAsignLog();
+
+        Task UpdateUIPickPortWarehouse();
+
+        Task UpdateUIDropPortWarehouse();
 
         Task<bool> GetTableWarehousePickPort();
 

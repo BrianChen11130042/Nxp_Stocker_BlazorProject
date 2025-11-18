@@ -9,16 +9,16 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         void RemovePierUIObserver(IPierUIObserver o);
 
-        Task NotifyPierMission(string pier, PierMissionTable table);
+        Task NotifyPierMission(int pier, PierMissionTable table);
 
-        Task NotifyPierLog(string pier, List<LogTable> list);
+        Task NotifyPierLog(int pier, List<LogTable> list);
     }
 
 
     public interface IPierUIObserver
     {
-        Task UpdatePierMission(string pier, PierMissionTable table);
+        Task UpdatePierMission(int pier, PierMissionTable table);
 
-        Task UpdatePierLog(string pier, List<LogTable> list);
+        Task UpdatePierLog(int pier, List<LogTable> list);
     }
 }

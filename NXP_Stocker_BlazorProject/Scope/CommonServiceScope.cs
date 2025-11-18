@@ -25,11 +25,11 @@ namespace NXP_Stocker_BlazorProject.Scope
 
             pier1MissionAsignDataService = new MissionAsignDataService(ILogTableOp, IMissionAsignTableOp,
                                                                        IPierMissionTableOp, IRobotMissionTalbeOp,
-                                                                       IWarehouseTableOp, observerService);
+                                                                       observerService);
 
             pier2MissionAsignDataService = new MissionAsignDataService(ILogTableOp, IMissionAsignTableOp,
                                                                        IPierMissionTableOp, IRobotMissionTalbeOp,
-                                                                       IWarehouseTableOp, observerService);
+                                                                       observerService);
 
             pier1DataService = new PierDataService(ILogTableOp, IPierMissionTableOp, observerService);
 

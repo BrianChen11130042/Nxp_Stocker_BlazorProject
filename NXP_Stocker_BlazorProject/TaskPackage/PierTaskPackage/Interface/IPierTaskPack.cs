@@ -2,7 +2,7 @@
 {
     public interface IPierTaskPack
     {
-        Task<bool> GetPlcPierName();
+        Task<bool> GetPlcPierNo();
 
         Task<bool> GetTableNewMission();
 

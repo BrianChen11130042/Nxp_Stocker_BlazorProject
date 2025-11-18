@@ -5,7 +5,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 {
     public interface IPierDataService
     {
-        string PierName { get; set; }
+        int PierNo { get; set; }
 
         PierMissionTable PierMission { get; set; }
 

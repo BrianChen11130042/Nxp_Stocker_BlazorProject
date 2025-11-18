@@ -1,9 +1,12 @@
 ﻿using CommonLibraryB_NXP.Tools.LogWritter;
+using DevExpress.Blazor;
 using NXP_Stocker_BlazorProject.CommonService.Data.Interface;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
 using NXP_Stocker_BlazorProject.EFModel;
+using NXP_Stocker_BlazorProject.MachineModel;
+using System.Reflection.Emit;
 
 namespace NXP_Stocker_BlazorProject.CommonService.Data
 {
@@ -11,23 +14,21 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     public partial class MissionAsignDataService : IMissionAsignDataService
     {
         readonly ILogTableOperate ILogTableOp;
-        readonly IMissionTableOperate IMissionAsignTableOp;
+        readonly IMissionAsignTableOperate IMissionAsignTableOp;
         readonly IPierMissionTableOperate IPierMissionTableOp;
         readonly IRobotMissionTableOperate IRobotMissionTableOp;
-        readonly IWarehouseTableOperate IWarehouseTableOp;
 
         readonly INLogWritterObservable INLogWritter;
 
 
-        public MissionAsignDataService(ILogTableOperate ILogTableOp, IMissionTableOperate IMissionAsignTableOp,
-                                        IPierMissionTableOperate IPierMissionTableOp, IRobotMissionTableOperate IRobotMissionTableOp,
-                                        IWarehouseTableOperate IWarehouseTableOp, ObserverService observerService)
+        public MissionAsignDataService(ILogTableOperate ILogTableOp, IMissionAsignTableOperate IMissionAsignTableOp,
+                                       IPierMissionTableOperate IPierMissionTableOp, IRobotMissionTableOperate IRobotMissionTableOp,
+                                       ObserverService observerService)
         {
             this.ILogTableOp = ILogTableOp;
             this.IMissionAsignTableOp = IMissionAsignTableOp;
             this.IPierMissionTableOp = IPierMissionTableOp;
             this.IRobotMissionTableOp = IRobotMissionTableOp;
-            this.IWarehouseTableOp = IWarehouseTableOp;
 
             this.INLogWritter = observerService;
         }
@@ -45,17 +46,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
     public partial class MissionAsignDataService
     {
-        string _pierName { get; set; } = string.Empty;
+        int _pierNo { get; set; } = 0;
 
-        public string PierName
+        public int PierNo
         {
             get
             {
-                return _pierName;
+                return _pierNo;
             }
             set
             {
-                _pierName = value;
+                _pierNo = value;
             }
         }
 
@@ -73,9 +74,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        WarehouseTable_stub _pickPort { get; set; } = new WarehouseTable_stub();
+        WarehouseInform _pickPort { get; set; } = new WarehouseInform();
 
-        public WarehouseTable_stub PickPort
+        public WarehouseInform PickPort
         {
             get
             {
@@ -87,9 +88,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        WarehouseTable_stub _dropPort { get; set; } = new WarehouseTable_stub();
+        WarehouseInform _dropPort { get; set; } = new WarehouseInform();
 
-        public WarehouseTable_stub DropPort
+        public WarehouseInform DropPort
         {
             get
             {
@@ -115,20 +116,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        List<LogTable> _listMissionAsignLog { get; set; } = new List<LogTable>();
-
-        public List<LogTable> ListMissionAsignLog
-        {
-            get
-            {
-                return _listMissionAsignLog;
-            }
-            set
-            {
-                _listMissionAsignLog = value;
-            }
-        }
-
         RobotMissionTable _robotMission { get; set; } = new RobotMissionTable();
 
         public RobotMissionTable RobotMission
@@ -143,13 +130,26 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
+        List<LogTable> _listMissionAsignLog { get; set; } = new List<LogTable>();
+
+        public List<LogTable> ListMissionAsignLog
+        {
+            get
+            {
+                return _listMissionAsignLog;
+            }
+            set
+            {
+                _listMissionAsignLog = value;
+            }
+        }
     }
 
     public partial class MissionAsignDataService
     {
         public async Task<bool> GetNewMissionAsignTable()
         {
-            var result = await IMissionAsignTableOp.GetNewMissionAsign(PierName);
+            var result = await IMissionAsignTableOp.GetNewMissionAsign(PierNo);
 
             if (result.status)
             {
@@ -161,78 +161,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 {
                     MissionAsign = new MissionAsignTable();
                 }
-
-                return result.status;
-            }
-            else
-            {
-                await writeNLogError(result.msg);
-                return result.status;
-            }
-        }
-
-        public async Task<bool> GetWarehousePickTable()
-        {
-            var result = await IWarehouseTableOp.GetWHTarget(MissionAsign.PierName, 
-                                                             MissionAsign.PickZone, 
-                                                             MissionAsign.PickLayer);
-
-            if(result.status)
-            {
-                PickPort = result.table;
-
-                return result.status;
-            }
-            else
-            {
-                await writeNLogError(result.msg);
-                return result.status;
-            }
-        }
-
-        public async Task<bool> GetWarehouseDropTable()
-        {
-            var result = await IWarehouseTableOp.GetWHTarget(MissionAsign.PierName,
-                                                             MissionAsign.DropZone,
-                                                             MissionAsign.DropLayer);
-
-            if(result.status)
-            {
-                DropPort = result.table;
-
-                return result.status;
-            }
-            else
-            {
-                await writeNLogError(result.msg);
-                return result.status;
-            }
-        }
-
-        public async Task<bool> SetWarehousePickTable()
-        {
-            var result = await IWarehouseTableOp.SetWHTarget(PickPort);
-
-            if(result.status)
-            {
-                PickPort = result.table;
-
-                return result.status;
-            }
-            else
-            {
-                await writeNLogError(result.msg);
-                return result.status;
-            }
-        }
-
-        public async Task<bool> SetWarehouseDropTable()
-        {
-            var result = await IWarehouseTableOp.SetWHTarget(DropPort);
-
-            if(result.status)
-            {
-                DropPort = result.table;
 
                 return result.status;
             }
@@ -342,7 +270,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             else
                 _missionAsignLog = log;
 
-            string equip = "MissionAsign_" + PierName;
+            string equip = "MissionAsign_" + PierNo.ToString();
 
             var table = _getLogTable(equip, type, log);
             var result = await ILogTableOp.AddLogData(table);

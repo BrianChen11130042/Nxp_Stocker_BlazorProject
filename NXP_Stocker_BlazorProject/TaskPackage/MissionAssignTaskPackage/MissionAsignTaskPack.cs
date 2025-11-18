@@ -8,6 +8,8 @@ using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
 using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage.Interface;
 using NXP_Stocker_BlazorProject.EFModel;
+using NXP_Stocker_BlazorProject.MachineModel;
+using NXP_Stocker_BlazorProject.Tasks;
 
 namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 {
@@ -69,11 +71,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
     public partial class MissionAsignTaskPack<EPLC> : IMissionAsignTaskPack
     {
 
-        public async Task<bool> GetPlcPierName()
+        public async Task<bool> GetPlcPierNo()
         {
-            if (await IPeirOp.GetDeviceName(pier))
+            if (await IPeirOp.GetDeviceNo(pier))
             {
-                IDataService.PierName = pierLib.Packages[pier].property.getPier.pierName;
+                IDataService.PierNo = pierLib.Packages[pier].property.getPier.pierNo;
                 return true;
             }
             else
@@ -86,7 +88,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         int _reset { get; set; } = 0;
 
-        public async Task<bool> GetPlcIsReset()
+        public async Task<bool> GetPlcIsReady()
         {
             if(await IPeirOp.GetDeviceIsReady(pier))
             {
@@ -101,7 +103,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
-        public bool IsPlcReset()
+        public bool IsPlcReady()
         {
             if(_reset == 1)
             {
@@ -127,26 +129,51 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> GetTableWarehousePickPort()
         {
-            if (await IDataService.GetWarehousePickTable())
+            WarehouseInform pick = new WarehouseInform();
+
+            if (IDataService.MissionAsign.ActionCode == 1)
             {
-                return true;
+                pick.pierNo = IDataService.MissionAsign.PierNo;
+                pick.zone = IDataService.MissionAsign.PickZone;
+                pick.layer = IDataService.MissionAsign.PickLayer;
+
+                pick.isOccupy = false;
+                pick.barcode = string.Empty;
+                pick.size = 0;
             }
             else
             {
-                return false;
+                pick.pierNo = IDataService.MissionAsign.PierNo;
+                pick.zone = IDataService.MissionAsign.PickZone;
+                pick.layer = IDataService.MissionAsign.PickLayer;
+
+                pick.isOccupy = true;
+                pick.barcode = IDataService.MissionAsign.Barcode;
+                pick.size = IDataService.MissionAsign.BoardSize;
             }
+
+
+            IDataService.PickPort = pick;
+
+            return true;
         }
 
         public async Task<bool> GetTableWarehouseDropPort()
         {
-            if(await IDataService.GetWarehouseDropTable())
+
+            WarehouseInform drop = new WarehouseInform()
             {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                pierNo = IDataService.MissionAsign.PierNo,
+                zone = IDataService.MissionAsign.DropZone,
+                layer = IDataService.MissionAsign.DropLayer,
+                isOccupy = false,
+                barcode = string.Empty,
+                size = 0
+            };
+
+            IDataService.DropPort = drop;
+
+            return true;
         }
 
         public async Task<bool> SetTableNewPierMission()
@@ -156,8 +183,10 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
             PierMissionTable pier = new PierMissionTable()
             {
-                PierName = IDataService.MissionAsign.PierName,
+                Id = new Guid(),
                 AsignId = IDataService.MissionAsign.Id,
+
+                PierNo = IDataService.MissionAsign.PierNo,
                 Barcode = IDataService.MissionAsign.Barcode,
                 ActionCode = pierActionCode,
                 EstablishTime = DateTime.Now,
@@ -220,7 +249,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public bool IsPierMissionFinish()
         {
-            if(IDataService.PierMission.IsFinish == true)
+            if(IDataService.PierMission.FinishTime != null)
             {
                 return true;
             }
@@ -234,8 +263,10 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
         {
             RobotMissionTable robot = new RobotMissionTable()
             {
-                PierName = IDataService.MissionAsign.PierName,
+                Id = new Guid(),
                 AsignId = IDataService.MissionAsign.Id,
+
+                PierNo = IDataService.MissionAsign.PierNo,
                 Barcode = IDataService.MissionAsign.Barcode,
                 BoardSize = IDataService.MissionAsign.BoardSize,
                 PickZone = IDataService.MissionAsign.PickZone,
@@ -276,7 +307,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public bool IsRobotMissionFinish()
         {
-            if(IDataService.RobotMission.IsFinish == true)
+            if(IDataService.RobotMission.FinishTime != null)
             {
                 return true;
             }
@@ -288,7 +319,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetTableMissionAsignStart()
         {
-            IDataService.MissionAsign.IsStart = true;
             IDataService.MissionAsign.StartTime = DateTime.Now;
 
             if (await IDataService.SetMissionAsignTable())
@@ -303,7 +333,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetTableMissionAsignFinsih()
         {
-            IDataService.MissionAsign.IsFinish = true;
             IDataService.MissionAsign.FinishTime = DateTime.Now;
 
             if(await IDataService.SetMissionAsignTable())
@@ -318,7 +347,8 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetLogMissionAsignStart()
         {
-            string temp = IDataService.MissionAsign.PierName 
+            string temp = "Pier"
+                          + IDataService.MissionAsign.PierNo.ToString()
                           + dcBoardSize[IDataService.MissionAsign.BoardSize]
                           + dcMissionAssign[IDataService.MissionAsign.ActionCode] + "_任務開始";
 
@@ -334,7 +364,8 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetLogMissionAsignFinish()
         {
-            string temp = IDataService.MissionAsign.PierName
+            string temp = "Pier"
+                         + IDataService.MissionAsign.PierNo.ToString()
                          + dcBoardSize[IDataService.MissionAsign.BoardSize]
                          + dcMissionAssign[IDataService.MissionAsign.ActionCode] + "_任務結束";
 
@@ -350,12 +381,22 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task UpdateUIMissionAsign()
         {
-            await IMissionAsignObser.NotifyMissionAsign(IDataService.PierName, IDataService.MissionAsign);
+            await IMissionAsignObser.NotifyMissionAsign(IDataService.PierNo, IDataService.MissionAsign);
         }
 
         public async Task UpdateUIMissionAsignLog()
         {
-            await IMissionAsignObser.NotifyMissionAsignLog(IDataService.PierName, IDataService.ListMissionAsignLog);
+            await IMissionAsignObser.NotifyMissionAsignLog(IDataService.PierNo, IDataService.ListMissionAsignLog);
+        }
+
+        public async Task UpdateUIPickPortWarehouse()
+        {
+            await IMissionAsignObser.NotifyWarehouseInform(IDataService.PierNo, IDataService.PickPort);
+        }
+
+        public async Task UpdateUIDropPortWarehouse()
+        {
+            await IMissionAsignObser.NotifyWarehouseInform(IDataService.PierNo, IDataService.DropPort);
         }
     }
 
@@ -363,67 +404,38 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
     {
         public async Task<bool> SetTableWarehouseInputPickPort()
         {
-            IDataService.PickPort.IsOccupy = true;
-            IDataService.PickPort.Barcode = IDataService.MissionAsign.Barcode;
-            IDataService.PickPort.BoardSize = IDataService.MissionAsign.BoardSize;
+            IDataService.PickPort.isOccupy = true;
+            IDataService.PickPort.barcode = IDataService.MissionAsign.Barcode;
+            IDataService.PickPort.size = IDataService.MissionAsign.BoardSize;
 
-            if(await IDataService.SetWarehousePickTable())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
+            return true;
         }
 
         public async Task<bool> SetTableWarehouseOutputPickPort()
         {
-            IDataService.PickPort.IsOccupy = false;
-            IDataService.PickPort.Barcode = string.Empty;
-            IDataService.PickPort.BoardSize = 999;
+            IDataService.PickPort.isOccupy = false;
+            IDataService.PickPort.barcode = string.Empty;
+            IDataService.PickPort.size = 0;
 
-            if(await IDataService.SetWarehousePickTable())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
 
         public async Task<bool> SetTableWarehouseInputDropPort()
         {
-            IDataService.DropPort.IsOccupy = true;
-            IDataService.DropPort.Barcode = IDataService.MissionAsign.Barcode;
-            IDataService.DropPort.BoardSize = IDataService.MissionAsign.BoardSize;
+            IDataService.DropPort.isOccupy = true;
+            IDataService.DropPort.barcode = IDataService.MissionAsign.Barcode;
+            IDataService.DropPort.size = IDataService.MissionAsign.BoardSize;
 
-            if(await IDataService.SetWarehouseDropTable())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
 
         public async Task<bool> SetTableWarehouseOutputDropPort()
         {
-            IDataService.DropPort.IsOccupy = false;
-            IDataService.DropPort.Barcode = string.Empty;
-            IDataService.DropPort.BoardSize = 999;
+            IDataService.DropPort.isOccupy = false;
+            IDataService.DropPort.barcode = string.Empty;
+            IDataService.DropPort.size = 0;
 
-            if(await IDataService.SetWarehouseDropTable())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
     }
 

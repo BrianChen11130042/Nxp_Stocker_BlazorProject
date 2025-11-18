@@ -2,6 +2,7 @@
 using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
 using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.EFModel;
+using NXP_Stocker_BlazorProject.MachineModel;
 
 namespace NXP_Stocker_BlazorProject.CommonService.Observer
 {
@@ -64,7 +65,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyPierMission(string pier, PierMissionTable table)
+        public async Task NotifyPierMission(int pier, PierMissionTable table)
         {
             if(osPier != null)
             {
@@ -75,7 +76,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyPierLog(string pier, List<LogTable> list)
+        public async Task NotifyPierLog(int pier, List<LogTable> list)
         {
             if (osPier != null)
             {
@@ -111,7 +112,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyRobotLog(string pier, List<LogTable> list)
+        public async Task NotifyRobotLog(int pier, List<LogTable> list)
         {
             if(osRobot != null)
             {
@@ -122,7 +123,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyRobotMission(string pier, RobotMissionTable table)
+        public async Task NotifyRobotMission(int pier, RobotMissionTable table)
         {
             if(osRobot != null)
             {
@@ -158,7 +159,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyMissionAsign(string pier, MissionAsignTable missionAsign)
+        public async Task NotifyMissionAsign(int pier, MissionAsignTable missionAsign)
         {
             if(osMissionAssign != null)
             {
@@ -169,13 +170,24 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyMissionAsignLog(string pier, List<LogTable> list)
+        public async Task NotifyMissionAsignLog(int pier, List<LogTable> list)
         {
             if(osMissionAssign != null)
             {
                 foreach(var o in osMissionAssign)
                 {
                     await o.UpdateMissionAsignLog(pier, list);
+                }
+            }
+        }
+
+        public async Task NotifyWarehouseInform(int pier, WarehouseInform warehouse)
+        {
+            if(osMissionAssign != null)
+            {
+                foreach(var o in osMissionAssign)
+                {
+                    await o.UpdateWarehouseInform(pier, warehouse);
                 }
             }
         }

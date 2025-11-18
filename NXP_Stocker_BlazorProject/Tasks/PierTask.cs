@@ -30,9 +30,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.GetPlcOutputLargeBoardStatus();
         }
 
-        public Task<bool> GetPlcPierName()
+        public Task<bool> GetPlcPierNo()
         {
-            return pack.GetPlcPierName();
+            return pack.GetPlcPierNo();
         }
 
         public Task<bool> GetTableNewMission()
@@ -182,7 +182,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            if(await GetPlcPierName())
+                            if(await GetPlcPierNo())
                             {
                                 Set(10);
                             }

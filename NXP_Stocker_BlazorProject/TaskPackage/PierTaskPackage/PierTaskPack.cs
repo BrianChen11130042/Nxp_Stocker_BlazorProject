@@ -31,7 +31,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             this.pierLib = pierLib;
 
             this.IDataService = dataService;
-            this.IDataService.PierName = pier.ToString();
 
             this.INLogObser = observerService;
             this.IPierObser = observerService;
@@ -51,8 +50,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         string err { get; set; } = "Error";
 
-        int pierStatus { get; set; } = 0;
-
         Dictionary<int, string> dcPierMission { get; set; } = new Dictionary<int, string>()
         {
             { 0, "NoData"},
@@ -67,11 +64,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
     public partial class PierTaskPack<EPLC> : IPierTaskPack
     {
-        public async Task<bool> GetPlcPierName()
+        public async Task<bool> GetPlcPierNo()
         {
-            if(await IPeirOp.GetDeviceName(pier))
+            if(await IPeirOp.GetDeviceNo(pier))
             {
-                IDataService.PierName = pierLib.Packages[pier].property.getPier.pierName;
+                IDataService.PierNo = pierLib.Packages[pier].property.getPier.pierNo;
                 return true;
             }
             else
@@ -96,7 +93,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetTableMissionStart()
         {
-            IDataService.PierMission.IsStart = true;
             IDataService.PierMission.StartTime = DateTime.Now;
 
             if(await IDataService.SetPierMissionTable())
@@ -111,7 +107,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetTableMissionFinsih()
         {
-            IDataService.PierMission.IsFinish = true;
             IDataService.PierMission.FinishTime = DateTime.Now;
 
             if(await IDataService.SetPierMissionTable())
@@ -126,7 +121,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetLogMissionStart()
         {
-            string temp = IDataService.PierName + dcPierMission[IDataService.PierMission.ActionCode] + "_任務開始";
+            string temp = "Pier" + IDataService.PierNo.ToString() + dcPierMission[IDataService.PierMission.ActionCode] + "_任務開始";
 
             if (await IDataService.AddLogByPier(info, temp))
             {
@@ -140,7 +135,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetLogMissionFinish()
         {
-            string temp = IDataService.PierName + dcPierMission[IDataService.PierMission.ActionCode] + "_任務結束";
+            string temp = "Pier" + IDataService.PierNo.ToString() + dcPierMission[IDataService.PierMission.ActionCode] + "_任務結束";
 
             if(await IDataService.AddLogByPier(info, temp))
             {
@@ -154,12 +149,12 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task UpdateUIPierMission()
         {
-            await IPierObser.NotifyPierMission(IDataService.PierName, IDataService.PierMission);
+            await IPierObser.NotifyPierMission(IDataService.PierNo, IDataService.PierMission);
         }
 
         public async Task UpdateUIPierLog()
         {
-            await IPierObser.NotifyPierLog(IDataService.PierName, IDataService.ListPierLog);
+            await IPierObser.NotifyPierLog(IDataService.PierNo, IDataService.ListPierLog);
         }
     }
 
@@ -198,24 +193,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
-        Dictionary<int, string> dcInputLargeBoard { get; set; } = new Dictionary<int, string>()
-        {
-            { 0, "NO DATA"},
-            { 1, "等人按鈕1"},
-            { 100, "Shuttle伸出條件不滿足"},
-            { 2, "Shuttle伸出中"},
-            { 3, "等人按鈕2"},
-            { 102, "Shuttle收回條件不滿足"},
-            { 4, "Shuttle收回中"},
-            { 5, "入大板完成"}
-        };
-
         public async Task<bool> GetPlcInputLargeBoardStatus()
         {
             if(await IPeirOp.GetPierStatus(pier))
             {
-                pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
-                IDataService.PierMission.Status = dcInputLargeBoard[pierStatus];
+                IDataService.PierMission.Status = pierLib.Packages[pier].property.getPier.missionStatus;
                 return true;
             }
             else
@@ -228,7 +210,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public bool IsInputLargeBoardFinish()
         {
-            if(pierStatus == 5)
+            if(IDataService.PierMission.Status == 5)
             {
                 return true;
             }
@@ -290,24 +272,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
-        Dictionary<int, string> dcInputSmallBoard { get; set; } = new Dictionary<int, string>()
-        {
-            { 0, "NO DATA"},
-            { 21, "等人按鈕1"},
-            { 100, "Shuttle伸出條件不滿足"},
-            { 22, "Shuttle伸出中"},
-            { 23, "等人按鈕2"},
-            { 104, "Shuttle收回條件不滿足"},
-            { 24, "Shuttle收回中"},
-            { 25, "入小板完成"}
-        };
-
         public async Task<bool> GetPlcInputSmallBoardStatus()
         {
             if(await IPeirOp.GetPierStatus(pier))
             {
-                pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
-                IDataService.PierMission.Status = dcInputSmallBoard[pierStatus];
+                IDataService.PierMission.Status = pierLib.Packages[pier].property.getPier.missionStatus;
                 return true;
             }
             else
@@ -320,7 +289,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public bool IsInputSmallBoardFinish()
         {
-            if(pierStatus == 25)
+            if(IDataService.PierMission.Status == 25)
             {
                 return true;
             }
@@ -383,24 +352,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
-        Dictionary<int, string> dcOutputLargeBoard { get; set; } = new Dictionary<int, string>()
-        {
-            { 0, "NO DATA"},
-            { 11, "等人按鈕1"},
-            { 106, "Shuttle伸出條件不滿足"},
-            { 12, "Shuttle伸出中"},
-            { 13, "等人按鈕2"},
-            { 110, "Shuttle收回條件不滿足"},
-            { 14, "Shuttle收回中"},
-            { 15, "出大板完成"}
-        };
-
         public async Task<bool> GetPlcOutputLargeBoardStatus()
         {
             if (await IPeirOp.GetPierStatus(pier))
             {
-                pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
-                IDataService.PierMission.Status = dcOutputLargeBoard[pierStatus];
+                IDataService.PierMission.Status = pierLib.Packages[pier].property.getPier.missionStatus;
                 return true;
             }
             else
@@ -413,7 +369,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public bool IsOutputLargeBoardFinish()
         {
-            if(pierStatus == 15)
+            if(IDataService.PierMission.Status == 15)
             {
                 return true;
             }
@@ -475,24 +431,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
-        Dictionary<int, string> dcOutputSmallBoard { get; set; } = new Dictionary<int, string>()
-        {
-            { 0, "NO DATA"},
-            { 31, "等人按鈕1"},
-            { 108, "Shuttle伸出條件不滿足"},
-            { 32, "Shuttle伸出中"},
-            { 33, "等人按鈕2"},
-            { 105, "Shuttle收回條件不滿足"},
-            { 34, "Shuttle收回中"},
-            { 35, "出大板完成"}
-        };
-
         public async Task<bool> GetPlcOutputSmallBoardStatus()
         {
             if (await IPeirOp.GetPierStatus(pier))
             {
-                pierStatus = pierLib.Packages[pier].property.getPier.missionStatus;
-                IDataService.PierMission.Status = dcOutputSmallBoard[pierStatus];
+                IDataService.PierMission.Status = pierLib.Packages[pier].property.getPier.missionStatus;
                 return true;
             }
             else
@@ -505,7 +448,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public bool IsOutputSmallBoardFinish()
         {
-            if(pierStatus == 35)
+            if(IDataService.PierMission.Status == 35)
             {
                 return true;
             }

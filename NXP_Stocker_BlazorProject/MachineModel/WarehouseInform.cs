@@ -2,7 +2,7 @@
 {
     public class WarehouseInform
     {
-        public EPier pier { get; set; }
+        public int pierNo { get; set; } // 1:pier1 , 2:pier2 
 
         public int zone { get; set; }
 

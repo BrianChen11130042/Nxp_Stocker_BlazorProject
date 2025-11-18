@@ -1,5 +1,6 @@
 ﻿using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.EFModel;
+using NXP_Stocker_BlazorProject.MachineModel;
 
 namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 {
@@ -9,16 +10,20 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         void RemoveMissionAssignUIObserver(IMissionAssignUIObserver o);
 
-        Task NotifyMissionAsign(string pier, MissionAsignTable missionAsign);
+        Task NotifyMissionAsign(int pier, MissionAsignTable missionAsign);
 
-        Task NotifyMissionAsignLog(string pier, List<LogTable> list);
+        Task NotifyMissionAsignLog(int pier, List<LogTable> list);
+
+        Task NotifyWarehouseInform(int pier, WarehouseInform warehouse);
     }
 
 
     public interface IMissionAssignUIObserver
     {
-        Task UpdateMissionAsign(string pier, MissionAsignTable missionAsign);
+        Task UpdateMissionAsign(int pier, MissionAsignTable missionAsign);
 
-        Task UpdateMissionAsignLog(string pier, List<LogTable> list);
+        Task UpdateMissionAsignLog(int pier, List<LogTable> list);
+
+        Task UpdateWarehouseInform(int pier, WarehouseInform warehouse);
     }
 }

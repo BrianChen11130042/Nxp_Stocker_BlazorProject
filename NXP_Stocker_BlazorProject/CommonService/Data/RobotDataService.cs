@@ -36,17 +36,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
     public partial class RobotDataService
     {
-        string _pierName { get; set; } = string.Empty;
+        int _pierNo { get; set; } = 0;
 
-        public string PierName
+        public int PierNo
         {
             get
             {
-                return _pierName;
+                return _pierNo;
             }
             set 
             {
-                _pierName = value;
+                _pierNo = value;
             }
         }
 
@@ -90,12 +90,12 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 if(result.table != null)
                 {
                     RobotMission = result.table;
-                    PierName = result.table.PierName;
+                    PierNo = result.table.PierNo;
                 }
                 else
                 {
                     RobotMission = new RobotMissionTable();
-                    PierName = string.Empty;
+                    PierNo = 0;
                 }
 
                 return result.status;
@@ -114,7 +114,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             if(result.status)
             {
                 RobotMission = result.table;
-                PierName = result.table.PierName;
+                PierNo = result.table.PierNo;
                 return result.status;
             }
             else
@@ -136,7 +136,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             else
                 _robotLog = log;
 
-            string equip = "Robot_" + PierName;
+            string equip = "Robot_Pier" + PierNo.ToString();
 
             var table = _getLogTable(equip, type, log);
             var result = await ILogTableOp.AddLogData(table);

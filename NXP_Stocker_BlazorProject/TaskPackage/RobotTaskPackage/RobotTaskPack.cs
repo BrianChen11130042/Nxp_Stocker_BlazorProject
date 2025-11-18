@@ -49,8 +49,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
         string info { get; set; } = "Inform";
 
         string err { get; set; } = "Error";
-
-        int robotStatus { get; set; } = 0;
     }
 
     public partial class RobotTaskPack<EPLC> : IRobotTaskPack
@@ -87,7 +85,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public bool IsGetNewMission()
         {
-            if (!string.IsNullOrEmpty(IDataService.PierName)
+            if (IDataService.PierNo != 0
                && !string.IsNullOrEmpty(IDataService.RobotMission.Barcode))
             {
                 return true;
@@ -137,7 +135,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetTableMissionStart()
         {
-            IDataService.RobotMission.IsStart = true;
             IDataService.RobotMission.StartTime = DateTime.Now;
 
             if(await IDataService.SetRobotMissionTable())
@@ -154,8 +151,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
         {
             if(await IRobotOp.GetRobotStatus(robot))
             {
-                robotStatus = RobotLib.Packages[robot].property.getRobot.missionStatus;
-                IDataService.RobotMission.Status = robotStatus.ToString();
+                IDataService.RobotMission.Status = RobotLib.Packages[robot].property.getRobot.missionStatus;
                 return true;
             }
             else
@@ -168,7 +164,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public bool IsRobotFinish()
         {
-            if(robotStatus == 0)
+            if(IDataService.RobotMission.Status == 20)
             {
                 return true;
             }
@@ -196,7 +192,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetTableMissionFinish()
         {
-            IDataService.RobotMission.IsFinish = true;
             IDataService.RobotMission.FinishTime = DateTime.Now;
 
             if(await IDataService.SetRobotMissionTable())
@@ -211,7 +206,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetLogMissionStart()
         {
-            string temp = IDataService.PierName + "區手臂任務開始";
+            string temp = "Pier" + IDataService.PierNo.ToString() + "區手臂任務開始";
 
             if(await IDataService.AddLogByRobot(info, temp))
             {
@@ -225,7 +220,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetLogMissionFinish()
         {
-            string temp = IDataService.PierName + "區手臂任務結束";
+            string temp = "Pier" + IDataService.PierNo.ToString() + "區手臂任務結束";
 
             if (await IDataService.AddLogByRobot(info, temp))
             {
@@ -239,12 +234,12 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task UpdateUIRobotMission()
         {
-            await IRobotObser.NotifyRobotMission(IDataService.PierName, IDataService.RobotMission);
+            await IRobotObser.NotifyRobotMission(IDataService.PierNo, IDataService.RobotMission);
         }
 
         public async Task UpdateUIRobotLog()
         {
-            await IRobotObser.NotifyRobotLog(IDataService.PierName, IDataService.ListRobotLog);
+            await IRobotObser.NotifyRobotLog(IDataService.PierNo, IDataService.ListRobotLog);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace NXP_Stocker_BlazorProject.EFModel
 {
     public class MissionBase
     {
-        public string PierName { get; set; } //int
+        public int PierNo { get; set; } 
 
         public Guid Id { get; set; }
 
@@ -14,19 +14,15 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public DateTime EstablishTime { get; set; }
 
-        public bool IsStart { get; set; } //砍
+        public DateTime? StartTime { get; set; }
 
-        public DateTime StartTime { get; set; }
-
-        public string Status { get; set; } //int
+        public int Status { get; set; }
 
         public bool IsError { get; set; }
 
         public int ErrorCode { get; set; }
 
-        public bool IsFinish { get; set; } //砍
-
-        public DateTime FinishTime { get; set; }
+        public DateTime? FinishTime { get; set; }
 
         public virtual MissionAsignTable Asign { get; set; }
     }

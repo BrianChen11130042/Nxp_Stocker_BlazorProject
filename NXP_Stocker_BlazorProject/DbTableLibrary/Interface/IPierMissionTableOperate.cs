@@ -7,7 +7,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary.Interface
     {
         Task<(bool status, string msg, PierMissionTable table)> AddPierMission(PierMissionTable data);
 
-        Task<(bool status, string msg, PierMissionTable table)> GetNewPierMission(string PierName);
+        Task<(bool status, string msg, PierMissionTable table)> GetNewPierMission(int PierNo);
 
         Task<(bool status, string msg, PierMissionTable table)> UpdatePierMission(PierMissionTable data);
 
