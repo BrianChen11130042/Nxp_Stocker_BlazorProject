@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
+using NXP_Stocker_BlazorProject.EFModel;
 
 namespace NXP_Stocker_BlazorProject.DbTableLibrary
 {
@@ -20,23 +21,6 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //**********************************//
     }
-
-    //**********下面先取代DB 要砍掉*************//
-
-    public class LogTable_stub
-    {
-        //public int Id { get; set; } 到時候DB要加上這個讓它自動增加
-
-        public string LogType { get; set; }
-
-        public string Equipment { get; set; }
-
-        public string Msg { get; set; }
-
-        public DateTime RecordTime { get; set; }
-    }
-
-    //***************************************//
 
     public partial class LogTableLibrary : ILogTableOperate
     {

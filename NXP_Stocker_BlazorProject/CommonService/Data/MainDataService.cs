@@ -3,6 +3,7 @@ using NXP_Stocker_BlazorProject.CommonService.Data.Interface;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
+using NXP_Stocker_BlazorProject.EFModel;
 
 namespace NXP_Stocker_BlazorProject.CommonService.Data
 {

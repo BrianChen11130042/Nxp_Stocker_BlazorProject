@@ -1,4 +1,5 @@
 ﻿using NXP_Stocker_BlazorProject.DbTableLibrary;
+using NXP_Stocker_BlazorProject.EFModel;
 
 namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 {
