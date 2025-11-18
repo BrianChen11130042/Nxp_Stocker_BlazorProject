@@ -115,9 +115,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        List<LogTable_stub> _listMissionAsignLog { get; set; } = new List<LogTable_stub>();
+        List<LogTable> _listMissionAsignLog { get; set; } = new List<LogTable>();
 
-        public List<LogTable_stub> ListMissionAsignLog
+        public List<LogTable> ListMissionAsignLog
         {
             get
             {
@@ -361,9 +361,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
         }
 
 
-        LogTable_stub _getLogTable(string equip, string logType, string msg)
+        LogTable _getLogTable(string equip, string logType, string msg)
         {
-            LogTable_stub table = new LogTable_stub()
+            LogTable table = new LogTable()
             {
                 LogType = logType,
                 Equipment = equip,

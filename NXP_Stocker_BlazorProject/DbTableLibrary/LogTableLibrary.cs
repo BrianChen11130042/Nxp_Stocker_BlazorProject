@@ -17,20 +17,20 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //*************下面砍掉*************//
 
-        List<LogTable_stub> listLogTable { get; set; } = new List<LogTable_stub>();
+        List<LogTable> listLogTable { get; set; } = new List<LogTable>();
 
         //**********************************//
     }
 
     public partial class LogTableLibrary : ILogTableOperate
     {
-        public async Task<(bool status, string msg, List<LogTable_stub> list)> AddLogData(LogTable_stub data)
+        public async Task<(bool status, string msg, List<LogTable> list)> AddLogData(LogTable data)
         {
             try
             {
                 listLogTable.Add(data);
 
-                List<LogTable_stub> list = listLogTable.Where(x => x.Equipment == data.Equipment).ToList();
+                List<LogTable> list = listLogTable.Where(x => x.Equipment == data.Equipment).ToList();
 
                 return (true, string.Empty, list);
 

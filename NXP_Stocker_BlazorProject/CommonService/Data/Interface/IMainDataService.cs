@@ -6,7 +6,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
     public interface IMainDataService
     {
-        List<LogTable_stub> ListMainLog { get; set; }
+        List<LogTable> ListMainLog { get; set; }
 
         bool IsModbusConnect { get; set; }
 

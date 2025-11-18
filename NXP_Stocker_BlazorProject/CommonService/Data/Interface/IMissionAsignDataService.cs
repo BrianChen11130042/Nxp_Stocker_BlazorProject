@@ -17,7 +17,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         RobotMissionTable RobotMission { get; set; }
 
-        List<LogTable_stub> ListMissionAsignLog { get; set; }
+        List<LogTable> ListMissionAsignLog { get; set; }
 
         //MissionAsignTable
         Task<bool> GetNewMissionAsignTable();

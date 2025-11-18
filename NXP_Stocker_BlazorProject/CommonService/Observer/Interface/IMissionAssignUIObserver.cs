@@ -11,7 +11,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         Task NotifyMissionAsign(string pier, MissionAsignTable missionAsign);
 
-        Task NotifyMissionAsignLog(string pier, List<LogTable_stub> list);
+        Task NotifyMissionAsignLog(string pier, List<LogTable> list);
     }
 
 
@@ -19,6 +19,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
     {
         Task UpdateMissionAsign(string pier, MissionAsignTable missionAsign);
 
-        Task UpdateMissionAsignLog(string pier, List<LogTable_stub> list);
+        Task UpdateMissionAsignLog(string pier, List<LogTable> list);
     }
 }

@@ -79,7 +79,7 @@ namespace NXP_Stocker_BlazorProject.Services
             scope.initAll();
         }
 
-        public async Task UpdateMainLog(List<LogTable_stub> list)
+        public async Task UpdateMainLog(List<LogTable> list)
         {
 
         }

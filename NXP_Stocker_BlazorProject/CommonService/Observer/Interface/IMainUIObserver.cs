@@ -11,13 +11,13 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         Task NotifyPopUpMessage(bool popUp, string msg);
 
-        Task NotifyMainLog(List<LogTable_stub> list);
+        Task NotifyMainLog(List<LogTable> list);
     }
 
     public interface IMainUIObserver
     {
         Task UpdatePopUpMessage(bool popUp, string msg);
 
-        Task UpdateMainLog(List<LogTable_stub> list);
+        Task UpdateMainLog(List<LogTable> list);
     }
 }

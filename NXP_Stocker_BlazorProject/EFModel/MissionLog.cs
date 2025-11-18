@@ -1,6 +1,6 @@
 ﻿namespace NXP_Stocker_BlazorProject.EFModel
 {
-    public class LogTable_stub
+    public class LogTable
     {
         public int Id { get; set; } //自動增加
 
