@@ -48,9 +48,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        PierMissionTable_stub _pierMission { get; set; } = new PierMissionTable_stub();
+        PierMissionTable _pierMission { get; set; } = new PierMissionTable();
 
-        public PierMissionTable_stub PierMission
+        public PierMissionTable PierMission
         {
             get
             {
@@ -91,7 +91,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 }
                 else
                 {
-                    PierMission = new PierMissionTable_stub();
+                    PierMission = new PierMissionTable();
                 }
 
                 return result.status;

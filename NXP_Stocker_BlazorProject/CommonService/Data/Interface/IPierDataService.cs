@@ -7,7 +7,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
     {
         string PierName { get; set; }
 
-        PierMissionTable_stub PierMission { get; set; }
+        PierMissionTable PierMission { get; set; }
 
         List<LogTable_stub> ListPierLog { get; set; }
 

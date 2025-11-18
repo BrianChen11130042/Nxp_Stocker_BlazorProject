@@ -50,9 +50,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        RobotMissionTable_stub _robotMission { get; set; } = new RobotMissionTable_stub();
+        RobotMissionTable _robotMission { get; set; } = new RobotMissionTable();
 
-        public RobotMissionTable_stub RobotMission
+        public RobotMissionTable RobotMission
         {
             get
             {
@@ -94,7 +94,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 }
                 else
                 {
-                    RobotMission = new RobotMissionTable_stub();
+                    RobotMission = new RobotMissionTable();
                     PierName = string.Empty;
                 }
 

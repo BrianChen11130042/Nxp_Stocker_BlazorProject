@@ -14,20 +14,20 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //*************下面砍掉*************//
 
-        List<RobotMissionTable_stub> listRobotMissionTable { get; set; } = new List<RobotMissionTable_stub>();
+        List<RobotMissionTable> listRobotMissionTable { get; set; } = new List<RobotMissionTable>();
 
         //**********************************//
     }
 
     public partial class RobotMissionTableLibrary : IRobotMissionTableOperate
     {
-        public async Task<(bool status, string msg, RobotMissionTable_stub table)> AddRobotMission(RobotMissionTable_stub data)
+        public async Task<(bool status, string msg, RobotMissionTable table)> AddRobotMission(RobotMissionTable data)
         {
             try
             {
                 listRobotMissionTable.Add(data);
 
-                RobotMissionTable_stub table = listRobotMissionTable.FirstOrDefault(x => x.PierName == data.PierName 
+                RobotMissionTable table = listRobotMissionTable.FirstOrDefault(x => x.PierName == data.PierName 
                                                                                  && x.AsignId == data.AsignId
                                                                                  && x.Barcode == data.Barcode
                                                                                  && x.BoardSize == data.BoardSize
@@ -45,11 +45,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, RobotMissionTable_stub table)> GetNewRobotMission()
+        public async Task<(bool status, string msg, RobotMissionTable table)> GetNewRobotMission()
         {
             try
             {
-                RobotMissionTable_stub table = listRobotMissionTable.FirstOrDefault(x => x.IsStart == false
+                RobotMissionTable table = listRobotMissionTable.FirstOrDefault(x => x.IsStart == false
                                                                                  && x.IsFinish == false);
 
                 return (true, string.Empty, table);
@@ -60,7 +60,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, RobotMissionTable_stub table)> UpdateRobotMission(RobotMissionTable_stub data)
+        public async Task<(bool status, string msg, RobotMissionTable table)> UpdateRobotMission(RobotMissionTable data)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, RobotMissionTable_stub table)> GetTargetRobotMission(RobotMissionTable_stub data)
+        public async Task<(bool status, string msg, RobotMissionTable table)> GetTargetRobotMission(RobotMissionTable data)
         {
             try
             {

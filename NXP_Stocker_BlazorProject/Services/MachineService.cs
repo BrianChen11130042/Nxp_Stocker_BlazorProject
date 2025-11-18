@@ -94,7 +94,7 @@ namespace NXP_Stocker_BlazorProject.Services
     {
         public async Task<bool> SetMission(MissionInform mission)
         {
-            MissionAsignTable_stub missionAsignTable = new MissionAsignTable_stub()
+            MissionAsignTable missionAsignTable = new MissionAsignTable()
             {
                 PierName = mission.pier.ToString(),
                 Id = new Guid(),

@@ -14,20 +14,20 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //*************下面砍掉*************//
 
-        List<PierMissionTable_stub> listPierMissionTable { get; set; } = new List<PierMissionTable_stub>();
+        List<PierMissionTable> listPierMissionTable { get; set; } = new List<PierMissionTable>();
 
         //**********************************//
     }
 
     public partial class PierMissionTableLibrary : IPierMissionTableOperate
     {
-        public async Task<(bool status, string msg, PierMissionTable_stub table)> AddPierMission(PierMissionTable_stub data)
+        public async Task<(bool status, string msg, PierMissionTable table)> AddPierMission(PierMissionTable data)
         {
             try
             {
                 listPierMissionTable.Add(data);
 
-                PierMissionTable_stub table = listPierMissionTable.FirstOrDefault(x => x.PierName == data.PierName
+                PierMissionTable table = listPierMissionTable.FirstOrDefault(x => x.PierName == data.PierName
                                                                                && x.AsignId == data.AsignId
                                                                                && x.Barcode == data.Barcode
                                                                                && x.ActionCode == data.ActionCode
@@ -42,11 +42,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, PierMissionTable_stub table)> GetNewPierMission(string PierName)
+        public async Task<(bool status, string msg, PierMissionTable table)> GetNewPierMission(string PierName)
         {
             try
             {
-                PierMissionTable_stub table = listPierMissionTable.FirstOrDefault(x => x.PierName == PierName
+                PierMissionTable table = listPierMissionTable.FirstOrDefault(x => x.PierName == PierName
                                                                                && x.IsStart == false
                                                                                && x.IsFinish == false);
 
@@ -58,7 +58,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, PierMissionTable_stub table)> UpdatePierMission(PierMissionTable_stub data)
+        public async Task<(bool status, string msg, PierMissionTable table)> UpdatePierMission(PierMissionTable data)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, PierMissionTable_stub table)> GetTargetPierMission(PierMissionTable_stub data)
+        public async Task<(bool status, string msg, PierMissionTable table)> GetTargetPierMission(PierMissionTable data)
         {
             try
             {

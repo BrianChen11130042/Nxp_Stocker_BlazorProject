@@ -9,7 +9,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         void RemoveMissionAssignUIObserver(IMissionAssignUIObserver o);
 
-        Task NotifyMissionAsign(string pier, MissionAsignTable_stub missionAsign);
+        Task NotifyMissionAsign(string pier, MissionAsignTable missionAsign);
 
         Task NotifyMissionAsignLog(string pier, List<LogTable_stub> list);
     }
@@ -17,7 +17,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
     public interface IMissionAssignUIObserver
     {
-        Task UpdateMissionAsign(string pier, MissionAsignTable_stub missionAsign);
+        Task UpdateMissionAsign(string pier, MissionAsignTable missionAsign);
 
         Task UpdateMissionAsignLog(string pier, List<LogTable_stub> list);
     }

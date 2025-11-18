@@ -2,7 +2,7 @@
 
 namespace NXP_Stocker_BlazorProject.EFModel
 {
-    public class RobotMissionTable_stub : MissionBase_stub
+    public class RobotMissionTable : MissionBase
     {
         public int BoardSize { get; set; }
 

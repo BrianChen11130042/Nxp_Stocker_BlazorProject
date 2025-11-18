@@ -59,9 +59,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        MissionAsignTable_stub _missionAsign { get; set; } = new MissionAsignTable_stub();
+        MissionAsignTable _missionAsign { get; set; } = new MissionAsignTable();
 
-        public MissionAsignTable_stub MissionAsign
+        public MissionAsignTable MissionAsign
         {
             get
             {
@@ -101,9 +101,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        PierMissionTable_stub _pierMission { get; set; } = new PierMissionTable_stub();
+        PierMissionTable _pierMission { get; set; } = new PierMissionTable();
 
-        public PierMissionTable_stub PierMission
+        public PierMissionTable PierMission
         {
             get
             {
@@ -129,9 +129,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        RobotMissionTable_stub _robotMission { get; set; } = new RobotMissionTable_stub();
+        RobotMissionTable _robotMission { get; set; } = new RobotMissionTable();
 
-        public RobotMissionTable_stub RobotMission
+        public RobotMissionTable RobotMission
         {
             get
             {
@@ -159,7 +159,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 }
                 else
                 {
-                    MissionAsign = new MissionAsignTable_stub();
+                    MissionAsign = new MissionAsignTable();
                 }
 
                 return result.status;

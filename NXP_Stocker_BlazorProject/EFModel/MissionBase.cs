@@ -2,7 +2,7 @@
 
 namespace NXP_Stocker_BlazorProject.EFModel
 {
-    public class MissionBase_stub
+    public class MissionBase
     {
         public string PierName { get; set; } //int
 
@@ -28,6 +28,6 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public DateTime FinishTime { get; set; }
 
-        public virtual MissionAsignTable_stub Asign { get; set; }
+        public virtual MissionAsignTable Asign { get; set; }
     }
 }

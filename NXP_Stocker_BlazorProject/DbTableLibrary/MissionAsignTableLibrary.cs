@@ -16,20 +16,20 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         //*************下面砍掉*************//
 
-        List<MissionAsignTable_stub> listMissionAsignTable { get; set; } = new List<MissionAsignTable_stub>();
+        List<MissionAsignTable> listMissionAsignTable { get; set; } = new List<MissionAsignTable>();
 
         //**********************************//
     }
 
     public partial class MissionAsignTableLibrary : IMissionAsignTableOperate
     {
-        public async Task<(bool status, string msg, MissionAsignTable_stub table)> AddMissionAsign(MissionAsignTable_stub data)
+        public async Task<(bool status, string msg, MissionAsignTable table)> AddMissionAsign(MissionAsignTable data)
         {
             try
             {
                 listMissionAsignTable.Add(data);
 
-                MissionAsignTable_stub table = listMissionAsignTable.FirstOrDefault(x => x.PierName == data.PierName
+                MissionAsignTable table = listMissionAsignTable.FirstOrDefault(x => x.PierName == data.PierName
                                                                                && x.Id == data.Id
                                                                                && x.Barcode == data.Barcode);
 
@@ -41,11 +41,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, MissionAsignTable_stub table)> GetNewMissionAsign(string PierName)
+        public async Task<(bool status, string msg, MissionAsignTable table)> GetNewMissionAsign(string PierName)
         {
             try
             {
-                MissionAsignTable_stub table = listMissionAsignTable.FirstOrDefault(x => x.PierName == PierName
+                MissionAsignTable table = listMissionAsignTable.FirstOrDefault(x => x.PierName == PierName
                                                                                && x.IsStart == false
                                                                                && x.IsFinish == false);
 
@@ -57,7 +57,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, MissionAsignTable_stub table)> UpdateMissionAsign(MissionAsignTable_stub data)
+        public async Task<(bool status, string msg, MissionAsignTable table)> UpdateMissionAsign(MissionAsignTable data)
         {
             try
             {

@@ -1,6 +1,6 @@
 ﻿namespace NXP_Stocker_BlazorProject.EFModel
 {
-    public class MissionAsignTable_stub
+    public class MissionAsignTable
     {
         public string PierName { get; set; } //int
 
@@ -36,6 +36,6 @@
 
         public bool IsCancel { get; set; }
 
-        public virtual ICollection<MissionBase_stub> ListMission { get; set; } = new List<MissionBase_stub>();
+        public virtual ICollection<MissionBase> ListMission { get; set; } = new List<MissionBase>();
     }
 }

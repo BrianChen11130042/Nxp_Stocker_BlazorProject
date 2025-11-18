@@ -64,7 +64,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyPierMission(string pier, PierMissionTable_stub table)
+        public async Task NotifyPierMission(string pier, PierMissionTable table)
         {
             if(osPier != null)
             {
@@ -122,7 +122,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyRobotMission(string pier, RobotMissionTable_stub table)
+        public async Task NotifyRobotMission(string pier, RobotMissionTable table)
         {
             if(osRobot != null)
             {
@@ -158,7 +158,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyMissionAsign(string pier, MissionAsignTable_stub missionAsign)
+        public async Task NotifyMissionAsign(string pier, MissionAsignTable missionAsign)
         {
             if(osMissionAssign != null)
             {

@@ -1,6 +1,6 @@
 ﻿namespace NXP_Stocker_BlazorProject.EFModel
 {
-    public class PierMissionTable_stub : MissionBase_stub
+    public class PierMissionTable : MissionBase
     {
         public int ActionCode { get; set; }
     }
