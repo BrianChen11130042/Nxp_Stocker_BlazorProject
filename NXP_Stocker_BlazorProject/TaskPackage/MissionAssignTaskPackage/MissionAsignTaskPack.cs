@@ -7,6 +7,7 @@ using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
 using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage.Interface;
+using NXP_Stocker_BlazorProject.EFModel;
 
 namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 {

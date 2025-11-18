@@ -6,6 +6,7 @@ using NXP_Stocker_BlazorProject.DeviceName.PLC;
 using NXP_Stocker_BlazorProject.Scope;
 using NXP_Stocker_BlazorProject.Services.Interface;
 using NXP_Stocker_BlazorProject.MachineModel;
+using NXP_Stocker_BlazorProject.EFModel;
 
 namespace NXP_Stocker_BlazorProject.Services
 {

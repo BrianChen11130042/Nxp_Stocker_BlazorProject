@@ -1,4 +1,6 @@
-﻿namespace NXP_Stocker_BlazorProject.DbTableLibrary.Interface
+﻿using NXP_Stocker_BlazorProject.EFModel;
+
+namespace NXP_Stocker_BlazorProject.DbTableLibrary.Interface
 {
 
     public interface IRobotMissionTableOperate
