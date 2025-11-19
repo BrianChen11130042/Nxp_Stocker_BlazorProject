@@ -2,7 +2,7 @@
 {
     public class LogTable
     {
-        public int Id { get; set; } //自動增加
+        public int Id { get; set; }
 
         public string LogType { get; set; }
 

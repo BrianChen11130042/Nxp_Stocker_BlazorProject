@@ -1,8 +1,9 @@
 ﻿using NXP_Stocker_BlazorProject.DbTableLibrary;
+using System;
 
 namespace NXP_Stocker_BlazorProject.EFModel
 {
-    public class MissionBase
+    public abstract class MissionBase
     {
         public int PierNo { get; set; } 
 
@@ -12,7 +13,7 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public string Barcode { get; set; }
 
-        public DateTime EstablishTime { get; set; }
+        public DateTime? EstablishTime { get; set; }
 
         public DateTime? StartTime { get; set; }
 
@@ -24,6 +25,6 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public DateTime? FinishTime { get; set; }
 
-        public virtual MissionAsignTable Asign { get; set; }
+        public virtual MissionAsignTable? MissionAsign { get; set; }
     }
 }

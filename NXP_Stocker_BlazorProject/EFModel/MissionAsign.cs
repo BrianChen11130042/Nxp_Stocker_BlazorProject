@@ -1,14 +1,17 @@
-﻿namespace NXP_Stocker_BlazorProject.EFModel
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NXP_Stocker_BlazorProject.EFModel
 {
     public class MissionAsignTable
     {
-        public int PierNo { get; set; }
-
+        [Key]
         public Guid Id { get; set; }
+
+        public int PierNo { get; set; }
 
         public int ActionCode { get; set; }
 
-        public string Barcode { get; set; }
+        public string Barcode { get; set; } = null!;
 
         public int BoardSize { get; set; }
 
@@ -20,7 +23,7 @@
 
         public int DropLayer { get; set; }
 
-        public DateTime EstablishTime { get; set; }
+        public DateTime? EstablishTime { get; set; }
 
         public DateTime? StartTime { get; set; }
 
@@ -32,6 +35,6 @@
 
         public bool IsCancel { get; set; }
 
-        public virtual ICollection<MissionBase> ListMission { get; set; } = new List<MissionBase>();
+        public virtual ICollection<MissionBase> Missions { get; set; } = new List<MissionBase>();
     }
 }
