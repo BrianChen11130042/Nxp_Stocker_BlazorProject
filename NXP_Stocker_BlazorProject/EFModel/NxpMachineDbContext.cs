@@ -14,7 +14,7 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         }
 
-        public virtual DbSet<MissionAsignTable> MissionAsigns { get; set; }
+        public virtual DbSet<MissionAsignTable> MissionAsignTables { get; set; }
 
         public virtual DbSet<MissionBase> MissionBases { get; set; }
 
@@ -39,12 +39,12 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
             modelBuilder.Entity<PierMissionTable>(entity =>
             {
-                entity.ToTable("PierMissionTable");
+                //entity.ToTable("PierMissionTable");
             });
 
             modelBuilder.Entity<RobotMissionTable>(entity =>
             {
-                entity.ToTable("RobotMissionTable");
+                //entity.ToTable("RobotMissionTable");
             });
 
             modelBuilder.Entity<LogTable>(entity =>
@@ -54,7 +54,7 @@ namespace NXP_Stocker_BlazorProject.EFModel
                 entity.Property(e => e.Id)
                       .UseIdentityColumn(); // 自動遞增
 
-                entity.ToTable("LogTable");
+                //entity.ToTable("LogTable");
 
                 entity.Property(e => e.Equipment).HasMaxLength(200);
                 entity.Property(e => e.LogType).HasMaxLength(200);

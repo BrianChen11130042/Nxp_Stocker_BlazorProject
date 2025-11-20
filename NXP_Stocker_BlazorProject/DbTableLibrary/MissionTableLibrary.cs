@@ -29,7 +29,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 {
                     NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                    MissionAsignTable table = await context.MissionAsigns.Include(x => x.Missions)
+                    MissionAsignTable table = await context.MissionAsignTables.Include(x => x.Missions)
                                                                          .AsNoTracking()
                                                                          .OrderBy(x => x.EstablishTime)
                                                                          .FirstOrDefaultAsync(x => x.PierNo == PierNo
@@ -55,7 +55,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 {
                     NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                    var target = await context.MissionAsigns.FirstOrDefaultAsync(x => x.Id == data.Id);
+                    var target = await context.MissionAsignTables.FirstOrDefaultAsync(x => x.Id == data.Id);
 
                     if(target != null)
                     {
@@ -64,7 +64,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                     }
                     else
                     {
-                        context.MissionAsigns.Add(data);
+                        context.MissionAsignTables.Add(data);
                         table = data;
                     }
 

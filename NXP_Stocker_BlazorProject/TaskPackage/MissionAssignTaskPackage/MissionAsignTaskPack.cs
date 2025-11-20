@@ -319,7 +319,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetTableMissionAsignStart()
         {
-            IDataService.MissionAsign.IsStart = true;
+            //IDataService.MissionAsign.IsStart = true;
             IDataService.MissionAsign.StartTime = DateTime.Now;
 
             if (await IDataService.SetMissionAsignTable())
@@ -334,7 +334,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetTableMissionAsignFinsih()
         {
-            IDataService.MissionAsign.IsFinish = true;
+            //IDataService.MissionAsign.IsFinish = true;
             IDataService.MissionAsign.FinishTime = DateTime.Now;
 
             if(await IDataService.SetMissionAsignTable())

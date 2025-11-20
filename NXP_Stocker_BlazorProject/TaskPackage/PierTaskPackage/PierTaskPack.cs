@@ -93,7 +93,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetTableMissionStart()
         {
-            IDataService.PierMission.IsStart = true;
+            //IDataService.PierMission.IsStart = true;
             IDataService.PierMission.StartTime = DateTime.Now;
 
             if(await IDataService.SetPierMissionTable())
@@ -108,7 +108,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetTableMissionFinsih()
         {
-            IDataService.PierMission.IsFinish = true;
+            //IDataService.PierMission.IsFinish = true;
             IDataService.PierMission.FinishTime = DateTime.Now;
 
             if(await IDataService.SetPierMissionTable())

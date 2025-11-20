@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NXP_Stocker_BlazorProject.EFModel
 {
@@ -23,17 +24,19 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public int DropLayer { get; set; }
 
-        public DateTime? EstablishTime { get; set; }
+        public DateTime EstablishTime { get; set; }
 
-        public bool IsStart { get; set; }
+        [NotMapped]
+        public bool IsStart => StartTime is not null;
 
         public DateTime? StartTime { get; set; }
-
-        public bool IsError { get; set; }
+        [NotMapped]
+        public bool IsError => ErrorCode is not 0;
 
         public int ErrorCode { get; set; }
 
-        public bool IsFinish { get; set; }
+        [NotMapped]
+        public bool IsFinish => FinishTime is not null;
 
         public DateTime? FinishTime { get; set; }
 
