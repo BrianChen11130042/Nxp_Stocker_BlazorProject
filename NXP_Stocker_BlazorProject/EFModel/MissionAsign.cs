@@ -8,12 +8,13 @@ namespace NXP_Stocker_BlazorProject.EFModel
         [Key]
         public Guid Id { get; set; }
 
+        [Range(1,2)]
         public int PierNo { get; set; }
-
+        [Range(1, 3)]
         public int ActionCode { get; set; }
-
+        [Required]
         public string Barcode { get; set; } = null!;
-
+        [Range(0, 1)]
         public int BoardSize { get; set; }
 
         public int PickZone { get; set; }

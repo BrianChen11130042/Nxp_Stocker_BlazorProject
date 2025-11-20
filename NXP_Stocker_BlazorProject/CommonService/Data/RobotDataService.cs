@@ -60,7 +60,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
             set
             {
-                value = _robotMission;
+                _robotMission = value;
             }
         }
 

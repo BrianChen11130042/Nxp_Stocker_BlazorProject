@@ -29,12 +29,13 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 {
                     NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                    MissionAsignTable table = await context.MissionAsignTables.Include(x => x.Missions)
+                    var tables = await context.MissionAsignTables.Include(x => x.Missions)
                                                                          .AsNoTracking()
+                                                                         .Where(x => x.PierNo == PierNo)
                                                                          .OrderBy(x => x.EstablishTime)
-                                                                         .FirstOrDefaultAsync(x => x.PierNo == PierNo
-                                                                                                && x.IsStart == IsStart
-                                                                                                && x.IsFinish == IsFinish);
+                                                                         .ToListAsync();
+
+                    var table = tables.FirstOrDefault(x => x.IsStart == IsStart && x.IsFinish == IsFinish);
 
                     return (true, string.Empty, table);
                 }
@@ -181,12 +182,9 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             {
                 NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                List<MissionBase> list = await context.MissionBases.AsNoTracking().Where(x => x.PierNo == PierNo
-                                                                                          && x.IsStart == IsStart
-                                                                                          && x.IsFinish == IsFinish)
-                                                                                 .ToListAsync();
+                List<MissionBase> list = await context.MissionBases.AsNoTracking().Where(x => x.PierNo == PierNo).ToListAsync();
 
-                list = list.OrderBy(x => x.EstablishTime).ToList();
+                list = list.Where(x=> x.IsStart == IsStart && x.IsFinish == IsFinish).OrderBy(x => x.EstablishTime).ToList();
 
                 return list;
             }
@@ -198,11 +196,9 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             {
                 NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                List<MissionBase> list = await context.MissionBases.AsNoTracking().Where(x => x.IsStart == IsStart
-                                                                                          && x.IsFinish == IsFinish)
-                                                                                 .ToListAsync();
+                List<MissionBase> list = await context.MissionBases.AsNoTracking().ToListAsync();
 
-                list = list.OrderBy(x => x.EstablishTime).ToList();
+                list = list.Where(x => x.IsStart == IsStart && x.IsFinish == IsFinish).OrderBy(x => x.EstablishTime).ToList();
 
                 return list;
             }

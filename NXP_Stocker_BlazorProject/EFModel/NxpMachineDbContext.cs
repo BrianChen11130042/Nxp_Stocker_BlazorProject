@@ -18,6 +18,10 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public virtual DbSet<MissionBase> MissionBases { get; set; }
 
+        public virtual DbSet<PierMissionTable> PierMissionTables { get; set; }
+
+        public virtual DbSet<RobotMissionTable> RobotMissionTables { get; set; }
+
         public virtual DbSet<LogTable> LogTables { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
