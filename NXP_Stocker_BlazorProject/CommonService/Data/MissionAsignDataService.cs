@@ -6,7 +6,6 @@ using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
 using NXP_Stocker_BlazorProject.EFModel;
 using NXP_Stocker_BlazorProject.MachineModel;
-using System.Reflection.Emit;
 
 namespace NXP_Stocker_BlazorProject.CommonService.Data
 {
@@ -14,21 +13,16 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     public partial class MissionAsignDataService : IMissionAsignDataService
     {
         readonly ILogTableOperate ILogTableOp;
-        readonly IMissionAsignTableOperate IMissionAsignTableOp;
-        readonly IPierMissionTableOperate IPierMissionTableOp;
-        readonly IRobotMissionTableOperate IRobotMissionTableOp;
+        readonly IMissionTableOperate IMissionTableOp;
 
         readonly INLogWritterObservable INLogWritter;
 
 
-        public MissionAsignDataService(ILogTableOperate ILogTableOp, IMissionAsignTableOperate IMissionAsignTableOp,
-                                       IPierMissionTableOperate IPierMissionTableOp, IRobotMissionTableOperate IRobotMissionTableOp,
+        public MissionAsignDataService(ILogTableOperate ILogTableOp, IMissionTableOperate IMissionAsignTableOp,
                                        ObserverService observerService)
         {
             this.ILogTableOp = ILogTableOp;
-            this.IMissionAsignTableOp = IMissionAsignTableOp;
-            this.IPierMissionTableOp = IPierMissionTableOp;
-            this.IRobotMissionTableOp = IRobotMissionTableOp;
+            this.IMissionTableOp = IMissionAsignTableOp;
 
             this.INLogWritter = observerService;
         }
@@ -149,7 +143,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     {
         public async Task<bool> GetNewMissionAsignTable()
         {
-            var result = await IMissionAsignTableOp.GetNewMissionAsign(PierNo);
+            var result = await IMissionTableOp.GetNewMissionAsign(false, false, PierNo);
 
             if (result.status)
             {
@@ -173,7 +167,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
         public async Task<bool> SetNewPierMissionTable()
         {
-            var result = await IPierMissionTableOp.AddPierMission(PierMission);
+            var result = await IMissionTableOp.UpSertMission<PierMissionTable>(PierMission);
 
             if(result.status)
             {
@@ -190,7 +184,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
         public async Task<bool> SetNewRobotMissionTable()
         {
-            var result = await IRobotMissionTableOp.AddRobotMission(RobotMission);
+            var result = await IMissionTableOp.UpSertMission<RobotMissionTable>(RobotMission);
 
             if(result.status)
             {
@@ -207,7 +201,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
         public async Task<bool> GetTargetPierMissionTable()
         {
-            var result = await IPierMissionTableOp.GetTargetPierMission(PierMission);
+            var result = await IMissionTableOp.GetMissionById<PierMissionTable>(PierMission.Id);
 
             if(result.status)
             {
@@ -224,7 +218,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
         public async Task<bool> GetTargetRobotMissionTable()
         {
-            var result = await IRobotMissionTableOp.GetTargetRobotMission(RobotMission);
+            var result = await IMissionTableOp.GetMissionById<RobotMissionTable>(RobotMission.Id);
 
             if(result.status)
             {
@@ -241,7 +235,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
         public async Task<bool> SetMissionAsignTable()
         {
-            var result = await IMissionAsignTableOp.UpdateMissionAsign(MissionAsign);
+            var result = await IMissionTableOp.UpSertMissionAsign(MissionAsign);
 
             if(result.status)
             {

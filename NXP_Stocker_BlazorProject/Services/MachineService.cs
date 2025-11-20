@@ -7,6 +7,8 @@ using NXP_Stocker_BlazorProject.Scope;
 using NXP_Stocker_BlazorProject.Services.Interface;
 using NXP_Stocker_BlazorProject.MachineModel;
 using NXP_Stocker_BlazorProject.EFModel;
+using CommonLibraryB_NXP.Tools.LogWritter;
+using NXP_Stocker_BlazorProject.CommonService.Observer;
 
 namespace NXP_Stocker_BlazorProject.Services
 {
@@ -109,7 +111,7 @@ namespace NXP_Stocker_BlazorProject.Services
                 EstablishTime = DateTime.Now
             };
 
-            var result = await scope.IMissionAsignTableOp.AddMissionAsign(missionAsignTable);
+            var result = await scope.IMissionTableOp.UpSertMissionAsign(missionAsignTable);
 
             if (result.status == true)
             {
@@ -117,6 +119,7 @@ namespace NXP_Stocker_BlazorProject.Services
             }
             else
             {
+                await scope.observerService.NotifyNLog(EStatus.Error, result.msg);
                 return false;
             }
         }

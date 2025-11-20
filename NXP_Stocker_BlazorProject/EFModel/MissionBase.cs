@@ -15,6 +15,8 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public DateTime? EstablishTime { get; set; }
 
+        public bool IsStart { get; set; }
+
         public DateTime? StartTime { get; set; }
 
         public int Status { get; set; }
@@ -22,6 +24,8 @@ namespace NXP_Stocker_BlazorProject.EFModel
         public bool IsError { get; set; }
 
         public int ErrorCode { get; set; }
+
+        public bool IsFinish { get; set; }
 
         public DateTime? FinishTime { get; set; }
 

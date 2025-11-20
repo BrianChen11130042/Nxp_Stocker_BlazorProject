@@ -10,15 +10,15 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     public partial class PierDataService : IPierDataService
     {
         readonly ILogTableOperate ILogTableOp;
-        readonly IPierMissionTableOperate IPierMissionTableOp;
+        readonly IMissionTableOperate IMissionTableOp;
         readonly INLogWritterObservable INLogWritter;
 
         public PierDataService(ILogTableOperate ILogTableOp,
-                               IPierMissionTableOperate IPierMissionTableOp,
+                               IMissionTableOperate IMissionTableOp,
                                ObserverService observerService)
         {
             this.ILogTableOp = ILogTableOp;
-            this.IPierMissionTableOp = IPierMissionTableOp;
+            this.IMissionTableOp = IMissionTableOp;
             this.INLogWritter = observerService;
         }
 
@@ -81,7 +81,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     {
         public async Task<bool> GetNewPierMissionTable()
         {
-            var result = await IPierMissionTableOp.GetNewPierMission(PierNo);
+            var result = await IMissionTableOp.GetNewMission<PierMissionTable>(false, false, PierNo);
 
             if(result.status)
             {
@@ -105,7 +105,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
         public async Task<bool> SetPierMissionTable()
         {
-            var result = await IPierMissionTableOp.UpdatePierMission(PierMission);
+            var result = await IMissionTableOp.UpSertMission<PierMissionTable>(PierMission);
 
             if(result.status)
             {

@@ -249,7 +249,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public bool IsPierMissionFinish()
         {
-            if(IDataService.PierMission.FinishTime != null)
+            if(IDataService.PierMission.IsFinish == true)
             {
                 return true;
             }
@@ -307,7 +307,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public bool IsRobotMissionFinish()
         {
-            if(IDataService.RobotMission.FinishTime != null)
+            if(IDataService.RobotMission.IsFinish == true)
             {
                 return true;
             }
@@ -319,6 +319,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetTableMissionAsignStart()
         {
+            IDataService.MissionAsign.IsStart = true;
             IDataService.MissionAsign.StartTime = DateTime.Now;
 
             if (await IDataService.SetMissionAsignTable())
@@ -333,6 +334,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> SetTableMissionAsignFinsih()
         {
+            IDataService.MissionAsign.IsFinish = true;
             IDataService.MissionAsign.FinishTime = DateTime.Now;
 
             if(await IDataService.SetMissionAsignTable())

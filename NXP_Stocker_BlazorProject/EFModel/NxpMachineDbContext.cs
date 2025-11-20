@@ -14,9 +14,11 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         }
 
-        public virtual DbSet<MissionAsignTable> MissionAsign { get; set; }
+        public virtual DbSet<MissionAsignTable> MissionAsigns { get; set; }
 
-        public virtual DbSet<MissionBase> MissionBase { get; set; }
+        public virtual DbSet<MissionBase> MissionBases { get; set; }
+
+        public virtual DbSet<LogTable> LogTables { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

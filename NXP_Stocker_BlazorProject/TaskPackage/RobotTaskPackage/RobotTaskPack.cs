@@ -135,6 +135,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetTableMissionStart()
         {
+            IDataService.RobotMission.IsStart = true;
             IDataService.RobotMission.StartTime = DateTime.Now;
 
             if(await IDataService.SetRobotMissionTable())
@@ -192,6 +193,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetTableMissionFinish()
         {
+            IDataService.RobotMission.IsFinish = true;
             IDataService.RobotMission.FinishTime = DateTime.Now;
 
             if(await IDataService.SetRobotMissionTable())

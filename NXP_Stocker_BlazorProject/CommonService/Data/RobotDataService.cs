@@ -11,15 +11,15 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     public partial class RobotDataService : IRobotDataService
     {
         readonly ILogTableOperate ILogTableOp;
-        readonly IRobotMissionTableOperate IRobotTableOp;
+        readonly IMissionTableOperate IMissionTableOp;
         readonly INLogWritterObservable INLogWritter;
 
         public RobotDataService(ILogTableOperate ILogTableOp,
-                                IRobotMissionTableOperate IRobotTableOp,
+                                IMissionTableOperate IMissionTableOp,
                                 ObserverService observerService)
         {
             this.ILogTableOp = ILogTableOp;
-            this.IRobotTableOp = IRobotTableOp;
+            this.IMissionTableOp = IMissionTableOp;
             this.INLogWritter = observerService;
         }
 
@@ -83,7 +83,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     {
         public async Task<bool> GetNewRobotMissionTable()
         {
-            var result = await IRobotTableOp.GetNewRobotMission();
+            var result = await IMissionTableOp.GetNewMission<RobotMissionTable>(false, false);
 
             if(result.status)
             {
@@ -109,7 +109,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
         public async Task<bool> SetRobotMissionTable()
         {
-            var result = await IRobotTableOp.UpdateRobotMission(RobotMission);
+            var result = await IMissionTableOp.UpSertMission<RobotMissionTable>(RobotMission);
 
             if(result.status)
             {

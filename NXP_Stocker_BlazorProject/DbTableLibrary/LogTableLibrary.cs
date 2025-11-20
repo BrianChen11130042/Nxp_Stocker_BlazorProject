@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using CommonLibraryP.MapPKG;
+using Microsoft.EntityFrameworkCore;
 using NXP_Stocker_BlazorProject.DbTableLibrary.Interface;
 using NXP_Stocker_BlazorProject.EFModel;
 
@@ -14,12 +16,6 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             this.serviceProvider = serviceProvider;
         }
-
-        //*************下面砍掉*************//
-
-        List<LogTable> listLogTable { get; set; } = new List<LogTable>();
-
-        //**********************************//
     }
 
     public partial class LogTableLibrary : ILogTableOperate
@@ -28,14 +24,28 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             try
             {
-                listLogTable.Add(data);
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                List<LogTable> list = listLogTable.Where(x => x.Equipment == data.Equipment).ToList();
+                    context.LogTables.Add(data);
 
-                return (true, string.Empty, list);
+                    await context.SaveChangesAsync();
 
+                    DateTime timePoint = DateTime.Now.AddDays(-2);
+
+                    List<LogTable> list = await context.LogTables.AsNoTracking()
+                                                                 .Where(x => x.RecordTime != null
+                                                                          && x.RecordTime >= timePoint
+                                                                          && x.Equipment == data.Equipment)
+                                                                 .OrderByDescending(x => x.RecordTime)
+                                                                 .Take(100)
+                                                                 .ToListAsync();
+
+                    return (true, string.Empty, list);
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return (false, ex.Message, null);
             }

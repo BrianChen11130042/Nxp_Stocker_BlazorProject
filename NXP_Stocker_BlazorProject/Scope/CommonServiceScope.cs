@@ -23,19 +23,17 @@ namespace NXP_Stocker_BlazorProject.Scope
 
             mainDataService = new MainDataService(ILogTableOp, observerService);
 
-            pier1MissionAsignDataService = new MissionAsignDataService(ILogTableOp, IMissionAsignTableOp,
-                                                                       IPierMissionTableOp, IRobotMissionTalbeOp,
+            pier1MissionAsignDataService = new MissionAsignDataService(ILogTableOp, IMissionTableOp,
                                                                        observerService);
 
-            pier2MissionAsignDataService = new MissionAsignDataService(ILogTableOp, IMissionAsignTableOp,
-                                                                       IPierMissionTableOp, IRobotMissionTalbeOp,
+            pier2MissionAsignDataService = new MissionAsignDataService(ILogTableOp, IMissionTableOp,
                                                                        observerService);
 
-            pier1DataService = new PierDataService(ILogTableOp, IPierMissionTableOp, observerService);
+            pier1DataService = new PierDataService(ILogTableOp, IMissionTableOp, observerService);
 
-            pier2DataService = new PierDataService(ILogTableOp, IPierMissionTableOp, observerService);
+            pier2DataService = new PierDataService(ILogTableOp, IMissionTableOp, observerService);
 
-            robotDataService = new RobotDataService(ILogTableOp, IRobotMissionTalbeOp, observerService);
+            robotDataService = new RobotDataService(ILogTableOp, IMissionTableOp, observerService);
         }
 
         void initCommonService()
