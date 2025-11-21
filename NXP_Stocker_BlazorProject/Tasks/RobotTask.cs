@@ -79,6 +79,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.SetTableMissionStart();
         }
 
+        public Task UpdateRobotMissionStatusToInQue()
+        {
+            return pack.UpdateRobotMissionStatusToInQue();
+        }
+
         public Task UpdateUIRobotLog()
         {
             return pack.UpdateUIRobotLog();
@@ -227,6 +232,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 0:
                             if(await GetPlcRobotStatus())
                             {
+                                await UpdateRobotMissionStatusToInQue();
                                 await UpdateUIRobotMission();
                                 Set(10);
                             }

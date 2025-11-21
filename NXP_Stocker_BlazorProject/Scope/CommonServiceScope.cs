@@ -21,7 +21,7 @@ namespace NXP_Stocker_BlazorProject.Scope
         {
             observerService = provider.GetRequiredService<ObserverService>();
 
-            mainDataService = new MainDataService(ILogTableOp, observerService);
+            mainDataService = new MainDataService(ILogTableOp, IMissionTableOp, observerService);
 
             pier1MissionAsignDataService = new MissionAsignDataService(ILogTableOp, IMissionTableOp,
                                                                        observerService);

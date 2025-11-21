@@ -16,6 +16,8 @@
 
         Task UpdateUIPierMission();
 
+        Task UpdatePierMissionStatusToInque();
+
         Task UpdateUIPierLog();
 
         //入大板

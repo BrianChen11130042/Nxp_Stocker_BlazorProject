@@ -118,6 +118,11 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 return result.status;
             }
         }
+
+        public async Task UpdatePierMissionStatusToInQue()
+        {
+            await IMissionTableOp.UpdateMissionStatusToInQue<PierMissionTable>(PierMission);
+        }
     }
 
     public partial class PierDataService

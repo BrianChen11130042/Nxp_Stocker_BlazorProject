@@ -154,6 +154,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.SetPlcFinishOutputSmallBoard();
         }
+
+        public Task UpdatePierMissionStatusToInque()
+        {
+            return pack.UpdatePierMissionStatusToInque();
+        }
     }
 
     public enum EPierAction
@@ -275,6 +280,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 30:
                             if(await GetPlcInputLargeBoardStatus())
                             {
+                                await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
                                 Set(40);
                             }
@@ -381,6 +387,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 30:
                             if(await GetPlcInputSmallBoardStatus())
                             {
+                                await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
                                 Set(40);
                             }
@@ -486,6 +493,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 30:
                             if(await GetPlcOutputLargeBoardStatus())
                             {
+                                await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
                                 Set(40);
                             }
@@ -591,6 +599,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 30:
                             if(await GetPlcOutputSmallBoardStatus())
                             {
+                                await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
                                 Set(40);
                             }

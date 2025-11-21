@@ -10,11 +10,14 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     public partial class MainDataService : IMainDataService
     {
         readonly ILogTableOperate ILogTableOp;
+        readonly IMissionTableOperate IMissionTableOp;
         readonly INLogWritterObservable INLogWritter;
 
-        public MainDataService(ILogTableOperate ILogTableOp, ObserverService observerService)
+        public MainDataService(ILogTableOperate ILogTableOp, IMissionTableOperate IMissionTableOp,
+                               ObserverService observerService)
         {
             this.ILogTableOp = ILogTableOp;
+            this.IMissionTableOp = IMissionTableOp;
             this.INLogWritter = observerService;
         }
 
@@ -57,6 +60,24 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             set
             {
                 _listMainLog = value;
+            }
+        }
+    }
+
+    public partial class MainDataService
+    {
+        public async Task<bool> InitMissionAsignByInQue()
+        {
+            var result = await IMissionTableOp.InitMissionAsignToInQue();
+
+            if(result.status)
+            {
+                return result.status;
+            }
+            else
+            {
+                await writeNLogError(result.msg);
+                return result.status;
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using CommonLibraryB_NXP.Library.PLC.Config;
 using CommonLibraryB_NXP.Manager.ModbusTcp.Master;
+using NXP_Stocker_BlazorProject.EFModel;
 using NXP_Stocker_BlazorProject.MachineModel;
 
 namespace NXP_Stocker_BlazorProject.Services.Interface
@@ -20,6 +21,8 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
         event dgInitMessage dgInitMsg;
 
         //任務
+        Task<List<MissionAsignTable>> GetMissionAsignFromInQue();
+
         Task<bool> SetMission(MissionInform mission);
     }
 }

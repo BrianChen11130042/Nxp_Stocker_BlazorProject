@@ -31,9 +31,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
             interval = 1;
         }
 
-        public Task<bool> CheckDbConnect()
+        public Task<bool> InitMissionAsignInQue()
         {
-            return pack.CheckDbConnect();
+            return pack.InitMissionAsignInQue();
         }
 
         public Task<bool> CheckPlcConnect()
@@ -97,9 +97,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
             switch(S3)
             {
                 case 0:
-                    if (await CheckDbConnect())
+                    if (await InitMissionAsignInQue())
                     {
-                        await UpdateUIMainLog();
                         Set(10);
                     }
                     else
@@ -203,18 +202,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if (await SetPlcHeartBeat())
-                            {
-                                Set(20);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMain.None, 0);
-                            }
-                            break;  
-
-                        case 20:
                             await pier2AsignTask.Run();
 
                             if(pier2AsignTask.key == EHandshakeKey.Finish)
@@ -226,24 +213,12 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
-                                    Set(30);
+                                    Set(EMain.Mission, 0);
                                 }
                             }
                             else
                             {
-                                Set(30);
-                            }
-                            break;
-
-                        case 30:
-                            if (await SetPlcHeartBeat())
-                            {
                                 Set(EMain.Mission, 0);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMain.None, 0);
                             }
                             break;
                     }
@@ -274,18 +249,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if (await SetPlcHeartBeat())
-                            {
-                                Set(20);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMain.None, 0);
-                            }
-                            break;
-
-                        case 20:
                             await pier2Task.Run();
 
                             if(pier2Task.key == EHandshakeKey.Finish)
@@ -297,28 +260,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
-                                    Set(30);
+                                    Set(20);
                                 }
                             }
                             else
                             {
-                                Set(30);
+                                Set(20);
                             }
                             break;
 
-                        case 30:
-                            if (await SetPlcHeartBeat())
-                            {
-                                Set(40);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMain.None, 0);
-                            }
-                            break;
-
-                        case 40:
+                        case 20:
                             await robotTask.Run();
 
                             if (robotTask.key == EHandshakeKey.Finish)

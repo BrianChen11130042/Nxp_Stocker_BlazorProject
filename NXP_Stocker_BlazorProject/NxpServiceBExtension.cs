@@ -14,7 +14,7 @@ namespace NXP_Stocker_BlazorProject
         public static IHostApplicationBuilder AddNxpServiceB(this IHostApplicationBuilder builder, string dbConnectionStringName = "NXPStorageConnectionString")
         {
             #region DB Table
-            builder.Services.AddDbContextFactory<NxpMachineDbContext>(options =>
+            builder.Services.AddDbContext<NxpMachineDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString(dbConnectionStringName));
             });

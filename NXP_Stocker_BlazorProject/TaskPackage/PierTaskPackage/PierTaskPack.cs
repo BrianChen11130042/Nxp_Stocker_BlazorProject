@@ -149,6 +149,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
+        public async Task UpdatePierMissionStatusToInque()
+        {
+            await IDataService.UpdatePierMissionStatusToInQue();
+        }
+
         public async Task UpdateUIPierMission()
         {
             await IPierObser.NotifyPierMission(IDataService.PierNo, IDataService.PierMission);

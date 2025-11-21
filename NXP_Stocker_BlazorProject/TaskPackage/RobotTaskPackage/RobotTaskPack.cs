@@ -234,6 +234,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
             }
         }
 
+        public async Task UpdateRobotMissionStatusToInQue()
+        {
+            await IDataService.UpdateRobotMissionStatusToInque();
+        }
+
         public async Task UpdateUIRobotMission()
         {
             await IRobotObser.NotifyRobotMission(IDataService.PierNo, IDataService.RobotMission);

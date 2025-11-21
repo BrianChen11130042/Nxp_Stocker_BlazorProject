@@ -17,6 +17,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         Task<bool> SetRobotMissionTable();
 
+        Task UpdateRobotMissionStatusToInque();
+
         //LogTable
         Task<bool> AddLogByRobot(string type, string log);
     }

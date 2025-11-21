@@ -16,6 +16,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         Task<bool> SetPierMissionTable();
 
+        Task UpdatePierMissionStatusToInQue();
+
         //LogTable
         Task<bool> AddLogByPier(string type, string log);
     }

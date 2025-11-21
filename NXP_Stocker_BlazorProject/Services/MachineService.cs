@@ -94,6 +94,11 @@ namespace NXP_Stocker_BlazorProject.Services
 
     public partial class MachineService
     {
+        public async Task<List<MissionAsignTable>> GetMissionAsignFromInQue()
+        {
+            return await scope.IMissionTableOp.GetMissionAsignFromInQue();
+        }
+
         public async Task<bool> SetMission(MissionInform mission)
         {
             MissionAsignTable missionAsignTable = new MissionAsignTable()

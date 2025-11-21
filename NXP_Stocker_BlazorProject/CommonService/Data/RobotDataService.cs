@@ -123,6 +123,11 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 return result.status;
             }
         }
+
+        public async Task UpdateRobotMissionStatusToInque()
+        {
+            await IMissionTableOp.UpdateMissionStatusToInQue<RobotMissionTable>(RobotMission);
+        }
     }
 
     public partial class RobotDataService

@@ -2,7 +2,7 @@
 {
     public interface IMainTaskPack
     {
-        Task<bool> CheckDbConnect();
+        Task<bool> InitMissionAsignInQue();
 
         Task<bool> CheckPlcConnect();
 

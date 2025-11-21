@@ -56,11 +56,9 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage
 
     public partial class MainTaskPack<EPLC> : IMainTaskPack
     {
-        public async Task<bool> CheckDbConnect()
+        public async Task<bool> InitMissionAsignInQue()
         {
-            string temp = "開始初始化";
-
-            if(await IDataService.AddLogByMainTask(info, temp))
+            if(await IDataService.InitMissionAsignByInQue())
             {
                 return true;
             }

@@ -11,6 +11,8 @@
 
         Task UpdateUIRobotMission();
 
+        Task UpdateRobotMissionStatusToInQue();
+
         Task UpdateUIRobotLog();
 
         bool IsGetNewMission();
