@@ -15,18 +15,18 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             this.serviceProvider = serviceProvider;
         }
+        public event Func<Task>? MissionAssignInQueueChangedAct;
+        List<MissionAssignTable> _missionAsignInQueue { get; set; } = new List<MissionAssignTable>();
 
-        List<MissionAsignTable> _missionAsignInQue { get; set; } = new List<MissionAsignTable>();
-
-        List<MissionAsignTable> MissionAsignInQue
+        List<MissionAssignTable> MissionAssignInQueue
         {
             get
             {
-                return _missionAsignInQue;
+                return _missionAsignInQueue;
             }
             set
             {
-                _missionAsignInQue = value;
+                _missionAsignInQueue = value;
             }
         }
     }
@@ -41,7 +41,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 {
                     NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                    List<MissionAsignTable> list = await context.MissionAsignTables.Include(x => x.Missions)
+                    List<MissionAssignTable> list = await context.MissionAssignTables.Include(x => x.Missions)
                                                                                    .AsNoTracking()
                                                                                    .Where(x => x.FinishTime != null)
                                                                                    .OrderBy(x => x.EstablishTime)
@@ -49,8 +49,8 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
                     list = list.Where(x => x.IsFinish == false).ToList();
 
-                    MissionAsignInQue = list;
-
+                    MissionAssignInQueue = list;
+                    MissionAssignInQueueChangedAct?.Invoke();
                     return (true, string.Empty);
                 }
             }
@@ -60,23 +60,29 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<List<MissionAsignTable>> GetMissionAsignFromInQue()
+        public Task RemoveFinishedMission()
         {
-            MissionAsignInQue.RemoveAll(x => x.IsFinish == true);
-            return MissionAsignInQue.OrderBy(x => x.EstablishTime).ToList();
+            MissionAssignInQueue.RemoveAll(x => x.IsFinish == true);
+            MissionAssignInQueueChangedAct?.Invoke();
+            return Task.CompletedTask;
         }
 
-        public async Task<(bool status, string msg, MissionAsignTable table)> UpSertMissionAsign(MissionAsignTable data)
+        public async Task<List<MissionAssignTable>> GetMissionAssignFromInQueue()
+        {
+            return MissionAssignInQueue.OrderBy(x => x.EstablishTime).ToList();
+        }
+
+        public async Task<(bool status, string msg, MissionAssignTable table)> UpSertMissionAsign(MissionAssignTable data)
         {
             try
             {
-                MissionAsignTable table;
+                MissionAssignTable table;
 
                 using (var scope = serviceProvider.CreateScope())
                 {
                     NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                    var target = await context.MissionAsignTables.FirstOrDefaultAsync(x => x.Id == data.Id);
+                    var target = await context.MissionAssignTables.FirstOrDefaultAsync(x => x.Id == data.Id);
 
                     if (target != null)
                     {
@@ -85,13 +91,13 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                     }
                     else
                     {
-                        context.MissionAsignTables.Add(data);
+                        context.MissionAssignTables.Add(data);
                         table = data;
                     }
 
                     await context.SaveChangesAsync();
 
-                    await _upSertMissionAsignToInQue(data);
+                    await UpsertMissionAsignToInQueue(data);
 
                     return (true, string.Empty, table);
 
@@ -103,9 +109,9 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        async Task _upSertMissionAsignToInQue(MissionAsignTable data)
+        async Task UpsertMissionAsignToInQueue(MissionAssignTable data)
         {
-            var target = MissionAsignInQue.FirstOrDefault(x => x.Id == data.Id);
+            var target = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.Id);
 
             if (target != null)
             {
@@ -116,11 +122,12 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
             else
             {
-                MissionAsignInQue.Add(data);
+                MissionAssignInQueue.Add(data);
+                MissionAssignInQueueChangedAct?.Invoke();
             }
         }
 
-        public async Task<(bool status, string msg, MissionAsignTable table)> GetNewMissionAsign(bool IsStart,
+        public async Task<(bool status, string msg, MissionAssignTable table)> GetNewMissionAsign(bool IsStart,
                                                                                                  bool IsFinish,
                                                                                                  int PierNo)
         {
@@ -130,7 +137,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 {
                     NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
-                    var tables = await context.MissionAsignTables.Include(x => x.Missions)
+                    var tables = await context.MissionAssignTables.Include(x => x.Missions)
                                                                          .AsNoTracking()
                                                                          .Where(x => x.PierNo == PierNo)
                                                                          .OrderBy(x => x.EstablishTime)
@@ -243,7 +250,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         async Task _UpsertMissionToInQue<T>(T data) where T : MissionBase
         {
-            var missionAsign = MissionAsignInQue.FirstOrDefault(x => x.Id == data.AsignId);
+            var missionAsign = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.AsignId);
 
             if(missionAsign != null)
             {
@@ -260,12 +267,13 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 {
                     missionAsign.Missions.Add(data);
                 }
+                MissionAssignInQueueChangedAct?.Invoke();
             }
         }
 
         public async Task UpdateMissionStatusToInQue<T>(T data) where T : MissionBase
         {
-            var missionAsign = MissionAsignInQue.FirstOrDefault(x => x.Id == data.AsignId);
+            var missionAsign = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.AsignId);
 
             if (missionAsign != null)
             {
@@ -274,6 +282,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 if (target != null)
                 {
                     target.Status = data.Status;
+                    MissionAssignInQueueChangedAct?.Invoke();
                 }
             }
         }

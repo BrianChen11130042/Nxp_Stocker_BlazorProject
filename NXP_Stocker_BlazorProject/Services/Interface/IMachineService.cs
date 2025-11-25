@@ -21,7 +21,7 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
         event dgInitMessage dgInitMsg;
 
         //任務
-        Task<List<MissionAsignTable>> GetMissionAsignFromInQue();
+        Task<List<MissionAssignTable>> GetMissionAsignFromInQue();
 
         Task<bool> SetMission(MissionInform mission);
     }

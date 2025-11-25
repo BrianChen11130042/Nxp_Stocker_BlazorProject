@@ -38,6 +38,7 @@ namespace NXP_Stocker_BlazorProject
             #region Service
 
             builder.Services.AddSingleton<IMachineService, MachineService>();
+            builder.Services.AddHostedService<MissionHostingService>();
 
             #endregion
 

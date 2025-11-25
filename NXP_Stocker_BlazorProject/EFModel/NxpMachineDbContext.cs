@@ -14,7 +14,7 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         }
 
-        public virtual DbSet<MissionAsignTable> MissionAsignTables { get; set; }
+        public virtual DbSet<MissionAssignTable> MissionAssignTables { get; set; }
 
         public virtual DbSet<MissionBase> MissionBases { get; set; }
 
@@ -26,7 +26,7 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MissionAsignTable>(entity =>
+            modelBuilder.Entity<MissionAssignTable>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Barcode).IsUnique();

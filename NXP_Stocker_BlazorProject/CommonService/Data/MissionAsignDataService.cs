@@ -54,9 +54,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-        MissionAsignTable _missionAsign { get; set; } = new MissionAsignTable();
+        MissionAssignTable _missionAsign { get; set; } = new MissionAssignTable();
 
-        public MissionAsignTable MissionAsign
+        public MissionAssignTable MissionAsign
         {
             get
             {
@@ -153,7 +153,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 }
                 else
                 {
-                    MissionAsign = new MissionAsignTable();
+                    MissionAsign = new MissionAssignTable();
                 }
 
                 return result.status;

@@ -31,6 +31,6 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public DateTime? FinishTime { get; set; }
 
-        public virtual MissionAsignTable? MissionAsign { get; set; }
+        public virtual MissionAssignTable? MissionAsign { get; set; }
     }
 }

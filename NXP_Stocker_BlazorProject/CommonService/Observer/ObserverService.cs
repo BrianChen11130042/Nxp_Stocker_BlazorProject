@@ -159,7 +159,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyMissionAsign(int pier, MissionAsignTable missionAsign)
+        public async Task NotifyMissionAsign(int pier, MissionAssignTable missionAsign)
         {
             if(osMissionAssign != null)
             {

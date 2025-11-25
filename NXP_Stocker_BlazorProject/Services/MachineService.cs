@@ -94,14 +94,14 @@ namespace NXP_Stocker_BlazorProject.Services
 
     public partial class MachineService
     {
-        public async Task<List<MissionAsignTable>> GetMissionAsignFromInQue()
+        public async Task<List<MissionAssignTable>> GetMissionAsignFromInQue()
         {
-            return await scope.IMissionTableOp.GetMissionAsignFromInQue();
+            return await scope.IMissionTableOp.GetMissionAssignFromInQueue();
         }
 
         public async Task<bool> SetMission(MissionInform mission)
         {
-            MissionAsignTable missionAsignTable = new MissionAsignTable()
+            MissionAssignTable missionAsignTable = new MissionAssignTable()
             {
                 Id = new Guid(),
 

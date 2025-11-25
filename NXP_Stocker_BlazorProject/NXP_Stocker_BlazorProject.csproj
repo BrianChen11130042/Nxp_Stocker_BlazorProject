@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="DevExpress.Blazor" Version="25.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.10" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\CommonLibraryB_NXP\CommonLibraryB_NXP\CommonLibraryB_NXP.csproj" />
-    <ProjectReference Include="..\..\CommonLibraryP\CommonLibraryP\CommonLibraryP.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="DevExpress.Blazor" Version="25.1.3" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.10" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\CommonLibraryB_NXP\CommonLibraryB_NXP\CommonLibraryB_NXP.csproj" />
+		<ProjectReference Include="..\..\CommonLibraryP\CommonLibraryP\CommonLibraryP.csproj" />
+	</ItemGroup>
 </Project>

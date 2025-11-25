@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NXP_Stocker_BlazorProject.EFModel
 {
-    public class MissionAsignTable
+    public class MissionAssignTable
     {
         [Key]
         public Guid Id { get; set; }
