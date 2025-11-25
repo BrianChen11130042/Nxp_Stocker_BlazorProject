@@ -3,9 +3,9 @@ using NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage.Interface;
 
 namespace NXP_Stocker_BlazorProject.Tasks
 {
-    public partial class MainThreadTask : IMainTaskPack
+    public partial class MainThreadTask : IThreadTaskPack
     {
-        readonly IMainTaskPack pack;
+        readonly IThreadTaskPack pack;
 
         readonly MissionAsignTask pier1AsignTask;
         readonly MissionAsignTask pier2AsignTask;
@@ -15,7 +15,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         readonly RobotTask robotTask;
 
-        public MainThreadTask(IMainTaskPack pack, MissionAsignTask pier1AsignTask, MissionAsignTask pier2AsignTask,
+        public MainThreadTask(IThreadTaskPack pack, MissionAsignTask pier1AsignTask, MissionAsignTask pier2AsignTask,
                               PierTask pier1Task, PierTask pier2Task, RobotTask robotTask)
         {
             this.pack = pack;

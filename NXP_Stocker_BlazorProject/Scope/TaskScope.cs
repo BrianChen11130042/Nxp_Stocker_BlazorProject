@@ -62,13 +62,13 @@ namespace NXP_Stocker_BlazorProject.Scope
             pier2MissionAsignTask.Set(ES1.None, EMissionAssign.None, 0);
         }
 
-        public MainTaskPack<EPLC> mainTaskPack;
+        public ThreadTaskPack<EPLC> mainTaskPack;
 
         public MainThreadTask mainTask;
 
         void initMainTask()
         {
-            mainTaskPack = new MainTaskPack<EPLC>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
+            mainTaskPack = new ThreadTaskPack<EPLC>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
                                                   mainDataService, observerService);
 
             mainTask = new MainThreadTask(mainTaskPack, pier1MissionAsignTask, pier2MissionAsignTask,

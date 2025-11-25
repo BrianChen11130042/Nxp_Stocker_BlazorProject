@@ -9,7 +9,7 @@ using NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage.Interface;
 
 namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage
 {
-    public partial class MainTaskPack<EPLC>
+    public partial class ThreadTaskPack<EPLC>
     {
         readonly EPLC Pier1;
         readonly EPLC Pier2;
@@ -23,7 +23,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage
         readonly INLogWritterObservable INLogObser;
         readonly IMainUIObserverable IMainObser;
 
-        public MainTaskPack(EPLC pier1, EPLC pier2, EPLC Robot, PlcLibrary<EPLC> plcLib,
+        public ThreadTaskPack(EPLC pier1, EPLC pier2, EPLC Robot, PlcLibrary<EPLC> plcLib,
                             MainDataService dataService, ObserverService observerService)
         {
             this.Pier1 = pier1;
@@ -54,7 +54,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage
         string err { get; set; } = "Error";
     }
 
-    public partial class MainTaskPack<EPLC> : IMainTaskPack
+    public partial class ThreadTaskPack<EPLC> : IThreadTaskPack
     {
         public async Task<bool> InitMissionAsignInQue()
         {

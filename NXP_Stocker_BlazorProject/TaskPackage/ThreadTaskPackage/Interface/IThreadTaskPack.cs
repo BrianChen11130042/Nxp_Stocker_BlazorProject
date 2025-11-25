@@ -1,6 +1,6 @@
 ﻿namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage.Interface
 {
-    public interface IMainTaskPack
+    public interface IThreadTaskPack
     {
         Task<bool> InitMissionAsignInQue();
 
