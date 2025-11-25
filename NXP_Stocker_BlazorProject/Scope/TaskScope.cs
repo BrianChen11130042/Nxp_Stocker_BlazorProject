@@ -1,6 +1,6 @@
 ﻿using CommonLibraryB_NXP.Base.FiniteStateMachine;
 using NXP_Stocker_BlazorProject.DeviceName.PLC;
-using NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage;
+using NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage;
 using NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage;
 using NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage;
 using NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage;
@@ -62,59 +62,129 @@ namespace NXP_Stocker_BlazorProject.Scope
             pier2MissionAsignTask.Set(ES1.None, EMissionAssign.None, 0);
         }
 
-        public MainTaskPack<EPLC> mainTaskPack;
 
-        public MainTask mainTask;
+        public MissionAsignThreadTask missionAsignThreadTask;
+        public MissionThreadTask missionThreadTask;
 
-        void initMainTask()
+        public ThreadTaskPack<EPLC> mainTaskPack;
+        public MainThreadTask mainThreadTask;
+
+        void initThreadTask()
         {
-            mainTaskPack = new MainTaskPack<EPLC>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
-                                                  mainDataService, observerService);
 
-            mainTask = new MainTask(mainTaskPack, pier1MissionAsignTask, pier2MissionAsignTask,
-                                    pier1Task, pier2Task, robotTask);
 
-            mainTask.Set(ES1.Init, EMain.None, 0);
+            mainTaskPack = new ThreadTaskPack<EPLC>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
+                                                    mainDataService, observerService);
+
+            missionAsignThreadTask = new MissionAsignThreadTask(pier1MissionAsignTask, pier2MissionAsignTask);
+            missionAsignThreadTask.Set(ES1.None, EMissionAsignThread.None, 0);
+
+            missionThreadTask = new MissionThreadTask(pier1Task, pier2Task, robotTask);
+            missionThreadTask.Set(ES1.None, EMissionThread.None, 0);
+
+            mainThreadTask = new MainThreadTask(mainTaskPack, missionAsignThreadTask, missionThreadTask);
+            mainThreadTask.Set(ES1.Init, EMainThread.None, 0);
         }
 
+        private CancellationTokenSource _ctsMain;
+        private CancellationTokenSource _ctsMissionAssign;
+        private CancellationTokenSource _ctsMission;
 
-        private CancellationTokenSource _cts;
-        private Task _loopTask;
+        private Task _mainTask;
+        private Task _missionAssignTask;
+        private Task _missionTask;
 
-        void initThread()
+        public void initThread()
         {
-            if (_loopTask == null || _loopTask.IsCompleted)
+            if (_mainTask == null || _mainTask.IsCompleted)
             {
-                _cts = new CancellationTokenSource();
-                _loopTask = RunAsync(_cts.Token);
+                _ctsMain = new CancellationTokenSource();
+                _mainTask = StartLongRunning(async () => await RunMainAsync(_ctsMain.Token));
+            }
+
+            if (_missionAssignTask == null || _missionAssignTask.IsCompleted)
+            {
+                _ctsMissionAssign = new CancellationTokenSource();
+                _missionAssignTask = StartLongRunning(async () => await RunMissionAssignAsync(_ctsMissionAssign.Token));
+            }
+
+            if (_missionTask == null || _missionTask.IsCompleted)
+            {
+                _ctsMission = new CancellationTokenSource();
+                _missionTask = StartLongRunning(async () => await RunMissionAsync(_ctsMission.Token));
             }
         }
 
-        async Task RunAsync(CancellationToken token)
+        private Task StartLongRunning(Func<Task> func)
+        {
+            // 開啟「專屬 thread」而不是 ThreadPool
+            return Task.Factory.StartNew(
+                async () => await func(),
+                CancellationToken.None,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default
+            ).Unwrap();
+        }
+
+        private async Task RunMainAsync(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
                 try
                 {
-                    await mainTask.Run(); // 你的主邏輯
+                    await mainThreadTask.Run();
 
-                    await Task.Delay(100, token); // 可取消的 delay
+                    await Task.Delay(600, token); // 不要 Thread.Sleep
                 }
-                catch (TaskCanceledException)
-                {
-                    // 正常中止
-                }
+                catch (TaskCanceledException) { }
                 catch (Exception ex)
                 {
-                    // 記錄錯誤
-                    Console.WriteLine($"錯誤：{ex.Message}");
+                    Console.WriteLine($"Main 例外: {ex}");
+                }
+            }
+        }
+
+        private async Task RunMissionAssignAsync(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                try
+                {
+                    await missionAsignThreadTask.Run();
+
+                    await Task.Delay(10, token);
+                }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Assign 例外: {ex}");
+                }
+            }
+        }
+
+        private async Task RunMissionAsync(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                try
+                {
+                    await missionThreadTask.Run();
+
+                    await Task.Delay(100, token);
+                }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Mission 例外: {ex}");
                 }
             }
         }
 
         public void StopThread()
         {
-            _cts?.Cancel();
+            _ctsMain?.Cancel();
+            _ctsMissionAssign?.Cancel();
+            _ctsMission?.Cancel();
         }
 
     }

@@ -1,32 +1,21 @@
 ﻿using CommonLibraryB_NXP.Base.FiniteStateMachine;
-using NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage.Interface;
+using NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage.Interface;
 
 namespace NXP_Stocker_BlazorProject.Tasks
 {
-    public partial class MainTask : IMainTaskPack
+    public partial class MainThreadTask : IThreadTaskPack
     {
-        readonly IMainTaskPack pack;
+        readonly IThreadTaskPack pack;
 
-        readonly MissionAsignTask pier1AsignTask;
-        readonly MissionAsignTask pier2AsignTask;
+        readonly MissionAsignThreadTask missionAsignThread;
+        readonly MissionThreadTask missionThread;
 
-        readonly PierTask pier1Task;
-        readonly PierTask pier2Task;
-
-        readonly RobotTask robotTask;
-
-        public MainTask(IMainTaskPack pack, MissionAsignTask pier1AsignTask, MissionAsignTask pier2AsignTask,
-                        PierTask pier1Task, PierTask pier2Task, RobotTask robotTask)
+        public MainThreadTask(IThreadTaskPack pack, MissionAsignThreadTask missionAsignThread, MissionThreadTask missionThread)
         {
             this.pack = pack;
 
-            this.pier1AsignTask = pier1AsignTask;
-            this.pier2AsignTask = pier2AsignTask;
-
-            this.pier1Task = pier1Task;
-            this.pier2Task = pier2Task;
-
-            this.robotTask = robotTask;
+            this.missionAsignThread = missionAsignThread;
+            this.missionThread = missionThread;
 
             interval = 1;
         }
@@ -82,7 +71,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
         }
     }
 
-    public enum EMain
+    public enum EMainThread
     {
         None,
         HeartBeat,
@@ -90,7 +79,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
         Mission,
     }
 
-    public partial class MainTask : FSMBase<EMain, int>
+    public partial class MainThreadTask : FSMBase<EMainThread, int>
     {
         public async override Task Init()
         {
@@ -124,15 +113,10 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         await UpdateUIMainLog();
                         await UpdateUIPopInitSuccess();
 
-                        pier1AsignTask.Set(ES1.Action, EMissionAssign.CheckMission, 0);
-                        pier2AsignTask.Set(ES1.Action, EMissionAssign.CheckMission, 0);
+                        missionAsignThread.Set(ES1.Init, EMissionAsignThread.None, 0);
+                        missionThread.Set(ES1.Init, EMissionThread.None, 0);
 
-                        pier1Task.Set(ES1.Action, EPierAction.CheckMission, 0);
-                        pier2Task.Set(ES1.Action, EPierAction.CheckMission, 0);
-
-                        robotTask.Set(ES1.Action, ERobotAction.CheckError, 0);
-
-                        Set(ES1.Action, EMain.HeartBeat, 0);
+                        Set(ES1.Action, EMainThread.HeartBeat, 0);
                     }
                     else
                     {
@@ -145,7 +129,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     await UpdateUIMainLog();
                     await UpdateUIPopInitFail();
 
-                    Set(ES1.None, EMain.None, 0);
+                    Set(ES1.None, EMainThread.None, 0);
                     break;
             }
         }
@@ -156,137 +140,70 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
             switch(S2)
             {
-                case EMain.None:
-                    Set(ES1.Finish, EMain.None, 0);
+                case EMainThread.None:
+                    Set(ES1.Finish, EMainThread.None, 0);
                     break;
 
-                case EMain.HeartBeat:
+                case EMainThread.HeartBeat:
                     switch(S3)
                     {
                         case 0:
                             if(await SetPlcHeartBeat())
                             {
-                                Set(EMain.MissionAsign, 0);
+                                Set(EMainThread.MissionAsign, 0);
                             }
                             else
                             {
                                 SaveState();
-                                Set(ES1.Error, EMain.None, 0);
+                                Set(ES1.Error, EMainThread.None, 0);
                             }
                             break;  
                     }
                     break;
 
-                case EMain.MissionAsign:
+                case EMainThread.MissionAsign:
                     switch(S3)
                     {
                         case 0:
-                            await pier1AsignTask.Run();
-
-                            if(pier1AsignTask.key == EHandshakeKey.Finish)
+                            if(missionAsignThread.key == EHandshakeKey.Finish)
                             {
-                                if(pier1AsignTask.isError)
+                                if(missionAsignThread.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EMain.None, 0);
+                                    Set(ES1.Error, EMainThread.None, 0);
                                 }
                                 else
                                 {
-                                    Set(10);
+                                    Set(EMainThread.Mission, 0);
                                 }
                             }
                             else
                             {
-                                Set(10);
-                            }
-                            break;
-
-                        case 10:
-                            await pier2AsignTask.Run();
-
-                            if(pier2AsignTask.key == EHandshakeKey.Finish)
-                            {
-                                if(pier2AsignTask.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMain.None, 0);
-                                }
-                                else
-                                {
-                                    Set(EMain.Mission, 0);
-                                }
-                            }
-                            else
-                            {
-                                Set(EMain.Mission, 0);
+                                Set(EMainThread.Mission, 0);
                             }
                             break;
                     }
                     break;
 
-                case EMain.Mission:
+                case EMainThread.Mission:
                     switch(S3)
                     {
                         case 0:
-                            await pier1Task.Run();
-
-                            if(pier1Task.key == EHandshakeKey.Finish)
+                            if(missionThread.key == EHandshakeKey.Finish)
                             {
-                                if(pier1Task.isError)
+                                if(missionThread.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EMain.None, 0);
+                                    Set(ES1.Error, EMainThread.None, 0);
                                 }
                                 else
                                 {
-                                    Set(10);
+                                    Set(EMainThread.HeartBeat, 0);
                                 }
                             }
                             else
                             {
-                                Set(10);
-                            }
-                            break;
-
-                        case 10:
-                            await pier2Task.Run();
-
-                            if(pier2Task.key == EHandshakeKey.Finish)
-                            {
-                                if(pier2Task.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMain.None, 0);
-                                }
-                                else
-                                {
-                                    Set(20);
-                                }
-                            }
-                            else
-                            {
-                                Set(20);
-                            }
-                            break;
-
-                        case 20:
-                            await robotTask.Run();
-
-                            if (robotTask.key == EHandshakeKey.Finish)
-                            {
-                                if(robotTask.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMain.None, 0);
-                                }
-                                else
-                                {
-                                    Set(EMain.HeartBeat, 0);
-                                }
-                            }
-                            else
-                            {
-                                Set(EMain.HeartBeat, 0);
+                                Set(EMainThread.HeartBeat, 0);
                             }
                             break;
                     }
@@ -308,7 +225,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     await UpdateUIPopConnectFail();
 
                     key = EHandshakeKey.Finish;
-                    Set(ES1.Idle, EMain.None, 0);
+                    Set(ES1.Idle, EMainThread.None, 0);
                     break;
             }
         }

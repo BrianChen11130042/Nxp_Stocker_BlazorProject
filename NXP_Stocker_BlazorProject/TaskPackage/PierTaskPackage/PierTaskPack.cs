@@ -79,6 +79,35 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
+        int _reset { get; set; } = 0;
+
+        public async Task<bool> GetPlcIsReady()
+        {
+            if (await IPeirOp.GetDeviceIsReady(pier))
+            {
+                _reset = pierLib.Packages[pier].property.getPier.isReady;
+                return true;
+            }
+            else
+            {
+                string nlog = pierLib.Packages[pier].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public bool IsPlcReady()
+        {
+            if (_reset == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> GetTableNewMission()
         {
             if(await IDataService.GetNewPierMissionTable())

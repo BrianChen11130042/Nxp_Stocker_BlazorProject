@@ -3,9 +3,9 @@
 
     public interface IRobotTaskPack
     {
-        Task<bool> GetRobotStatus();
+        Task<bool> GetRobotIsReady();
 
-        bool IsRobotError();
+        bool IsRobotReady();
 
         Task<bool> GetTableNewMission();
 

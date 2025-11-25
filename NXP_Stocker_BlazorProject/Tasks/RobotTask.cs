@@ -19,9 +19,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.GetPlcRobotStatus();
         }
 
-        public Task<bool> GetRobotStatus()
+        public Task<bool> GetRobotIsReady()
         {
-            return pack.GetRobotStatus();
+            return pack.GetRobotIsReady();
         }
 
         public Task<bool> GetTableNewMission()
@@ -34,9 +34,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.IsGetNewMission();
         }
 
-        public bool IsRobotError()
+        public bool IsRobotReady()
         {
-            return pack.IsRobotError();
+            return pack.IsRobotReady();
         }
 
         public bool IsRobotFinish()
@@ -98,7 +98,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
     public enum ERobotAction
     {
         None,
-        CheckError,
+        CheckReady,
         CheckMission,
         Start,
         GetResult,
@@ -118,19 +118,19 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     Set(ES1.Finish, ERobotAction.None, 0);
                     break;
 
-                case ERobotAction.CheckError:
+                case ERobotAction.CheckReady:
                     switch(S3)
                     {
                         case 0:
-                            if (await GetRobotStatus())
+                            if (await GetRobotIsReady())
                             {
-                                if (IsRobotError())
+                                if (IsRobotReady())
                                 {
-                                    Set(ERobotAction.CheckError, 0);
+                                    Set(ERobotAction.CheckMission, 0);
                                 }
                                 else
                                 {
-                                    Set(ERobotAction.CheckMission, 0);
+                                    Set(ERobotAction.CheckReady, 0);
                                 }
                             }
                             else
@@ -165,7 +165,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
-                                Set(ERobotAction.CheckError, 0);
+                                Set(ERobotAction.CheckReady, 0);
                             }
                             break;
                     }
@@ -244,7 +244,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(IsRobotError())
+                            if(false)
                             {
                                 //待處理
                             }
@@ -299,7 +299,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             if(await SetLogMissionFinish())
                             {
                                 await UpdateUIRobotLog();
-                                Set(ERobotAction.CheckError, 0);
+                                Set(ERobotAction.CheckReady, 0);
                             }
                             else
                             {
