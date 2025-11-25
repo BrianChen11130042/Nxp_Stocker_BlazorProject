@@ -64,14 +64,14 @@ namespace NXP_Stocker_BlazorProject.Scope
 
         public MainTaskPack<EPLC> mainTaskPack;
 
-        public MainTask mainTask;
+        public MainThreadTask mainTask;
 
         void initMainTask()
         {
             mainTaskPack = new MainTaskPack<EPLC>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
                                                   mainDataService, observerService);
 
-            mainTask = new MainTask(mainTaskPack, pier1MissionAsignTask, pier2MissionAsignTask,
+            mainTask = new MainThreadTask(mainTaskPack, pier1MissionAsignTask, pier2MissionAsignTask,
                                     pier1Task, pier2Task, robotTask);
 
             mainTask.Set(ES1.Init, EMain.None, 0);

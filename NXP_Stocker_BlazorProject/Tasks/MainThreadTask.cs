@@ -3,7 +3,7 @@ using NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage.Interface;
 
 namespace NXP_Stocker_BlazorProject.Tasks
 {
-    public partial class MainTask : IMainTaskPack
+    public partial class MainThreadTask : IMainTaskPack
     {
         readonly IMainTaskPack pack;
 
@@ -15,8 +15,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         readonly RobotTask robotTask;
 
-        public MainTask(IMainTaskPack pack, MissionAsignTask pier1AsignTask, MissionAsignTask pier2AsignTask,
-                        PierTask pier1Task, PierTask pier2Task, RobotTask robotTask)
+        public MainThreadTask(IMainTaskPack pack, MissionAsignTask pier1AsignTask, MissionAsignTask pier2AsignTask,
+                              PierTask pier1Task, PierTask pier2Task, RobotTask robotTask)
         {
             this.pack = pack;
 
@@ -90,7 +90,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
         Mission,
     }
 
-    public partial class MainTask : FSMBase<EMain, int>
+    public partial class MainThreadTask : FSMBase<EMain, int>
     {
         public async override Task Init()
         {
