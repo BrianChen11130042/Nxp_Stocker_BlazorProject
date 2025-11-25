@@ -1,4 +1,4 @@
-﻿namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage.Interface
+﻿namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage.Interface
 {
     public interface IThreadTaskPack
     {

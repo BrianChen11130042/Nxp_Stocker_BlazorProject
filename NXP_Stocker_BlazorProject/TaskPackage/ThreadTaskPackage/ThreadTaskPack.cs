@@ -5,9 +5,9 @@ using NXP_Stocker_BlazorProject.CommonService.Data;
 using NXP_Stocker_BlazorProject.CommonService.Data.Interface;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
-using NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage.Interface;
+using NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage.Interface;
 
-namespace NXP_Stocker_BlazorProject.TaskPackage.MainTaskPackage
+namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
 {
     public partial class ThreadTaskPack<EPLC>
     {
