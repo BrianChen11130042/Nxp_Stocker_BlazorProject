@@ -4,6 +4,10 @@
     {
         Task<bool> GetPlcPierNo();
 
+        Task<bool> GetPlcIsReady();
+
+        bool IsPlcReady();
+
         Task<bool> GetTableNewMission();
 
         Task<bool> SetTableMissionStart();

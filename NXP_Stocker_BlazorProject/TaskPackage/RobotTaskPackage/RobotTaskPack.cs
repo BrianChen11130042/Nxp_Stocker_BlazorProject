@@ -54,19 +54,34 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
     public partial class RobotTaskPack<EPLC> : IRobotTaskPack
     {
 
-        //目前電控還沒給規格 先放著
+        int _reset { get; set; } = 0;
 
-        public async Task<bool> GetRobotStatus()
+        public async Task<bool> GetRobotIsReady()
         {
-            return true;
+            if (await IRobotOp.GetDeviceIsReady(robot))
+            {
+                _reset = RobotLib.Packages[robot].property.getRobot.isReady;
+                return true;
+            }
+            else
+            {
+                string nlog = RobotLib.Packages[robot].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
         }
 
-        public bool IsRobotError()
+        public bool IsRobotReady()
         {
-            return false;
+            if (_reset == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-
-        ///////////////////////////
     }
 
     public partial class RobotTaskPack<EPLC>

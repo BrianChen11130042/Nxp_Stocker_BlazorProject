@@ -133,16 +133,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.SetTableWarehouseOutputDropPort();
         }
 
-        public Task<bool> GetPlcIsReady()
-        {
-            return pack.GetPlcIsReady();
-        }
-
-        public bool IsPlcReady()
-        {
-            return pack.IsPlcReady();
-        }
-
         public Task UpdateUIPickPortWarehouse()
         {
             return pack.UpdateUIPickPortWarehouse();
@@ -191,16 +181,10 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(await GetPlcIsReady())
+                            if(await GetTableNewMissionAsign())
                             {
-                                if(IsPlcReady())
-                                {
-                                    Set(20);
-                                }
-                                else
-                                {
-                                    Set(0);
-                                }
+                                await UpdateUIMissionAsign();
+                                Set(20);
                             }
                             else
                             {
@@ -210,19 +194,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if(await GetTableNewMissionAsign())
-                            {
-                                await UpdateUIMissionAsign();
-                                Set(30);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-                            break;
-
-                        case 30:
                             if(IsInputWarehouse())
                             {
                                 Set(EMissionAssign.InputWarehouse, 0);

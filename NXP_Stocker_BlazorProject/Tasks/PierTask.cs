@@ -159,6 +159,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.UpdatePierMissionStatusToInque();
         }
+
+        public Task<bool> GetPlcIsReady()
+        {
+            return pack.GetPlcIsReady();
+        }
+
+        public bool IsPlcReady()
+        {
+            return pack.IsPlcReady();
+        }
     }
 
     public enum EPierAction
@@ -187,9 +197,18 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            if(await GetPlcPierNo())
+                            await GetPlcPierNo();
+
+                            if (await GetPlcIsReady())
                             {
-                                Set(10);
+                                if(IsPlcReady())
+                                {
+                                    Set(10);
+                                }
+                                else
+                                {
+                                    Set(0);
+                                }
                             }
                             else
                             {
