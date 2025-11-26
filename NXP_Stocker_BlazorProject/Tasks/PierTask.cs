@@ -298,7 +298,15 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
-                                Set(40);
+
+                                if (IsInputLargeBoardFinish())
+                                {
+                                    Set(40);
+                                }
+                                else
+                                {
+                                    Set(30);
+                                }
                             }
                             else
                             {
@@ -308,19 +316,21 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            if(IsInputLargeBoardFinish())
+                            if(await SetPlcFinshInputLargeBoard())
                             {
                                 Set(50);
                             }
                             else
                             {
-                                Set(30);
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
                             }
                             break;
 
                         case 50:
-                            if(await SetPlcFinshInputLargeBoard())
+                            if(await SetTableMissionFinsih())
                             {
+                                await UpdateUIPierMission();
                                 Set(60);
                             }
                             else
@@ -331,19 +341,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 60:
-                            if(await SetTableMissionFinsih())
-                            {
-                                await UpdateUIPierMission();
-                                Set(70);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EPierAction.None, 0);
-                            }
-                            break;
-
-                        case 70:
                             if(await SetLogMissionFinish())
                             {
                                 await UpdateUIPierLog();
@@ -405,7 +402,15 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
-                                Set(40);
+
+                                if (IsInputSmallBoardFinish())
+                                {
+                                    Set(40);
+                                }
+                                else
+                                {
+                                    Set(30);
+                                }
                             }
                             else
                             {
@@ -415,19 +420,21 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            if(IsInputSmallBoardFinish())
+                            if(await SetPlcFinishInputSmallBoard())
                             {
                                 Set(50);
                             }
                             else
                             {
-                                Set(30);
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
                             }
                             break;
 
                         case 50:
-                            if(await SetPlcFinishInputSmallBoard())
+                            if(await SetTableMissionFinsih())
                             {
+                                await UpdateUIPierMission();
                                 Set(60);
                             }
                             else
@@ -438,19 +445,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 60:
-                            if(await SetTableMissionFinsih())
-                            {
-                                await UpdateUIPierMission();
-                                Set(70);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EPierAction.None, 0);
-                            }
-                            break;
-
-                        case 70:
                             if(await SetLogMissionFinish())
                             {
                                 await UpdateUIPierLog();
@@ -511,7 +505,15 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
-                                Set(40);
+
+                                if (IsOutputLargeBoardFinish())
+                                {
+                                    Set(40);
+                                }
+                                else
+                                {
+                                    Set(30);
+                                }
                             }
                             else
                             {
@@ -521,19 +523,21 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            if(IsOutputLargeBoardFinish())
+                            if(await SetPlcFinishOutputLargeBoard())
                             {
                                 Set(50);
                             }
                             else
                             {
-                                Set(30);
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
                             }
                             break;
 
                         case 50:
-                            if(await SetPlcFinishOutputLargeBoard())
+                            if (await SetTableMissionFinsih())
                             {
+                                await UpdateUIPierMission();
                                 Set(60);
                             }
                             else
@@ -544,19 +548,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 60:
-                            if (await SetTableMissionFinsih())
-                            {
-                                await UpdateUIPierMission();
-                                Set(70);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EPierAction.None, 0);
-                            }
-                            break;
-
-                        case 70:
                             if (await SetLogMissionFinish())
                             {
                                 await UpdateUIPierLog();
@@ -617,7 +608,15 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
-                                Set(40);
+
+                                if (IsOutputSmallBoardFinish())
+                                {
+                                    Set(40);
+                                }
+                                else
+                                {
+                                    Set(30);
+                                }
                             }
                             else
                             {
@@ -627,19 +626,21 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            if(IsOutputSmallBoardFinish())
+                            if(await SetPlcFinishOutputSmallBoard())
                             {
                                 Set(50);
                             }
                             else
                             {
-                                Set(30);
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
                             }
                             break;
 
                         case 50:
-                            if(await SetPlcFinishOutputSmallBoard())
+                            if (await SetTableMissionFinsih())
                             {
+                                await UpdateUIPierMission();
                                 Set(60);
                             }
                             else
@@ -650,19 +651,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 60:
-                            if (await SetTableMissionFinsih())
-                            {
-                                await UpdateUIPierMission();
-                                Set(70);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EPierAction.None, 0);
-                            }
-                            break;
-
-                        case 70:
                             if (await SetLogMissionFinish())
                             {
                                 await UpdateUIPierLog();
