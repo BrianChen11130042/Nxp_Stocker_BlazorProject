@@ -231,34 +231,20 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdateRobotMissionStatusToInQue();
                                 await UpdateUIRobotMission();
-                                Set(10);
+
+                                if (IsRobotFinish())
+                                {
+                                    Set(ERobotAction.Finish, 0);
+                                }
+                                else
+                                {
+                                    Set(0);
+                                }
                             }
                             else
                             {
                                 SaveState();
                                 Set(ES1.Error, ERobotAction.None, 0);
-                            }
-                            break;
-
-                        case 10:
-                            if(false)
-                            {
-                                //待處理
-                            }
-                            else
-                            {
-                                Set(20);
-                            }
-                            break;
-
-                        case 20:
-                            if(IsRobotFinish())
-                            {
-                                Set(ERobotAction.Finish, 0);
-                            }
-                            else
-                            {
-                                Set(0);
                             }
                             break;
                     }
