@@ -221,35 +221,32 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             if(await GetTableNewMission())
                             {
                                 await UpdateUIPierMission();
-                                Set(20);
+
+                                if (IsInputLargeBoard())
+                                {
+                                    Set(EPierAction.InputLargeBoard, 0);
+                                }
+                                else if (IsInputSmallBoard())
+                                {
+                                    Set(EPierAction.InputSmallBoard, 0);
+                                }
+                                else if (IsOutputLargeBoard())
+                                {
+                                    Set(EPierAction.OutputLargeBoard, 0);
+                                }
+                                else if (IsOutputSmallBoard())
+                                {
+                                    Set(EPierAction.OutputSmallBoard, 0);
+                                }
+                                else
+                                {
+                                    Set(EPierAction.CheckMission, 0);
+                                }
                             }
                             else
                             {
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
-                            }
-                            break;
-
-                        case 20:
-                            if(IsInputLargeBoard())
-                            {
-                                Set(EPierAction.InputLargeBoard, 0);
-                            }
-                            else if(IsInputSmallBoard())
-                            {
-                                Set(EPierAction.InputSmallBoard, 0);
-                            }
-                            else if(IsOutputLargeBoard())
-                            {
-                                Set(EPierAction.OutputLargeBoard, 0);
-                            }
-                            else if(IsOutputSmallBoard())
-                            {
-                                Set(EPierAction.OutputSmallBoard, 0);
-                            }
-                            else
-                            {
-                                Set(EPierAction.CheckMission, 0);
                             }
                             break;
                     }
