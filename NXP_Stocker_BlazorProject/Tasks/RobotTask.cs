@@ -149,23 +149,20 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             if (await GetTableNewMission())
                             {
                                 await UpdateUIRobotMission();
-                                Set(10);
+
+                                if (IsGetNewMission())
+                                {
+                                    Set(ERobotAction.Start, 0);
+                                }
+                                else
+                                {
+                                    Set(ERobotAction.CheckReady, 0);
+                                }
                             }
                             else
                             {
                                 SaveState();
                                 Set(ES1.Error, ERobotAction.None, 0);
-                            }
-                            break;
-
-                        case 10:
-                            if(IsGetNewMission())
-                            {
-                                Set(ERobotAction.Start, 0);
-                            }
-                            else
-                            {
-                                Set(ERobotAction.CheckReady, 0);
                             }
                             break;
                     }
