@@ -169,46 +169,33 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            if(await GetPlcPierNo())
-                            {
-                                Set(10);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-                            break;
+                            await GetPlcPierNo();
 
-                        case 10:
-                            if(await GetTableNewMissionAsign())
+                            if (await GetTableNewMissionAsign())
                             {
                                 await UpdateUIMissionAsign();
-                                Set(20);
+
+                                if (IsInputWarehouse())
+                                {
+                                    Set(EMissionAssign.InputWarehouse, 0);
+                                }
+                                else if (IsOutputWarehouse())
+                                {
+                                    Set(EMissionAssign.OutputWarehouse, 0);
+                                }
+                                else if (IsTransformWarehouse())
+                                {
+                                    Set(EMissionAssign.TransformWarehouse, 0);
+                                }
+                                else
+                                {
+                                    Set(0);
+                                }
                             }
                             else
                             {
                                 SaveState();
                                 Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-                            break;
-
-                        case 20:
-                            if(IsInputWarehouse())
-                            {
-                                Set(EMissionAssign.InputWarehouse, 0);
-                            }
-                            else if(IsOutputWarehouse())
-                            {
-                                Set(EMissionAssign.OutputWarehouse, 0);
-                            }
-                            else if(IsTransformWarehouse())
-                            {
-                                Set(EMissionAssign.TransformWarehouse, 0);
-                            }
-                            else
-                            {
-                                Set(0);
                             }
                             break;
                     }
