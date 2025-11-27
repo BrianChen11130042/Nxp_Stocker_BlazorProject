@@ -132,7 +132,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                                                                                                  int PierNo)
         {
 
-            MissionAsignTable table = MissionAsignInQue.Where(x => x.PierNo == PierNo
+            MissionAssignTable table = MissionAssignInQueue.Where(x => x.PierNo == PierNo
                                                                && x.IsStart == IsStart
                                                                && x.IsFinish == IsFinish)
                                                       .OrderBy(x => x.EstablishTime)
@@ -197,7 +197,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         public async Task<(bool status, string msg, T table)> GetMissionById<T>(Guid Id) where T : MissionBase
         {
-            foreach(var missionAsign in MissionAsignInQue)
+            foreach(var missionAsign in MissionAssignInQueue)
             {
                 var item = missionAsign.Missions.FirstOrDefault(x => x.Id == Id);
 
@@ -316,7 +316,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             List<MissionBase> listResult = new List<MissionBase>();
 
-            foreach (var missionAsign in MissionAsignInQue)
+            foreach (var missionAsign in MissionAssignInQueue)
             {
                 List<MissionBase> listMissionBase = missionAsign.Missions.Where(x => x.PierNo == PierNo
                                                                                   && x.IsStart == IsStart
@@ -346,7 +346,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             List<MissionBase> listResult = new List<MissionBase>();
 
-            foreach(var missionAsign in MissionAsignInQue)
+            foreach(var missionAsign in MissionAssignInQueue)
             {
                 List<MissionBase> listMissionBase = missionAsign.Missions.Where(x => x.IsStart == IsStart
                                                                                   && x.IsFinish == IsFinish)
