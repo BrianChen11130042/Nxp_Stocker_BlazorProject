@@ -192,7 +192,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetPlcRobotFinish()
         {
-            RobotLib.Packages[robot].property.setRobot.missionFinish = 0;
+            RobotLib.Packages[robot].property.setRobot.missionFinish = 100;
 
             if(await IRobotOp.SetRobotMissionFinsih(robot))
             {
