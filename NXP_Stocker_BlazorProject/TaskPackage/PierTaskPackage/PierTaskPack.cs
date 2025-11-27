@@ -258,7 +258,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcFinshInputLargeBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionFinish = 0;
+            pierLib.Packages[pier].property.setPier.missionFinish = 100;
 
             if(await IPeirOp.SetPierMissionFinish(pier))
             {
@@ -337,7 +337,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcFinishInputSmallBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionFinish = 0;
+            pierLib.Packages[pier].property.setPier.missionFinish = 100;
 
             if (await IPeirOp.SetPierMissionFinish(pier))
             {
@@ -417,7 +417,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcFinishOutputLargeBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionFinish = 0;
+            pierLib.Packages[pier].property.setPier.missionFinish = 100;
 
             if (await IPeirOp.SetPierMissionFinish(pier))
             {
@@ -496,7 +496,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcFinishOutputSmallBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionFinish = 0;
+            pierLib.Packages[pier].property.setPier.missionFinish = 100;
 
             if (await IPeirOp.SetPierMissionFinish(pier))
             {
