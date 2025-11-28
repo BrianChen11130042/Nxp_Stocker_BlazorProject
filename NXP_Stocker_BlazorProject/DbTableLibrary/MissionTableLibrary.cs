@@ -11,24 +11,16 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         readonly IServiceProvider serviceProvider;
 
+        readonly object _missionAsignLock = new object();
+
         public MissionTableLibrary(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
         }
-        public event Func<Task>? MissionAssignInQueueChangedAct;
-        List<MissionAssignTable> _missionAsignInQueue { get; set; } = new List<MissionAssignTable>();
 
-        List<MissionAssignTable> MissionAssignInQueue
-        {
-            get
-            {
-                return _missionAsignInQueue;
-            }
-            set
-            {
-                _missionAsignInQueue = value;
-            }
-        }
+        public event Func<Task>? MissionAssignInQueueChangedAct;
+
+        List<MissionAssignTable> MissionAssignInQueue { get; set; } = new List<MissionAssignTable>();
     }
 
     public partial class MissionTableLibrary
@@ -49,7 +41,12 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
                     list = list.Where(x => x.IsFinish == false).ToList();
 
-                    MissionAssignInQueue = list;
+                    lock(_missionAsignLock)
+                    {
+                        MissionAssignInQueue.Clear();
+                        MissionAssignInQueue = list;
+                    }
+
                     MissionAssignInQueueChangedAct?.Invoke();
                     return (true, string.Empty);
                 }
@@ -62,14 +59,21 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         public Task RemoveFinishedMission()
         {
-            MissionAssignInQueue.RemoveAll(x => x.IsFinish == true);
+            lock(_missionAsignLock)
+            {
+                MissionAssignInQueue.RemoveAll(x => x.IsFinish == true);
+            }
+
             MissionAssignInQueueChangedAct?.Invoke();
             return Task.CompletedTask;
         }
 
         public async Task<List<MissionAssignTable>> GetMissionAssignFromInQueue()
         {
-            return MissionAssignInQueue.OrderBy(x => x.EstablishTime).ToList();
+            lock(_missionAsignLock)
+            {
+                return MissionAssignInQueue.OrderBy(x => x.EstablishTime).ToList();
+            }
         }
 
         public async Task<(bool status, string msg, MissionAssignTable table)> UpSertMissionAsign(MissionAssignTable data)
@@ -111,20 +115,28 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         async Task UpsertMissionAsignToInQueue(MissionAssignTable data)
         {
-            var target = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.Id);
+            bool notify = false;
 
-            if (target != null)
+            lock(_missionAsignLock)
             {
-                target.StartTime = data.StartTime;
-                target.ErrorCode = data.ErrorCode;
-                target.FinishTime = data.FinishTime;
-                target.IsCancel = data.IsCancel;
+                var target = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.Id);
+
+                if (target != null)
+                {
+                    target.StartTime = data.StartTime;
+                    target.ErrorCode = data.ErrorCode;
+                    target.FinishTime = data.FinishTime;
+                    target.IsCancel = data.IsCancel;
+                }
+                else
+                {
+                    MissionAssignInQueue.Add(data);
+                    notify = true;
+                }
             }
-            else
-            {
-                MissionAssignInQueue.Add(data);
+
+            if(notify)
                 MissionAssignInQueueChangedAct?.Invoke();
-            }
         }
 
         public async Task<(bool status, string msg, MissionAssignTable table)> GetNewMissionAsign(bool IsStart,
@@ -132,11 +144,16 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                                                                                                  int PierNo)
         {
 
-            MissionAssignTable table = MissionAssignInQueue.Where(x => x.PierNo == PierNo
-                                                               && x.IsStart == IsStart
-                                                               && x.IsFinish == IsFinish)
-                                                      .OrderBy(x => x.EstablishTime)
-                                                      .FirstOrDefault();
+            MissionAssignTable table;
+
+            lock(_missionAsignLock)
+            {
+                table = MissionAssignInQueue.Where(x => x.PierNo == PierNo
+                                                     && x.IsStart == IsStart
+                                                     && x.IsFinish == IsFinish)
+                                            .OrderBy(x => x.EstablishTime)
+                                            .FirstOrDefault();
+            }
 
             return (true, string.Empty, table);
 
@@ -197,13 +214,16 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         public async Task<(bool status, string msg, T table)> GetMissionById<T>(Guid Id) where T : MissionBase
         {
-            foreach(var missionAsign in MissionAssignInQueue)
+            lock(_missionAsignLock)
             {
-                var item = missionAsign.Missions.FirstOrDefault(x => x.Id == Id);
-
-                if(item != null && item is T table)
+                foreach (var missionAsign in MissionAssignInQueue)
                 {
-                    return (true, string.Empty, table);
+                    var item = missionAsign.Missions.FirstOrDefault(x => x.Id == Id);
+
+                    if (item != null && item is T table)
+                    {
+                        return (true, string.Empty, table);
+                    }
                 }
             }
 
@@ -272,41 +292,57 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
         async Task _UpsertMissionToInQue<T>(T data) where T : MissionBase
         {
-            var missionAsign = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.AsignId);
+            bool notify = false;
 
-            if(missionAsign != null)
+            lock (_missionAsignLock)
             {
-                var target = missionAsign.Missions.FirstOrDefault(x => x.Id == data.Id);
+                var missionAsign = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.AsignId);
 
-                if (target != null)
+                if (missionAsign != null)
                 {
-                    target.StartTime = data.StartTime;
-                    target.Status = data.Status;
-                    target.ErrorCode = data.ErrorCode;
-                    target.FinishTime = data.FinishTime;
+                    var target = missionAsign.Missions.FirstOrDefault(x => x.Id == data.Id);
+
+                    if (target != null)
+                    {
+                        target.StartTime = data.StartTime;
+                        target.Status = data.Status;
+                        target.ErrorCode = data.ErrorCode;
+                        target.FinishTime = data.FinishTime;
+                    }
+                    else
+                    {
+                        missionAsign.Missions.Add(data);
+                    }
+                    notify = true;
                 }
-                else
-                {
-                    missionAsign.Missions.Add(data);
-                }
-                MissionAssignInQueueChangedAct?.Invoke();
             }
+
+            if(notify)
+                MissionAssignInQueueChangedAct?.Invoke();
         }
 
         public async Task UpdateMissionStatusToInQue<T>(T data) where T : MissionBase
         {
-            var missionAsign = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.AsignId);
+            bool notify = false;
 
-            if (missionAsign != null)
+            lock (_missionAsignLock)
             {
-                var target = missionAsign.Missions.FirstOrDefault(x => x.Id == data.Id);
+                var missionAsign = MissionAssignInQueue.FirstOrDefault(x => x.Id == data.AsignId);
 
-                if (target != null)
+                if (missionAsign != null)
                 {
-                    target.Status = data.Status;
-                    MissionAssignInQueueChangedAct?.Invoke();
+                    var target = missionAsign.Missions.FirstOrDefault(x => x.Id == data.Id);
+
+                    if (target != null)
+                    {
+                        target.Status = data.Status;
+                        notify = true;
+                    }
                 }
             }
+
+            if(notify)
+                MissionAssignInQueueChangedAct?.Invoke();
         }
     }
 
@@ -316,14 +352,17 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             List<MissionBase> listResult = new List<MissionBase>();
 
-            foreach (var missionAsign in MissionAssignInQueue)
+            lock (_missionAsignLock)
             {
-                List<MissionBase> listMissionBase = missionAsign.Missions.Where(x => x.PierNo == PierNo
-                                                                                  && x.IsStart == IsStart
-                                                                                  && x.IsFinish == IsFinish)
-                                                                         .ToList();
+                foreach (var missionAsign in MissionAssignInQueue)
+                {
+                    List<MissionBase> listMissionBase = missionAsign.Missions.Where(x => x.PierNo == PierNo
+                                                                                      && x.IsStart == IsStart
+                                                                                      && x.IsFinish == IsFinish)
+                                                                             .ToList();
 
-                listResult.AddRange(listMissionBase);
+                    listResult.AddRange(listMissionBase);
+                }
             }
 
             listResult = listResult.OrderBy(x => x.EstablishTime).ToList();
@@ -346,13 +385,16 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             List<MissionBase> listResult = new List<MissionBase>();
 
-            foreach(var missionAsign in MissionAssignInQueue)
+            lock (_missionAsignLock)
             {
-                List<MissionBase> listMissionBase = missionAsign.Missions.Where(x => x.IsStart == IsStart
-                                                                                  && x.IsFinish == IsFinish)
-                                                                         .ToList();
+                foreach (var missionAsign in MissionAssignInQueue)
+                {
+                    List<MissionBase> listMissionBase = missionAsign.Missions.Where(x => x.IsStart == IsStart
+                                                                                      && x.IsFinish == IsFinish)
+                                                                             .ToList();
 
-                listResult.AddRange(listMissionBase);
+                    listResult.AddRange(listMissionBase);
+                }
             }
 
             listResult = listResult.OrderBy(x => x.EstablishTime).ToList();
