@@ -32,6 +32,13 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
         }
     }
 
+    public enum EWhStatus
+    {
+        Empty,
+        Small,
+        Large
+    }
+
     public partial class MainDataService
     {
         bool _isModbusConnect { get; set; } = false;
@@ -48,7 +55,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
-
         List<LogTable> _listMainLog { get; set; } = new List<LogTable>();
 
         public List<LogTable> ListMainLog
@@ -60,6 +66,20 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             set
             {
                 _listMainLog = value;
+            }
+        }
+
+        Dictionary<int, EWhStatus> _dcWarehouse { get; set; } = new Dictionary<int, EWhStatus>();
+
+        public Dictionary<int, EWhStatus> DcWarehouse
+        {
+            get
+            {
+                return _dcWarehouse;
+            }
+            set
+            {
+                _dcWarehouse = value;
             }
         }
     }

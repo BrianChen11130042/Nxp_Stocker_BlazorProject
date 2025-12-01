@@ -16,6 +16,8 @@
 
         Task<bool> SetPlcHeartBeat();
 
+        Task<bool> GetPlcWarehouse();
+
         Task<bool> SetLogConnectFail();
 
         Task UpdateUIPopConnectFail();

@@ -8,6 +8,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
     {
         List<LogTable> ListMainLog { get; set; }
 
+        Dictionary<int, EWhStatus> DcWarehouse { get; set; }
+
         bool IsModbusConnect { get; set; }
 
         //MissionAsignTable

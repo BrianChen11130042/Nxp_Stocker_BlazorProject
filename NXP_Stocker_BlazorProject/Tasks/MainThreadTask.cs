@@ -69,14 +69,18 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.UpdateUIMainLog();
         }
+
+        public Task<bool> GetPlcWarehouse()
+        {
+            return pack.GetPlcWarehouse();
+        }
     }
 
     public enum EMainThread
     {
         None,
         HeartBeat,
-        MissionAsign,
-        Mission,
+        Warehouse,
     }
 
     public partial class MainThreadTask : FSMBase<EMainThread, int>
@@ -150,7 +154,22 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 0:
                             if(await SetPlcHeartBeat())
                             {
-                                Set(EMainThread.MissionAsign, 0);
+                                if(missionAsignThread.key == EHandshakeKey.Finish || missionThread.key == EHandshakeKey.Finish)
+                                {
+                                    if(missionAsignThread.isError || missionThread.isError)
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EMainThread.None, 0);
+                                    }
+                                    else
+                                    {
+                                        Set(EMainThread.Warehouse, 0);
+                                    }
+                                }
+                                else
+                                {
+                                    Set(EMainThread.Warehouse, 0);
+                                }
                             }
                             else
                             {
@@ -161,49 +180,18 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     }
                     break;
 
-                case EMainThread.MissionAsign:
+                case EMainThread.Warehouse:
                     switch(S3)
                     {
                         case 0:
-                            if(missionAsignThread.key == EHandshakeKey.Finish)
-                            {
-                                if(missionAsignThread.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMainThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(EMainThread.Mission, 0);
-                                }
-                            }
-                            else
-                            {
-                                Set(EMainThread.Mission, 0);
-                            }
-                            break;
-                    }
-                    break;
-
-                case EMainThread.Mission:
-                    switch(S3)
-                    {
-                        case 0:
-                            if(missionThread.key == EHandshakeKey.Finish)
-                            {
-                                if(missionThread.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMainThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(EMainThread.HeartBeat, 0);
-                                }
-                            }
-                            else
+                            if(await GetPlcWarehouse())
                             {
                                 Set(EMainThread.HeartBeat, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMainThread.None, 0);
                             }
                             break;
                     }

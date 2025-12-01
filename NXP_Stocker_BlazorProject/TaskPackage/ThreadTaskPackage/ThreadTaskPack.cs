@@ -24,7 +24,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
         readonly IMainUIObserverable IMainObser;
 
         public ThreadTaskPack(EPLC pier1, EPLC pier2, EPLC Robot, PlcLibrary<EPLC> plcLib,
-                            MainDataService dataService, ObserverService observerService)
+                              MainDataService dataService, ObserverService observerService)
         {
             this.Pier1 = pier1;
             this.Pier2 = pier2;
@@ -106,6 +106,22 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
 
             if(await IPlcOp.SetHeartBeat(Robot))
             {
+                return true;
+            }
+            else
+            {
+                string nlog = plcLib.Packages[Robot].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public async Task<bool> GetPlcWarehouse()
+        {
+            if(await IPlcOp.GetWarehouse(Robot))
+            {
+                //後續還有
+
                 return true;
             }
             else
