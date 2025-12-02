@@ -240,7 +240,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
-                                    Set(EPierAction.CheckMission, 0);
+                                    Set(10);
                                 }
                             }
                             else
@@ -316,8 +316,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            if(await SetPlcFinshInputLargeBoard())
+                            if (await SetTableMissionFinsih())
                             {
+                                await UpdateUIPierMission();
                                 Set(50);
                             }
                             else
@@ -325,12 +326,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
-                            break;
+                            break;  
 
                         case 50:
-                            if(await SetTableMissionFinsih())
+                            if(await SetPlcFinshInputLargeBoard())
                             {
-                                await UpdateUIPierMission();
                                 Set(60);
                             }
                             else
@@ -420,8 +420,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            if(await SetPlcFinishInputSmallBoard())
+                            if (await SetTableMissionFinsih())
                             {
+                                await UpdateUIPierMission();
                                 Set(50);
                             }
                             else
@@ -432,9 +433,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 50:
-                            if(await SetTableMissionFinsih())
+                            if(await SetPlcFinishInputSmallBoard())
                             {
-                                await UpdateUIPierMission();
                                 Set(60);
                             }
                             else
@@ -523,8 +523,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            if(await SetPlcFinishOutputLargeBoard())
+                            if (await SetTableMissionFinsih())
                             {
+                                await UpdateUIPierMission();
                                 Set(50);
                             }
                             else
@@ -535,9 +536,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 50:
-                            if (await SetTableMissionFinsih())
+                            if(await SetPlcFinishOutputLargeBoard())
                             {
-                                await UpdateUIPierMission();
                                 Set(60);
                             }
                             else
@@ -626,8 +626,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            if(await SetPlcFinishOutputSmallBoard())
+                            if (await SetTableMissionFinsih())
                             {
+                                await UpdateUIPierMission();
                                 Set(50);
                             }
                             else
@@ -638,9 +639,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 50:
-                            if (await SetTableMissionFinsih())
+                            if(await SetPlcFinishOutputSmallBoard())
                             {
-                                await UpdateUIPierMission();
                                 Set(60);
                             }
                             else

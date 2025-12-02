@@ -156,7 +156,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
-                                    Set(ERobotAction.CheckReady, 0);
+                                    Set(0);
                                 }
                             }
                             else
@@ -174,7 +174,17 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 0:
                             if(await SetPlcRobotMission())
                             {
-                                Set(10);
+                                await Task.Delay(10);
+
+                                if (await SetPlcRobotStart())
+                                {
+                                    Set(10);
+                                }
+                                else
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, ERobotAction.None, 0);
+                                }
                             }
                             else
                             {
@@ -184,8 +194,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(await SetPlcRobotStart())
+                            if(await SetTableMissionStart())
                             {
+                                await UpdateUIRobotMission();
                                 Set(20);
                             }
                             else
@@ -196,19 +207,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if(await SetTableMissionStart())
-                            {
-                                await UpdateUIRobotMission();
-                                Set(30);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, ERobotAction.None, 0);
-                            }
-                            break;
-
-                        case 30:
                             if(await SetLogMissionStart())
                             {
                                 await UpdateUIRobotLog();
@@ -254,8 +252,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            if(await SetPlcRobotFinish())
+                            if (await SetTableMissionFinish())
                             {
+                                await UpdateUIRobotMission();
                                 Set(10);
                             }
                             else
@@ -266,9 +265,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(await SetTableMissionFinish())
+                            if(await SetPlcRobotFinish())
                             {
-                                await UpdateUIRobotMission();
                                 Set(20);
                             }
                             else
