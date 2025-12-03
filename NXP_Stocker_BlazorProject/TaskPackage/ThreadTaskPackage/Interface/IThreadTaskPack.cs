@@ -18,6 +18,8 @@
 
         Task<bool> GetPlcWarehouse();
 
+        Task UpdateUIWarehouse();
+
         Task<bool> SetLogConnectFail();
 
         Task UpdateUIPopConnectFail();

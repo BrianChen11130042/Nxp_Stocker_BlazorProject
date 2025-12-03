@@ -1,4 +1,5 @@
 ﻿using CommonLibraryB_NXP.Tools.LogWritter;
+using NXP_Stocker_BlazorProject.CommonService.Data;
 using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
 using NXP_Stocker_BlazorProject.DbTableLibrary;
 using NXP_Stocker_BlazorProject.EFModel;
@@ -234,6 +235,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 foreach(var o in osMain)
                 {
                     await o.UpdateMainLog(list);
+                }
+            }
+        }
+
+        public async Task NotifyWarehouseInform(Dictionary<int, EWhStatus> dcWh)
+        {
+            if(osMain != null)
+            {
+                foreach(var o in osMain)
+                {
+                    await o.UpdateWarehouseInform(dcWh);
                 }
             }
         }

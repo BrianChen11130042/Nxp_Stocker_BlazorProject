@@ -9,6 +9,7 @@ using NXP_Stocker_BlazorProject.MachineModel;
 using NXP_Stocker_BlazorProject.EFModel;
 using CommonLibraryB_NXP.Tools.LogWritter;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
+using NXP_Stocker_BlazorProject.CommonService.Data;
 
 namespace NXP_Stocker_BlazorProject.Services
 {
@@ -22,14 +23,15 @@ namespace NXP_Stocker_BlazorProject.Services
 
             scope.observerService.AddMainUIObserver(this);
         }
+
     }
 
     public delegate Task dgInitMessage(bool popUp, string msg);
 
+    public delegate Task dgWarehouseInform(Dictionary<int, EWhStatus> dcWh);
+
     public partial class MachineService : IMainUIObserver
     {
-        public event dgInitMessage dgInitMsg;
-
         public async Task<List<ModbusTcpMasterConfig>> GetModbusTcpConfig()
         {
             List<ModbusTcpMasterConfig> list = new List<ModbusTcpMasterConfig>();
@@ -86,9 +88,18 @@ namespace NXP_Stocker_BlazorProject.Services
 
         }
 
+        public event dgInitMessage dgInitMsg;
+
         public async Task UpdatePopUpMessage(bool popUp, string msg)
         {
             dgInitMsg?.Invoke(popUp, msg);
+        }
+
+        public event dgWarehouseInform dgWhInform;
+
+        public async Task UpdateWarehouseInform(Dictionary<int, EWhStatus> dcWh)
+        {
+            dgWhInform?.Invoke(dcWh);
         }
     }
 

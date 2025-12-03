@@ -74,6 +74,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.GetPlcWarehouse();
         }
+
+        public Task UpdateUIWarehouse()
+        {
+            return pack.UpdateUIWarehouse();
+        }
     }
 
     public enum EMainThread
@@ -186,6 +191,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         case 0:
                             if(await GetPlcWarehouse())
                             {
+                                await UpdateUIWarehouse();
+
                                 Set(EMainThread.HeartBeat, 0);
                             }
                             else
