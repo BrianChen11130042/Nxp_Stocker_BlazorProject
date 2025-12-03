@@ -177,15 +177,63 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                                 if (IsInputWarehouse())
                                 {
-                                    Set(EMissionAssign.InputWarehouse, 0);
+
+                                    await GetTableWarehousePickPort();
+                                    await UpdateUIPickPortWarehouse();
+
+                                    await GetTableWarehouseDropPort();
+                                    await UpdateUIDropPortWarehouse();
+
+                                    if (await SetTableNewPierMission())
+                                    {
+                                        Set(EMissionAssign.InputWarehouse, 0);
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EMissionAssign.None, 0);
+                                    }
+
                                 }
                                 else if (IsOutputWarehouse())
                                 {
-                                    Set(EMissionAssign.OutputWarehouse, 0);
+
+                                    await GetTableWarehousePickPort();
+                                    await UpdateUIPickPortWarehouse();
+
+                                    await GetTableWarehouseDropPort();
+                                    await UpdateUIDropPortWarehouse();
+
+                                    if (await SetTableNewRobotMission())
+                                    {
+                                        Set(EMissionAssign.OutputWarehouse, 0);
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EMissionAssign.None, 0);
+                                    }
+
                                 }
                                 else if (IsTransformWarehouse())
                                 {
-                                    Set(EMissionAssign.TransformWarehouse, 0);
+
+                                    await GetTableWarehousePickPort();
+                                    await UpdateUIPickPortWarehouse();
+
+                                    await GetTableWarehouseDropPort();
+                                    await UpdateUIDropPortWarehouse();
+
+                                    if (await SetTableNewRobotMission())
+                                    {
+                                        Set(EMissionAssign.TransformWarehouse, 0);
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EMissionAssign.None, 0);
+                                    }
+
                                 }
                                 else
                                 {
@@ -205,14 +253,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            await GetTableWarehousePickPort();
-                            await UpdateUIPickPortWarehouse();
-
-                            await GetTableWarehouseDropPort();
-                            await UpdateUIDropPortWarehouse();
-
-                            if (await SetTableNewPierMission())
+                            if(await SetTableMissionAsignStart())
                             {
+                                await UpdateUIMissionAsign();
                                 Set(10);
                             }
                             else
@@ -223,9 +266,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(await SetTableMissionAsignStart())
+                            if(await SetLogMissionAsignStart())
                             {
-                                await UpdateUIMissionAsign();
+                                await UpdateUIMissionAsignLog();
                                 Set(20);
                             }
                             else
@@ -236,10 +279,29 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if(await SetLogMissionAsignStart())
+                            if(await GetTablePierMissionStatus())
                             {
-                                await UpdateUIMissionAsignLog();
-                                Set(30);
+                                if (IsPierMissionFinish())
+                                {
+
+                                    await SetTableWarehouseInputPickPort();
+                                    await UpdateUIPickPortWarehouse();
+
+                                    if (await SetTableNewRobotMission())
+                                    {
+                                        Set(30);
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EMissionAssign.None, 0);
+                                    }
+
+                                }
+                                else
+                                {
+                                    Set(20);
+                                }
                             }
                             else
                             {
@@ -249,11 +311,18 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 30:
-                            if(await GetTablePierMissionStatus())
+                            if(await GetTableRobotMissionStatus())
                             {
-                                if (IsPierMissionFinish())
+                                if(IsRobotMissionFinish())
                                 {
-                                    Set(40);
+                                    if(IsRobotMissionError())
+                                    {
+                                        //後續跟電控討論
+                                    }
+                                    else
+                                    {
+                                        Set(40);
+                                    }
                                 }
                                 else
                                 {
@@ -268,48 +337,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            await SetTableWarehouseInputPickPort();
-                            await UpdateUIPickPortWarehouse();
-
-                            if (await SetTableNewRobotMission())
-                            {
-                                Set(50);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-
-                            break;
-
-                        case 50:
-                            if(await GetTableRobotMissionStatus())
-                            {
-                                if(IsRobotMissionFinish())
-                                {
-                                    if(IsRobotMissionError())
-                                    {
-                                        //後續跟電控討論
-                                    }
-                                    else
-                                    {
-                                        Set(60);
-                                    }
-                                }
-                                else
-                                {
-                                    Set(50);
-                                }
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-                            break;
-
-                        case 60:
                             await SetTableWarehouseOutputPickPort();
                             await UpdateUIPickPortWarehouse();
 
@@ -319,7 +346,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             if (await SetTableMissionAsignFinsih())
                             {
                                 await UpdateUIMissionAsign();
-                                Set(70);
+                                Set(50);
                             }
                             else
                             {
@@ -328,7 +355,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             break;
 
-                        case 70:
+                        case 50:
                             if(await SetLogMissionAsignFinish())
                             {
                                 await UpdateUIMissionAsignLog();
@@ -347,14 +374,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            await GetTableWarehousePickPort();
-                            await UpdateUIPickPortWarehouse();
-
-                            await GetTableWarehouseDropPort();
-                            await UpdateUIDropPortWarehouse();
-
-                            if (await SetTableNewRobotMission())
+                            if (await SetTableMissionAsignStart())
                             {
+                                await UpdateUIMissionAsign();
                                 Set(10);
                             }
                             else
@@ -365,9 +387,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if (await SetTableMissionAsignStart())
+                            if (await SetLogMissionAsignStart())
                             {
-                                await UpdateUIMissionAsign();
+                                await UpdateUIMissionAsignLog();
                                 Set(20);
                             }
                             else
@@ -378,19 +400,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if (await SetLogMissionAsignStart())
-                            {
-                                await UpdateUIMissionAsignLog();
-                                Set(30);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-                            break;
-
-                        case 30:
                             if(await GetTableRobotMissionStatus())
                             {
                                 if (IsRobotMissionFinish())
@@ -401,8 +410,43 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
-                                        Set(40);
+
+                                        await SetTableWarehouseOutputPickPort();
+                                        await UpdateUIPickPortWarehouse();
+
+                                        await SetTableWarehouseInputDropPort();
+                                        await UpdateUIDropPortWarehouse();
+
+                                        if (await SetTableNewPierMission())
+                                        {
+                                            Set(30);
+                                        }
+                                        else
+                                        {
+                                            SaveState();
+                                            Set(ES1.Error, EMissionAssign.None, 0);
+                                        }
+
                                     }
+                                }
+                                else
+                                {
+                                    Set(20);
+                                }
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 30:
+                            if (await GetTablePierMissionStatus())
+                            {
+                                if (IsPierMissionFinish())
+                                {
+                                    Set(40);
                                 }
                                 else
                                 {
@@ -417,14 +461,12 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
-                            await SetTableWarehouseOutputPickPort();
-                            await UpdateUIPickPortWarehouse();
-
-                            await SetTableWarehouseInputDropPort();
+                            await SetTableWarehouseOutputDropPort();
                             await UpdateUIDropPortWarehouse();
 
-                            if (await SetTableNewPierMission())
+                            if (await SetTableMissionAsignFinsih())
                             {
+                                await UpdateUIMissionAsign();
                                 Set(50);
                             }
                             else
@@ -435,41 +477,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 50:
-                            if (await GetTablePierMissionStatus())
-                            {
-                                if (IsPierMissionFinish())
-                                {
-                                    Set(60);
-                                }
-                                else
-                                {
-                                    Set(50);
-                                }
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-                            break;
-
-                        case 60:
-                            await SetTableWarehouseOutputDropPort();
-                            await UpdateUIDropPortWarehouse();
-
-                            if (await SetTableMissionAsignFinsih())
-                            {
-                                await UpdateUIMissionAsign();
-                                Set(70);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-                            break;
-
-                        case 70:
                             if (await SetLogMissionAsignFinish())
                             {
                                 await UpdateUIMissionAsignLog();
@@ -488,14 +495,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            await GetTableWarehousePickPort();
-                            await UpdateUIPickPortWarehouse();
-
-                            await GetTableWarehouseDropPort();
-                            await UpdateUIDropPortWarehouse();
-
-                            if (await SetTableNewRobotMission())
+                            if (await SetTableMissionAsignStart())
                             {
+                                await UpdateUIMissionAsign();
                                 Set(10);
                             }
                             else
@@ -506,9 +508,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if (await SetTableMissionAsignStart())
+                            if (await SetLogMissionAsignStart())
                             {
-                                await UpdateUIMissionAsign();
+                                await UpdateUIMissionAsignLog();
                                 Set(20);
                             }
                             else
@@ -519,19 +521,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if (await SetLogMissionAsignStart())
-                            {
-                                await UpdateUIMissionAsignLog();
-                                Set(30);
-                            }
-                            else
-                            {
-                                SaveState();
-                                Set(ES1.Error, EMissionAssign.None, 0);
-                            }
-                            break;
-
-                        case 30:
                             if (await GetTableRobotMissionStatus())
                             {
                                 if (IsRobotMissionFinish())
@@ -542,12 +531,12 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
-                                        Set(40);
+                                        Set(30);
                                     }
                                 }
                                 else
                                 {
-                                    Set(30);
+                                    Set(20);
                                 }
                             }
                             else
@@ -557,7 +546,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             break;
 
-                        case 40:
+                        case 30:
                             await SetTableWarehouseOutputPickPort();
                             await UpdateUIPickPortWarehouse();
 
@@ -567,7 +556,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             if (await SetTableMissionAsignFinsih())
                             {
                                 await UpdateUIMissionAsign();
-                                Set(50);
+                                Set(40);
                             }
                             else
                             {
@@ -576,7 +565,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             break;
 
-                        case 50:
+                        case 40:
                             if (await SetLogMissionAsignFinish())
                             {
                                 await UpdateUIMissionAsignLog();

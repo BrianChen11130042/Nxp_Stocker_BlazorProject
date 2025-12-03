@@ -152,7 +152,7 @@ namespace NXP_Stocker_BlazorProject.Scope
                 {
                     await missionAsignThreadTask.Run();
 
-                    await Task.Delay(10, token);
+                    await Task.Delay(5, token);
                 }
                 catch (TaskCanceledException) { }
                 catch (Exception ex)

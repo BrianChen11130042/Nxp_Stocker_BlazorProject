@@ -196,15 +196,11 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                 else
                     list = await _getMissionBaseByParam(PierNo, IsStart, IsFinish);
 
-                foreach (var item in list)
-                {
-                    if (item is T table)
-                    {
-                        return (true, string.Empty, table);
-                    }
-                }
+                var table = list.OrderBy(x => x.EstablishTime)
+                                .OfType<T>()
+                                .FirstOrDefault();
 
-                return (true, string.Empty, null);
+                return (true, string.Empty, table);
             }
             catch(Exception ex)
             {
