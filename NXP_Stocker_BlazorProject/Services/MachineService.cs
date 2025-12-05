@@ -22,15 +22,12 @@ namespace NXP_Stocker_BlazorProject.Services
             this.scope = scope;
 
             scope.observerService.AddMainUIObserver(this);
+            scope.observerService.AddPierUIObserver(this);
+            scope.observerService.AddRobotUIObserver(this);
         }
-
     }
 
-    public delegate Task dgInitMessage(bool popUp, string msg);
-
-    public delegate Task dgWarehouseInform(Dictionary<int, EWhStatus> dcWh);
-
-    public partial class MachineService : IMainUIObserver
+    public partial class MachineService
     {
         public async Task<List<ModbusTcpMasterConfig>> GetModbusTcpConfig()
         {
@@ -82,25 +79,6 @@ namespace NXP_Stocker_BlazorProject.Services
         {
             scope.initAll();
         }
-
-        public async Task UpdateMainLog(List<LogTable> list)
-        {
-
-        }
-
-        public event dgInitMessage dgInitMsg;
-
-        public async Task UpdatePopUpMessage(bool popUp, string msg)
-        {
-            dgInitMsg?.Invoke(popUp, msg);
-        }
-
-        public event dgWarehouseInform dgWhInform;
-
-        public async Task UpdateWarehouseInform(Dictionary<int, EWhStatus> dcWh)
-        {
-            dgWhInform?.Invoke(dcWh);
-        }
     }
 
     public partial class MachineService
@@ -138,6 +116,108 @@ namespace NXP_Stocker_BlazorProject.Services
                 await scope.observerService.NotifyNLog(EStatus.Error, result.msg);
                 return false;
             }
+        }
+    }
+
+    public delegate Task dgInitMessage(bool popUp, string msg);
+
+    public delegate Task dgWarehouseInform(Dictionary<int, EWhStatus> dcWh);
+
+    public partial class MachineService : IMainUIObserver
+    {
+        public async Task UpdateMainLog(List<LogTable> list)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public event dgInitMessage dgInitMsg;
+
+        public async Task UpdatePopUpMessage(bool popUp, string msg)
+        {
+            dgInitMsg?.Invoke(popUp, msg);
+        }
+
+        public event dgWarehouseInform dgWhInform;
+
+        public async Task UpdateWarehouseInform(Dictionary<int, EWhStatus> dcWh)
+        {
+            dgWhInform?.Invoke(dcWh);
+        }
+    }
+
+    public delegate Task dgPlcActionStatus(Dictionary<EPLC, bool> dcPlcAction);
+
+    public partial class MachineService : IPierUIObserver
+    {
+        public event dgPlcActionStatus dgPlcAction;
+
+        Dictionary<EPLC, bool> dcPlcAction { get; set; } = new Dictionary<EPLC, bool>()
+        {
+            { EPLC.Pier1, false},
+            { EPLC.Pier2, false},
+            { EPLC.Robot, false}
+        };
+
+        public async Task<Dictionary<EPLC, bool>> GetDcPlcAction()
+        {
+            return dcPlcAction;
+        }
+
+        public async Task UpdatePierAction(int pier, bool isRun)
+        {
+            switch(pier)
+            {
+                case 1:
+                    if (dcPlcAction[EPLC.Pier1] != isRun)
+                    {
+                        dcPlcAction[EPLC.Pier1] = isRun;
+                        dgPlcAction?.Invoke(dcPlcAction);
+                    }
+                    break;  
+
+                case 2:
+                    if(dcPlcAction[EPLC.Pier2] != isRun)
+                    {
+                        dcPlcAction[EPLC.Pier2] = isRun;
+                        dgPlcAction?.Invoke(dcPlcAction);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        public async Task UpdatePierLog(int pier, List<LogTable> list)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public async Task UpdatePierMission(int pier, PierMissionTable table)
+        {
+            //throw new NotImplementedException();
+        }
+    }
+
+    public partial class MachineService : IRobotUIObserver
+    {
+        public async Task UpdateRobotAction(int robot, bool isRun)
+        {
+            if (dcPlcAction[EPLC.Robot] != isRun)
+            {
+                dcPlcAction[EPLC.Robot] = isRun;
+                dgPlcAction?.Invoke(dcPlcAction);
+            }
+        }
+
+        public async Task UpdateRobotLog(int robot, List<LogTable> list)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public async Task UpdateRobotMission(int pier, RobotMissionTable table)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

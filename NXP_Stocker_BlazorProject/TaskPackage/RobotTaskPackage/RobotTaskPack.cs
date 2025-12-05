@@ -53,6 +53,20 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
     public partial class RobotTaskPack<EPLC> : IRobotTaskPack
     {
+        public async Task<bool> GetPlcRobotNo()
+        {
+            if(await IRobotOp.GetDeviceNo(robot))
+            {
+                IDataService.RobotNo = RobotLib.Packages[robot].property.getRobot.robotNo;
+                return true;
+            }
+            else
+            {
+                string nlog = RobotLib.Packages[robot].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
 
         int _reset { get; set; } = 0;
 
@@ -100,7 +114,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public bool IsGetNewMission()
         {
-            if (IDataService.PierNo != 0
+            if (IDataService.RobotMission.PierNo != 0
                && !string.IsNullOrEmpty(IDataService.RobotMission.Barcode))
             {
                 return true;
@@ -223,7 +237,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetLogMissionStart()
         {
-            string temp = "Pier" + IDataService.PierNo.ToString() + "區手臂任務開始";
+            string temp = "Pier" + IDataService.RobotMission.PierNo.ToString() + "區手臂任務開始";
 
             if(await IDataService.AddLogByRobot(info, temp))
             {
@@ -237,7 +251,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetLogMissionFinish()
         {
-            string temp = "Pier" + IDataService.PierNo.ToString() + "區手臂任務結束";
+            string temp = "Pier" + IDataService.RobotMission.PierNo.ToString() + "區手臂任務結束";
 
             if (await IDataService.AddLogByRobot(info, temp))
             {
@@ -256,12 +270,17 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task UpdateUIRobotMission()
         {
-            await IRobotObser.NotifyRobotMission(IDataService.PierNo, IDataService.RobotMission);
+            await IRobotObser.NotifyRobotMission(IDataService.RobotNo, IDataService.RobotMission);
         }
 
         public async Task UpdateUIRobotLog()
         {
-            await IRobotObser.NotifyRobotLog(IDataService.PierNo, IDataService.ListRobotLog);
+            await IRobotObser.NotifyRobotLog(IDataService.RobotNo, IDataService.ListRobotLog);
+        }
+
+        public async Task UpdateUIRobotAction(bool isRun)
+        {
+            await IRobotObser.NotifyRobotAction(IDataService.RobotNo, isRun);
         }
     }
 }

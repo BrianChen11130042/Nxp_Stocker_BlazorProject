@@ -24,6 +24,8 @@
 
         Task UpdateUIPierLog();
 
+        Task UpdateUIPierAction(bool isRun);
+
         //入大板
         bool IsInputLargeBoard();
 

@@ -87,6 +87,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 }
             }
         }
+
+        public async Task NotifyPierAction(int pier, bool isRun)
+        {
+            if(osPier != null)
+            {
+                foreach (var o in osPier)
+                {
+                    await o.UpdatePierAction(pier, isRun);
+                }
+            }
+        }
     }
 
     public partial class ObserverService : IRobotUIObserverable
@@ -113,24 +124,35 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyRobotLog(int pier, List<LogTable> list)
+        public async Task NotifyRobotLog(int robot, List<LogTable> list)
         {
             if(osRobot != null)
             {
                 foreach(var o in osRobot)
                 {
-                    await o.UpdateRobotLog(pier, list);
+                    await o.UpdateRobotLog(robot, list);
                 }
             }
         }
 
-        public async Task NotifyRobotMission(int pier, RobotMissionTable table)
+        public async Task NotifyRobotMission(int robot, RobotMissionTable table)
         {
             if(osRobot != null)
             {
                 foreach(var o in osRobot)
                 {
-                    await o.UpdateRobotMission(pier, table);
+                    await o.UpdateRobotMission(robot, table);
+                }
+            }
+        }
+
+        public async Task NotifyRobotAction(int robot, bool isRun)
+        {
+            if(osRobot != null)
+            {
+                foreach(var o in osRobot)
+                {
+                    await o.UpdateRobotAction(robot, isRun);
                 }
             }
         }

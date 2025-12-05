@@ -93,6 +93,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.UpdateUIRobotMission();
         }
+
+        public Task<bool> GetPlcRobotNo()
+        {
+            return pack.GetPlcRobotNo();
+        }
+
+        public Task UpdateUIRobotAction(bool isRun)
+        {
+            return pack.UpdateUIRobotAction(isRun);
+        }
     }
 
     public enum ERobotAction
@@ -122,6 +132,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
+                            await GetPlcRobotNo();
+
                             if (await GetRobotIsReady())
                             {
                                 if (IsRobotReady())
@@ -130,6 +142,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
+                                    await UpdateUIRobotAction(false);
+
                                     Set(ERobotAction.CheckReady, 0);
                                 }
                             }
@@ -159,6 +173,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                                         if (await SetPlcRobotStart())
                                         {
+                                            await UpdateUIRobotAction(true);
+
                                             Set(ERobotAction.Start, 0);
                                         }
                                         else
@@ -176,6 +192,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
+                                    await UpdateUIRobotAction(false);
+
                                     Set(0);
                                 }
                             }

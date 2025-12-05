@@ -3,6 +3,8 @@
 
     public interface IRobotTaskPack
     {
+        Task<bool> GetPlcRobotNo();
+
         Task<bool> GetRobotIsReady();
 
         bool IsRobotReady();
@@ -14,6 +16,8 @@
         Task UpdateRobotMissionStatusToInQue();
 
         Task UpdateUIRobotLog();
+
+        Task UpdateUIRobotAction(bool isRun);
 
         bool IsGetNewMission();
 

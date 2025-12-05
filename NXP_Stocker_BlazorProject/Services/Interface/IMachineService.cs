@@ -1,5 +1,6 @@
 ﻿using CommonLibraryB_NXP.Library.PLC.Config;
 using CommonLibraryB_NXP.Manager.ModbusTcp.Master;
+using NXP_Stocker_BlazorProject.DeviceName.PLC;
 using NXP_Stocker_BlazorProject.EFModel;
 using NXP_Stocker_BlazorProject.MachineModel;
 
@@ -27,6 +28,11 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
 
         //倉儲
         event dgWarehouseInform dgWhInform;
+
+        // On <-> off 狀態
+        event dgPlcActionStatus dgPlcAction;
+
+        Task<Dictionary<EPLC, bool>> GetDcPlcAction();
 
     }
 }

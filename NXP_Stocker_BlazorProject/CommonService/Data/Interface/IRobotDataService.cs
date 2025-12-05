@@ -6,7 +6,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
     public interface IRobotDataService
     {
-        int PierNo { get; set; }
+        int RobotNo { get; set; }
 
         RobotMissionTable RobotMission { get; set; }
 
