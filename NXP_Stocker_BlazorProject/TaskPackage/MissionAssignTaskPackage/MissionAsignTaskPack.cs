@@ -17,21 +17,21 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
     {
         readonly EPLC pier;
 
-        readonly IPlcOperate<EPLC> IPeirOp;
+        readonly IPlcOperate<EPLC> IPlcOp;
 
-        readonly PlcLibrary<EPLC> pierLib;
+        readonly PlcLibrary<EPLC> plcLib;
 
         readonly IMissionAsignDataService IDataService;
 
         readonly INLogWritterObservable INLogObser;
         readonly IMissionAssignUIObserverable IMissionAsignObser;
 
-        public MissionAsignTaskPack(EPLC pier, PlcLibrary<EPLC> pierLib,
+        public MissionAsignTaskPack(EPLC pier, PlcLibrary<EPLC> plcLib,
                                     MissionAsignDataService dataService, ObserverService observerService)
         {
             this.pier = pier;
-            this.IPeirOp = pierLib;
-            this.pierLib = pierLib;
+            this.IPlcOp = plcLib;
+            this.plcLib = plcLib;
 
             this.IDataService = dataService;
             this.INLogObser = observerService;
@@ -73,14 +73,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task<bool> GetPlcPierNo()
         {
-            if (await IPeirOp.GetDeviceNo(pier))
+            if (await IPlcOp.GetDeviceNo(pier))
             {
-                IDataService.PierNo = pierLib.Packages[pier].property.getPier.pierNo;
+                IDataService.PierNo = plcLib.Packages[pier].property.getPier.pierNo;
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }

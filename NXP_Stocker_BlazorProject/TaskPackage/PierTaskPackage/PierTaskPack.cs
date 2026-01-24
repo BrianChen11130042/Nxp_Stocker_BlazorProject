@@ -14,21 +14,21 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
     {
         readonly EPLC pier;
 
-        readonly IPlcOperate<EPLC> IPeirOp;
+        readonly IPlcOperate<EPLC> IPlcOp;
 
-        readonly PlcLibrary<EPLC> pierLib;
+        readonly PlcLibrary<EPLC> plcLib;
 
         readonly IPierDataService IDataService;
 
         readonly INLogWritterObservable INLogObser;
         readonly IPierUIObserverable IPierObser;
 
-        public PierTaskPack(EPLC pier, PlcLibrary<EPLC> pierLib,
+        public PierTaskPack(EPLC pier, PlcLibrary<EPLC> plcLib,
                             PierDataService dataService, ObserverService observerService)
         {
             this.pier = pier;
-            this.IPeirOp = pierLib;
-            this.pierLib = pierLib;
+            this.IPlcOp = plcLib;
+            this.plcLib = plcLib;
 
             this.IDataService = dataService;
 
@@ -66,14 +66,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
     {
         public async Task<bool> GetPlcPierNo()
         {
-            if(await IPeirOp.GetDeviceNo(pier))
+            if(await IPlcOp.GetDeviceNo(pier))
             {
-                IDataService.PierNo = pierLib.Packages[pier].property.getPier.pierNo;
+                IDataService.PierNo = plcLib.Packages[pier].property.getPier.pierNo;
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -83,14 +83,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> GetPlcIsReady()
         {
-            if (await IPeirOp.GetDeviceIsReady(pier))
+            if (await IPlcOp.GetDeviceIsReady(pier))
             {
-                _reset = pierLib.Packages[pier].property.getPier.isReady;
+                _reset = plcLib.Packages[pier].property.getPier.isReady;
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -220,15 +220,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcStartInputLargeBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
+            plcLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
 
-            if (await IPeirOp.SetPierMissionStart(pier))
+            if (await IPlcOp.SetPierMissionStart(pier))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -236,14 +236,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> GetPlcInputLargeBoardStatus()
         {
-            if(await IPeirOp.GetPierStatus(pier))
+            if(await IPlcOp.GetPierStatus(pier))
             {
-                IDataService.PierMission.Status = pierLib.Packages[pier].property.getPier.missionStatus;
+                IDataService.PierMission.Status = plcLib.Packages[pier].property.getPier.missionStatus;
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -263,15 +263,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcFinshInputLargeBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionFinish = 100;
+            plcLib.Packages[pier].property.setPier.missionFinish = 100;
 
-            if(await IPeirOp.SetPierMissionFinish(pier))
+            if(await IPlcOp.SetPierMissionFinish(pier))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -299,15 +299,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcStartInputSmallBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
+            plcLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
 
-            if (await IPeirOp.SetPierMissionStart(pier))
+            if (await IPlcOp.SetPierMissionStart(pier))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -315,14 +315,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> GetPlcInputSmallBoardStatus()
         {
-            if(await IPeirOp.GetPierStatus(pier))
+            if(await IPlcOp.GetPierStatus(pier))
             {
-                IDataService.PierMission.Status = pierLib.Packages[pier].property.getPier.missionStatus;
+                IDataService.PierMission.Status = plcLib.Packages[pier].property.getPier.missionStatus;
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -342,15 +342,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcFinishInputSmallBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionFinish = 100;
+            plcLib.Packages[pier].property.setPier.missionFinish = 100;
 
-            if (await IPeirOp.SetPierMissionFinish(pier))
+            if (await IPlcOp.SetPierMissionFinish(pier))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -379,15 +379,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcStartOutputLargeBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
+            plcLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
 
-            if (await IPeirOp.SetPierMissionStart(pier))
+            if (await IPlcOp.SetPierMissionStart(pier))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -395,14 +395,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> GetPlcOutputLargeBoardStatus()
         {
-            if (await IPeirOp.GetPierStatus(pier))
+            if (await IPlcOp.GetPierStatus(pier))
             {
-                IDataService.PierMission.Status = pierLib.Packages[pier].property.getPier.missionStatus;
+                IDataService.PierMission.Status = plcLib.Packages[pier].property.getPier.missionStatus;
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -422,15 +422,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcFinishOutputLargeBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionFinish = 100;
+            plcLib.Packages[pier].property.setPier.missionFinish = 100;
 
-            if (await IPeirOp.SetPierMissionFinish(pier))
+            if (await IPlcOp.SetPierMissionFinish(pier))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -458,15 +458,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcStartOutputSmallBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
+            plcLib.Packages[pier].property.setPier.missionStart = (ushort)IDataService.PierMission.ActionCode;
 
-            if (await IPeirOp.SetPierMissionStart(pier))
+            if (await IPlcOp.SetPierMissionStart(pier))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -474,14 +474,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> GetPlcOutputSmallBoardStatus()
         {
-            if (await IPeirOp.GetPierStatus(pier))
+            if (await IPlcOp.GetPierStatus(pier))
             {
-                IDataService.PierMission.Status = pierLib.Packages[pier].property.getPier.missionStatus;
+                IDataService.PierMission.Status = plcLib.Packages[pier].property.getPier.missionStatus;
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -501,15 +501,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
 
         public async Task<bool> SetPlcFinishOutputSmallBoard()
         {
-            pierLib.Packages[pier].property.setPier.missionFinish = 100;
+            plcLib.Packages[pier].property.setPier.missionFinish = 100;
 
-            if (await IPeirOp.SetPierMissionFinish(pier))
+            if (await IPlcOp.SetPierMissionFinish(pier))
             {
                 return true;
             }
             else
             {
-                string nlog = pierLib.Packages[pier].errorLog;
+                string nlog = plcLib.Packages[pier].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }

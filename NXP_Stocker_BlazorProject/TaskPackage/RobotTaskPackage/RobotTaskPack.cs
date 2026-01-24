@@ -14,21 +14,21 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
     {
         readonly EPLC robot;
 
-        readonly IPlcOperate<EPLC> IRobotOp;
+        readonly IPlcOperate<EPLC> IPlcOp;
 
-        readonly PlcLibrary<EPLC> RobotLib;
+        readonly PlcLibrary<EPLC> PlcLib;
 
         readonly IRobotDataService IDataService;
 
         readonly INLogWritterObservable INLogObser;
         readonly IRobotUIObserverable IRobotObser;
 
-        public RobotTaskPack(EPLC robot, PlcLibrary<EPLC> robotLib,
+        public RobotTaskPack(EPLC robot, PlcLibrary<EPLC> plcLib,
                              RobotDataService dataService, ObserverService observerService)
         {
             this.robot = robot;
-            this.IRobotOp = robotLib;
-            this.RobotLib = robotLib;
+            this.IPlcOp = plcLib;
+            this.PlcLib = plcLib;
 
             this.IDataService = dataService;
 
@@ -55,14 +55,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
     {
         public async Task<bool> GetPlcRobotNo()
         {
-            if(await IRobotOp.GetDeviceNo(robot))
+            if(await IPlcOp.GetDeviceNo(robot))
             {
-                IDataService.RobotNo = RobotLib.Packages[robot].property.getRobot.robotNo;
+                IDataService.RobotNo = PlcLib.Packages[robot].property.getRobot.robotNo;
                 return true;
             }
             else
             {
-                string nlog = RobotLib.Packages[robot].errorLog;
+                string nlog = PlcLib.Packages[robot].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -72,14 +72,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> GetRobotIsReady()
         {
-            if (await IRobotOp.GetDeviceIsReady(robot))
+            if (await IPlcOp.GetDeviceIsReady(robot))
             {
-                _reset = RobotLib.Packages[robot].property.getRobot.isReady;
+                _reset = PlcLib.Packages[robot].property.getRobot.isReady;
                 return true;
             }
             else
             {
-                string nlog = RobotLib.Packages[robot].errorLog;
+                string nlog = PlcLib.Packages[robot].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -127,20 +127,20 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetPlcRobotMission()
         {
-            RobotLib.Packages[robot].property.setRobot.barcode = IDataService.RobotMission.Barcode;
-            RobotLib.Packages[robot].property.setRobot.boardSize = (ushort)IDataService.RobotMission.BoardSize;
-            RobotLib.Packages[robot].property.setRobot.pickZone = (ushort)IDataService.RobotMission.PickZone;
-            RobotLib.Packages[robot].property.setRobot.pickLayer = (ushort)IDataService.RobotMission.PickLayer;
-            RobotLib.Packages[robot].property.setRobot.dropZone = (ushort)IDataService.RobotMission.DropZone;
-            RobotLib.Packages[robot].property.setRobot.dropLayer = (ushort)IDataService.RobotMission.DropLayer;
+            PlcLib.Packages[robot].property.setRobot.barcode = IDataService.RobotMission.Barcode;
+            PlcLib.Packages[robot].property.setRobot.boardSize = (ushort)IDataService.RobotMission.BoardSize;
+            PlcLib.Packages[robot].property.setRobot.pickZone = (ushort)IDataService.RobotMission.PickZone;
+            PlcLib.Packages[robot].property.setRobot.pickLayer = (ushort)IDataService.RobotMission.PickLayer;
+            PlcLib.Packages[robot].property.setRobot.dropZone = (ushort)IDataService.RobotMission.DropZone;
+            PlcLib.Packages[robot].property.setRobot.dropLayer = (ushort)IDataService.RobotMission.DropLayer;
 
-            if (await IRobotOp.SetRobotMissionInform(robot))
+            if (await IPlcOp.SetRobotMissionInform(robot))
             {
                 return true;
             }
             else
             {
-                string nlog = RobotLib.Packages[robot].errorLog;
+                string nlog = PlcLib.Packages[robot].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -148,15 +148,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetPlcRobotStart()
         {
-            RobotLib.Packages[robot].property.setRobot.missionStart = 1;
+            PlcLib.Packages[robot].property.setRobot.missionStart = 1;
 
-            if (await IRobotOp.SetRobotMissionStart(robot))
+            if (await IPlcOp.SetRobotMissionStart(robot))
             {
                 return true;
             }
             else
             {
-                string nlog = RobotLib.Packages[robot].errorLog;
+                string nlog = PlcLib.Packages[robot].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -179,14 +179,14 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> GetPlcRobotStatus()
         {
-            if(await IRobotOp.GetRobotStatus(robot))
+            if(await IPlcOp.GetRobotStatus(robot))
             {
-                IDataService.RobotMission.Status = RobotLib.Packages[robot].property.getRobot.missionStatus;
+                IDataService.RobotMission.Status = PlcLib.Packages[robot].property.getRobot.missionStatus;
                 return true;
             }
             else
             {
-                string nlog = RobotLib.Packages[robot].errorLog;
+                string nlog = PlcLib.Packages[robot].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
@@ -206,15 +206,15 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
 
         public async Task<bool> SetPlcRobotFinish()
         {
-            RobotLib.Packages[robot].property.setRobot.missionFinish = 100;
+            PlcLib.Packages[robot].property.setRobot.missionFinish = 100;
 
-            if(await IRobotOp.SetRobotMissionFinsih(robot))
+            if(await IPlcOp.SetRobotMissionFinsih(robot))
             {
                 return true;
             }
             else
             {
-                string nlog = RobotLib.Packages[robot].errorLog;
+                string nlog = PlcLib.Packages[robot].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }
