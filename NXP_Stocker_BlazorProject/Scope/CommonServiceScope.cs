@@ -17,6 +17,8 @@ namespace NXP_Stocker_BlazorProject.Scope
 
         public RobotDataService robotDataService;
 
+        public PlcRegularDataService plcRegularDataService;
+
         void createCommonService()
         {
             observerService = provider.GetRequiredService<ObserverService>();
@@ -34,6 +36,8 @@ namespace NXP_Stocker_BlazorProject.Scope
             pier2DataService = new PierDataService(ILogTableOp, IMissionTableOp, observerService);
 
             robotDataService = new RobotDataService(ILogTableOp, IMissionTableOp, observerService);
+
+            plcRegularDataService = new PlcRegularDataService(observerService);
         }
 
         void initCommonService()

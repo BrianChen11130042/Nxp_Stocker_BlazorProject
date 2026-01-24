@@ -4,6 +4,8 @@
     {
         Pier1,
         Pier2,
-        Robot
+        Robot,
+        Warehouse,
+        Heartbeat
     }
 }

@@ -14,12 +14,6 @@
 
         Task UpdateUIPopInitFail();
 
-        Task<bool> SetPlcHeartBeat();
-
-        Task<bool> GetPlcWarehouse();
-
-        Task UpdateUIWarehouse();
-
         Task<bool> SetLogConnectFail();
 
         Task UpdateUIPopConnectFail();

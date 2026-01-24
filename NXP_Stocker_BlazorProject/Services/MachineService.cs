@@ -24,6 +24,7 @@ namespace NXP_Stocker_BlazorProject.Services
             scope.observerService.AddMainUIObserver(this);
             scope.observerService.AddPierUIObserver(this);
             scope.observerService.AddRobotUIObserver(this);
+            scope.observerService.AddPlcRegularUIObserver(this);
         }
     }
 
@@ -121,8 +122,6 @@ namespace NXP_Stocker_BlazorProject.Services
 
     public delegate Task dgInitMessage(bool popUp, string msg);
 
-    public delegate Task dgWarehouseInform(Dictionary<int, EWhStatus> dcWh);
-
     public partial class MachineService : IMainUIObserver
     {
         public async Task UpdateMainLog(List<LogTable> list)
@@ -135,13 +134,6 @@ namespace NXP_Stocker_BlazorProject.Services
         public async Task UpdatePopUpMessage(bool popUp, string msg)
         {
             dgInitMsg?.Invoke(popUp, msg);
-        }
-
-        public event dgWarehouseInform dgWhInform;
-
-        public async Task UpdateWarehouseInform(Dictionary<int, EWhStatus> dcWh)
-        {
-            dgWhInform?.Invoke(dcWh);
         }
     }
 
@@ -218,6 +210,18 @@ namespace NXP_Stocker_BlazorProject.Services
         public async Task UpdateRobotMission(int pier, RobotMissionTable table)
         {
             //throw new NotImplementedException();
+        }
+    }
+
+    public delegate Task dgWarehouseInform(Dictionary<int, EWhStatus_Stub> dcWh);
+
+    public partial class MachineService : IPlcRegularUIObserver
+    {
+        public event dgWarehouseInform dgWhInform;
+
+        public async Task UpdateWarehouseInform(Dictionary<int, EWhStatus_Stub> dcWh)
+        {
+            dgWhInform?.Invoke(dcWh);
         }
     }
 }

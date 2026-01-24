@@ -260,12 +260,37 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 }
             }
         }
+    }
 
-        public async Task NotifyWarehouseInform(Dictionary<int, EWhStatus> dcWh)
+    public partial class ObserverService : IPlcRegularUIObserverable
+    {
+
+        List<IPlcRegularUIObserver> osPlcRegular { get; set; }
+
+        public void AddPlcRegularUIObserver(IPlcRegularUIObserver o)
         {
-            if(osMain != null)
+            if (osPlcRegular == null)
+                osPlcRegular = new List<IPlcRegularUIObserver>();
+
+            if (!osPlcRegular.Contains(o))
             {
-                foreach(var o in osMain)
+                osPlcRegular.Add(o);
+            }
+        }
+
+        public void RemovePlcRegularUIObserver(IPlcRegularUIObserver o)
+        {
+            if(osPlcRegular != null && osPlcRegular.Contains(o))
+            {
+                osPlcRegular.Remove(o);
+            }
+        }
+
+        public async Task NotifyWarehouseInform(Dictionary<int, EWhStatus_Stub> dcWh)
+        {
+            if(osPlcRegular != null)
+            {
+                foreach(var o in osPlcRegular)
                 {
                     await o.UpdateWarehouseInform(dcWh);
                 }

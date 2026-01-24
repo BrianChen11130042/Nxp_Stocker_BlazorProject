@@ -4,6 +4,7 @@ using NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage;
 using NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage;
 using NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage;
 using NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage;
+using NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage;
 using NXP_Stocker_BlazorProject.Tasks;
 
 namespace NXP_Stocker_BlazorProject.Scope
@@ -62,16 +63,29 @@ namespace NXP_Stocker_BlazorProject.Scope
             pier2MissionAsignTask.Set(ES1.None, EMissionAssign.None, 0);
         }
 
+        public PlcRegularTaskPack<EPLC> plcRegularTaskPack;
+
+        public PlcRegularTask plcRegularTask;
+
+        void initRegularTask()
+        {
+            plcRegularTaskPack = new PlcRegularTaskPack<EPLC>(EPLC.Warehouse, EPLC.Heartbeat, plcLibrary,
+                                                              plcRegularDataService, observerService);
+
+            plcRegularTask = new PlcRegularTask(plcRegularTaskPack);
+            plcRegularTask.Set(ES1.None, EPlcRegular.None, 0);
+        }
+
 
         public MissionAsignThreadTask missionAsignThreadTask;
         public MissionThreadTask missionThreadTask;
+        public PlcRegularThreadTask plcRegularThreadTask;
 
         public ThreadTaskPack<EPLC> mainTaskPack;
         public MainThreadTask mainThreadTask;
 
         void initThreadTask()
         {
-
 
             mainTaskPack = new ThreadTaskPack<EPLC>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
                                                     mainDataService, observerService);
@@ -82,17 +96,22 @@ namespace NXP_Stocker_BlazorProject.Scope
             missionThreadTask = new MissionThreadTask(pier1Task, pier2Task, robotTask);
             missionThreadTask.Set(ES1.None, EMissionThread.None, 0);
 
-            mainThreadTask = new MainThreadTask(mainTaskPack, missionAsignThreadTask, missionThreadTask);
+            plcRegularThreadTask = new PlcRegularThreadTask(plcRegularTask);
+            plcRegularThreadTask.Set(ES1.None, EPlcRegularThread.None, 0);
+
+            mainThreadTask = new MainThreadTask(mainTaskPack, missionAsignThreadTask, missionThreadTask, plcRegularThreadTask);
             mainThreadTask.Set(ES1.Init, EMainThread.None, 0);
         }
 
         private CancellationTokenSource _ctsMain;
         private CancellationTokenSource _ctsMissionAssign;
         private CancellationTokenSource _ctsMission;
+        private CancellationTokenSource _ctsPlcRegular;
 
         private Task _mainTask;
         private Task _missionAssignTask;
         private Task _missionTask;
+        private Task _plcRegularTask;
 
         public void initThread()
         {
@@ -112,6 +131,12 @@ namespace NXP_Stocker_BlazorProject.Scope
             {
                 _ctsMission = new CancellationTokenSource();
                 _missionTask = StartLongRunning(async () => await RunMissionAsync(_ctsMission.Token));
+            }
+
+            if(_plcRegularTask == null || _plcRegularTask.IsCompleted)
+            {
+                _ctsPlcRegular = new CancellationTokenSource();
+                _plcRegularTask = StartLongRunning(async () => await RunPlcRegularAsync(_ctsPlcRegular.Token));
             }
         }
 
@@ -157,7 +182,7 @@ namespace NXP_Stocker_BlazorProject.Scope
                 catch (TaskCanceledException) { }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Assign 例外: {ex}");
+                    Console.WriteLine($"Mission Assign 例外: {ex}");
                 }
             }
         }
@@ -176,6 +201,24 @@ namespace NXP_Stocker_BlazorProject.Scope
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Mission 例外: {ex}");
+                }
+            }
+        }
+
+        private async Task RunPlcRegularAsync(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                try
+                {
+                    await plcRegularThreadTask.Run();
+
+                    await Task.Delay(500, token);
+                }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Plc Regular 例外: {ex}");
                 }
             }
         }

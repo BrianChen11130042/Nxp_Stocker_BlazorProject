@@ -13,8 +13,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         Task NotifyPopUpMessage(bool popUp, string msg);
 
         Task NotifyMainLog(List<LogTable> list);
-
-        Task NotifyWarehouseInform(Dictionary<int, EWhStatus> dcWh);
     }
 
     public interface IMainUIObserver
@@ -22,7 +20,5 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         Task UpdatePopUpMessage(bool popUp, string msg);
 
         Task UpdateMainLog(List<LogTable> list);
-
-        Task UpdateWarehouseInform(Dictionary<int, EWhStatus> dcWh);
     }
 }

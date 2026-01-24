@@ -9,13 +9,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         readonly MissionAsignThreadTask missionAsignThread;
         readonly MissionThreadTask missionThread;
+        readonly PlcRegularThreadTask plcRegularThread;
 
-        public MainThreadTask(IThreadTaskPack pack, MissionAsignThreadTask missionAsignThread, MissionThreadTask missionThread)
+        public MainThreadTask(IThreadTaskPack pack, MissionAsignThreadTask missionAsignThread, MissionThreadTask missionThread,
+                              PlcRegularThreadTask plcRegularThread)
         {
             this.pack = pack;
 
             this.missionAsignThread = missionAsignThread;
             this.missionThread = missionThread;
+            this.plcRegularThread = plcRegularThread;
 
             interval = 1;
         }
@@ -45,11 +48,6 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.SetLogInitSuccess();
         }
 
-        public Task<bool> SetPlcHeartBeat()
-        {
-            return pack.SetPlcHeartBeat();
-        }
-
         public Task UpdateUIPopConnectFail()
         {
             return pack.UpdateUIPopConnectFail();
@@ -69,23 +67,12 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.UpdateUIMainLog();
         }
-
-        public Task<bool> GetPlcWarehouse()
-        {
-            return pack.GetPlcWarehouse();
-        }
-
-        public Task UpdateUIWarehouse()
-        {
-            return pack.UpdateUIWarehouse();
-        }
     }
 
     public enum EMainThread
     {
         None,
-        HeartBeat,
-        Warehouse,
+        MonitorSubThread
     }
 
     public partial class MainThreadTask : FSMBase<EMainThread, int>
@@ -124,8 +111,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                         missionAsignThread.Set(ES1.Init, EMissionAsignThread.None, 0);
                         missionThread.Set(ES1.Init, EMissionThread.None, 0);
+                        plcRegularThread.Set(ES1.Init, EPlcRegularThread.None, 0);
 
-                        Set(ES1.Action, EMainThread.HeartBeat, 0);
+                        Set(ES1.Action, EMainThread.MonitorSubThread, 0);
                     }
                     else
                     {
@@ -153,56 +141,69 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     Set(ES1.Finish, EMainThread.None, 0);
                     break;
 
-                case EMainThread.HeartBeat:
+                case EMainThread.MonitorSubThread:
                     switch(S3)
                     {
                         case 0:
-                            if(await SetPlcHeartBeat())
+                            if (missionAsignThread.key == EHandshakeKey.Finish)
                             {
-                                if(missionAsignThread.key == EHandshakeKey.Finish || missionThread.key == EHandshakeKey.Finish)
+                                if(missionAsignThread.isError)
                                 {
-                                    if(missionAsignThread.isError || missionThread.isError)
-                                    {
-                                        SaveState();
-                                        Set(ES1.Error, EMainThread.None, 0);
-                                    }
-                                    else
-                                    {
-                                        Set(EMainThread.Warehouse, 0);
-                                    }
+                                    SaveState();
+                                    Set(ES1.Error, EMainThread.None, 0);
                                 }
                                 else
                                 {
-                                    Set(EMainThread.Warehouse, 0);
+                                    Set(10);
                                 }
                             }
                             else
                             {
-                                SaveState();
-                                Set(ES1.Error, EMainThread.None, 0);
+                                Set(10);
                             }
-                            break;  
-                    }
-                    break;
+                            break;
 
-                case EMainThread.Warehouse:
-                    switch(S3)
-                    {
-                        case 0:
-                            if(await GetPlcWarehouse())
+                        case 10:
+                            if(missionThread.key == EHandshakeKey.Finish)
                             {
-                                await UpdateUIWarehouse();
-
-                                Set(EMainThread.HeartBeat, 0);
+                                if(missionThread.isError)
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, EMainThread.None, 0);
+                                }
+                                else
+                                {
+                                    Set(20);
+                                }
                             }
                             else
                             {
-                                SaveState();
-                                Set(ES1.Error, EMainThread.None, 0);
+                                Set(20);
                             }
                             break;
+
+                        case 20:
+                            if(plcRegularThread.key == EHandshakeKey.Finish)
+                            {
+                                if(plcRegularThread.isError)
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, EMainThread.None, 0);
+                                }
+                                else
+                                {
+                                    Set(0);
+                                }
+                            }
+                            else
+                            {
+                                Set(0);
+                            }
+                            break;
+
                     }
                     break;
+
             }
         }
 

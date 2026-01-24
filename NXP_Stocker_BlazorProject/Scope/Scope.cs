@@ -28,6 +28,7 @@
             initPierTask();
             initRobotTask();
             initMissionAsignTask();
+            initRegularTask();
             initThreadTask();
             initThread();
         }
