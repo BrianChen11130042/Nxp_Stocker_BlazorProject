@@ -3,6 +3,6 @@
 
     public interface IPlcRegularDataService
     {
-        Dictionary<int, EWhStatus_Stub> DcWarehouse { get; set; }
+        Dictionary<int, EWhStatus> DcWarehouse { get; set; }
     }
 }

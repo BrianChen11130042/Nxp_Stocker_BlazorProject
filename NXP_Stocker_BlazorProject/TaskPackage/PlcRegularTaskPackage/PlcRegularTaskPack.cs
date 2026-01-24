@@ -52,7 +52,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage
     {
         public async Task<bool> SetPlcHeartBeat()
         {
-            plcLib.Packages[Heartbeat].property.setRobot.heartBeat = _getHeartBeat();
+            plcLib.Packages[Heartbeat].property.setHeartbeat.heartBeat = _getHeartBeat();
 
             if (await IPlcOp.SetHeartBeat(Heartbeat))
             {
@@ -70,9 +70,9 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage
         {
             if (await IPlcOp.GetWarehouse(Warehouse))
             {
-                if (plcLib.Packages[Warehouse].property.getRobot.dcWarehouse.Count == 458)
+                if (plcLib.Packages[Warehouse].property.getWarehouse.dcWarehouse.Count == 458)
                 {
-                    IDataService.DcWarehouse = _upWarehouse(plcLib.Packages[Warehouse].property.getRobot.dcWarehouse);
+                    IDataService.DcWarehouse = _upWarehouse(plcLib.Packages[Warehouse].property.getWarehouse.dcWarehouse);
                 }
 
                 return true;
@@ -110,9 +110,9 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage
         }
 
 
-        Dictionary<int, EWhStatus_Stub> _upWarehouse(Dictionary<int, bool> dcWh)
+        Dictionary<int, EWhStatus> _upWarehouse(Dictionary<int, bool> dcWh)
         {
-            Dictionary<int, EWhStatus_Stub> dcResult = new Dictionary<int, EWhStatus_Stub>();
+            Dictionary<int, EWhStatus> dcResult = new Dictionary<int, EWhStatus>();
 
             foreach (var item in _getPier1Wh(dcWh))
             {
@@ -302,55 +302,55 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage
             return dcResult;
         }
 
-        Dictionary<int, EWhStatus_Stub> _getPier1Wh(Dictionary<int, bool> dcWh)
+        Dictionary<int, EWhStatus> _getPier1Wh(Dictionary<int, bool> dcWh)
         {
-            Dictionary<int, EWhStatus_Stub> dcPier1 = new Dictionary<int, EWhStatus_Stub>();
+            Dictionary<int, EWhStatus> dcPier1 = new Dictionary<int, EWhStatus>();
 
             bool Large = !(dcWh[36]);
             bool Small = !(dcWh[37]);
 
             if (Large == true && Small == false)
             {
-                dcPier1.Add(44, EWhStatus_Stub.Large);
+                dcPier1.Add(44, EWhStatus.Large);
             }
             else if (Large == false && Small == true)
             {
-                dcPier1.Add(44, EWhStatus_Stub.Small);
+                dcPier1.Add(44, EWhStatus.Small);
             }
             else
             {
-                dcPier1.Add(44, EWhStatus_Stub.Empty);
+                dcPier1.Add(44, EWhStatus.Empty);
             }
 
             return dcPier1;
         }
 
-        Dictionary<int, EWhStatus_Stub> _getPier2Wh(Dictionary<int, bool> dcWh)
+        Dictionary<int, EWhStatus> _getPier2Wh(Dictionary<int, bool> dcWh)
         {
-            Dictionary<int, EWhStatus_Stub> dcPier2 = new Dictionary<int, EWhStatus_Stub>();
+            Dictionary<int, EWhStatus> dcPier2 = new Dictionary<int, EWhStatus>();
 
             bool Large = !(dcWh[276]);
             bool Small = !(dcWh[277]);
 
             if (Large == true && Small == false)
             {
-                dcPier2.Add(424, EWhStatus_Stub.Large);
+                dcPier2.Add(424, EWhStatus.Large);
             }
             else if (Large == false && Small == true)
             {
-                dcPier2.Add(424, EWhStatus_Stub.Small);
+                dcPier2.Add(424, EWhStatus.Small);
             }
             else
             {
-                dcPier2.Add(424, EWhStatus_Stub.Empty);
+                dcPier2.Add(424, EWhStatus.Empty);
             }
 
             return dcPier2;
         }
 
-        Dictionary<int, EWhStatus_Stub> _getWh(int start, int finish, int offset, bool reverse, Dictionary<int, bool> dcWh)
+        Dictionary<int, EWhStatus> _getWh(int start, int finish, int offset, bool reverse, Dictionary<int, bool> dcWh)
         {
-            Dictionary<int, EWhStatus_Stub> dcData = new Dictionary<int, EWhStatus_Stub>();
+            Dictionary<int, EWhStatus> dcData = new Dictionary<int, EWhStatus>();
 
             for (int i = start; i <= finish; i++)
             {
@@ -367,11 +367,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage
 
                 if (occupy)
                 {
-                    dcData.Add(i, EWhStatus_Stub.Small);
+                    dcData.Add(i, EWhStatus.Small);
                 }
                 else
                 {
-                    dcData.Add(i, EWhStatus_Stub.Empty);
+                    dcData.Add(i, EWhStatus.Empty);
                 }
             }
 

@@ -286,7 +286,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyWarehouseInform(Dictionary<int, EWhStatus_Stub> dcWh)
+        public async Task NotifyWarehouseInform(Dictionary<int, EWhStatus> dcWh)
         {
             if(osPlcRegular != null)
             {

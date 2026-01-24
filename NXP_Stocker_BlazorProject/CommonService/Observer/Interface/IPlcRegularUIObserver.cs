@@ -8,11 +8,11 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         void RemovePlcRegularUIObserver(IPlcRegularUIObserver o);
 
-        Task NotifyWarehouseInform(Dictionary<int, EWhStatus_Stub> dcWh);
+        Task NotifyWarehouseInform(Dictionary<int, EWhStatus> dcWh);
     }
 
     public interface IPlcRegularUIObserver
     {
-        Task UpdateWarehouseInform(Dictionary<int, EWhStatus_Stub> dcWh);
+        Task UpdateWarehouseInform(Dictionary<int, EWhStatus> dcWh);
     }
 }

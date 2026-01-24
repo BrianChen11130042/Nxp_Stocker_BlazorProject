@@ -25,7 +25,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
         }
     }
 
-    public enum EWhStatus_Stub
+    public enum EWhStatus
     {
         Empty,
         Small,
@@ -34,9 +34,9 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
 
     public partial class PlcRegularDataService
     {
-        Dictionary<int, EWhStatus_Stub> _dcWarehouse { get; set; } = new Dictionary<int, EWhStatus_Stub>();
+        Dictionary<int, EWhStatus> _dcWarehouse { get; set; } = new Dictionary<int, EWhStatus>();
 
-        public Dictionary<int, EWhStatus_Stub> DcWarehouse
+        public Dictionary<int, EWhStatus> DcWarehouse
         {
             get
             {

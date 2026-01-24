@@ -213,13 +213,13 @@ namespace NXP_Stocker_BlazorProject.Services
         }
     }
 
-    public delegate Task dgWarehouseInform(Dictionary<int, EWhStatus_Stub> dcWh);
+    public delegate Task dgWarehouseInform(Dictionary<int, EWhStatus> dcWh);
 
     public partial class MachineService : IPlcRegularUIObserver
     {
         public event dgWarehouseInform dgWhInform;
 
-        public async Task UpdateWarehouseInform(Dictionary<int, EWhStatus_Stub> dcWh)
+        public async Task UpdateWarehouseInform(Dictionary<int, EWhStatus> dcWh)
         {
             dgWhInform?.Invoke(dcWh);
         }
