@@ -1,4 +1,6 @@
 ﻿using CommonLibraryB_NXP.Library.PLC.Config;
+using CommonLibraryB_NXP.Library.UPS.Config;
+using CommonLibraryB_NXP.Manager.ModbusRtu;
 using CommonLibraryB_NXP.Manager.ModbusTcp.Master;
 using NXP_Stocker_BlazorProject.DeviceName.PLC;
 using NXP_Stocker_BlazorProject.EFModel;
@@ -16,6 +18,18 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
         Task<List<PlcConfig>> GetPlcConfig();
 
         Task SetPlcConfig(PlcConfig config);
+
+
+        Task<List<ModbusRtuConfig>> GetModbusRtuConfig();
+
+        Task SetModbusRtuConfig(ModbusRtuConfig config);
+
+        Task<List<string>> GetModbusRtuComList();
+
+        Task<List<UpsConfig>> GetUpsConfig();
+
+        Task SetUpsConfig(UpsConfig config);
+
 
         Task Initial();
 

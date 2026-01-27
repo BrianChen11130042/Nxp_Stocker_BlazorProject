@@ -14,6 +14,7 @@ using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.Services.Interface;
 using CommonLibraryB_NXP;
 using NXP_Stocker_BlazorProject;
+using NXP_Stocker_BlazorProject.DeviceName.UPS;
 
 //var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,7 @@ builder.Services.AddMvc();
 
 string filePath = System.AppDomain.CurrentDomain.BaseDirectory;
 
-builder.AddCommonLibraryB<EPLC>(filePath);
+builder.AddCommonLibraryB<EPLC, EUPS>(filePath);
 
 builder.AddNxpServiceB();
 

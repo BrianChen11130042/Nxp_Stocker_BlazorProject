@@ -18,6 +18,7 @@
             createCommonService();
             createManager();
             createPlc();
+            createUps();
         }
 
         public void initAll()
@@ -25,6 +26,7 @@
             initCommonService();
             initManager();
             initPlc();
+            initUps();
             initPierTask();
             initRobotTask();
             initMissionAsignTask();

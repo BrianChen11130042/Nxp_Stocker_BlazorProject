@@ -10,6 +10,9 @@ using NXP_Stocker_BlazorProject.EFModel;
 using CommonLibraryB_NXP.Tools.LogWritter;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.CommonService.Data;
+using CommonLibraryB_NXP.Manager.ModbusRtu;
+using CommonLibraryB_NXP.Library.UPS.Config;
+using NXP_Stocker_BlazorProject.DeviceName.UPS;
 
 namespace NXP_Stocker_BlazorProject.Services
 {
@@ -74,6 +77,60 @@ namespace NXP_Stocker_BlazorProject.Services
         {
             scope.plcConfig.Set(config.device, config);
             scope.plcConfig.Save();
+        }
+
+
+        public async Task<List<ModbusRtuConfig>> GetModbusRtuConfig()
+        {
+            List<ModbusRtuConfig> list = new List<ModbusRtuConfig>();
+
+            foreach(var pair in scope.modbusRtuManager.table)
+            {
+                ModbusRtuConfig config = scope.modbusRtuManager.Get(pair.Key);
+
+                if(config != null)
+                {
+                    list.Add(config);
+                }
+            }
+
+            return list;
+        }
+
+        public async Task SetModbusRtuConfig(ModbusRtuConfig config)
+        {
+            scope.modbusRtuManager.Set(config.com, config);
+            scope.modbusRtuManager.Save();
+        }
+
+        public async Task<List<string>> GetModbusRtuComList()
+        {
+            List<string> list = scope.modbusRtuManager.keys.ToList();
+
+            return list;
+        }
+
+        public async Task<List<UpsConfig>> GetUpsConfig()
+        {
+            List<UpsConfig> list = new List<UpsConfig>();
+
+            foreach(string dev in Enum.GetNames(typeof(EUPS)))
+            {
+                UpsConfig config = scope.upsConfig.Get(dev);
+
+                if(config != null)
+                {
+                    list.Add(config);
+                }
+            }
+
+            return list;
+        }
+
+        public async Task SetUpsConfig(UpsConfig config)
+        {
+            scope.upsConfig.Set(config.device, config);
+            scope.upsConfig.Save();
         }
 
         public async Task Initial()
