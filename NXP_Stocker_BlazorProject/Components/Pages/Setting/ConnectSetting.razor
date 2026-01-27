@@ -1,5 +1,7 @@
 ﻿@page "/ConnectConfig"
 @rendermode InteractiveServer
+@using CommonLibraryB_NXP.Library.UPS.Config
+@using CommonLibraryB_NXP.Manager.ModbusRtu
 @using CommonLibraryB_NXP.Manager.ModbusTcp.Master
 @using CommonLibraryB_NXP.Library.PLC.Config
 @using NXP_Stocker_BlazorProject.Services.Interface
@@ -9,124 +11,201 @@
 <h3 class="section-title">ModbusTcp Setting</h3>
 
 <DxGrid Data="listModbusTcp"
-PageSize="12"
-ShowGroupPanel="false"
-EditMode="GridEditMode.EditCell"
-EditModelSaving="editModbusTcpConfig"
-KeyFieldName="@nameof(ModbusTcpMasterConfig.device)">
+        PageSize="12"
+        ShowGroupPanel="false"
+        EditMode="GridEditMode.EditCell"
+        EditModelSaving="editModbusTcpConfig"
+        KeyFieldName="@nameof(ModbusTcpMasterConfig.device)">
 
-	<Columns>
-		<DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.device) Caption="ModbusTcp" ReadOnly="true" MinWidth="150" />
-		<DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Ip) Caption="Ip" ReadOnly="false" MinWidth="150" />
-		<DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Port) Caption="Port" ReadOnly="false" MinWidth="150" />
-		<DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Enable) Caption="Enable" ReadOnly="false" MinWidth="150" />
-	</Columns>
+    <Columns>
+        <DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.device) Caption="ModbusTcp Master" ReadOnly="true" MinWidth="150" />
+        <DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Ip) Caption="Ip" ReadOnly="false" MinWidth="150" />
+        <DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Port) Caption="Port" ReadOnly="false" MinWidth="150" />
+        <DxGridDataColumn FieldName=@nameof(ModbusTcpMasterConfig.Enable) Caption="Enable" ReadOnly="false" MinWidth="150" />
+    </Columns>
 
 </DxGrid>
 
-<br/>
+<br />
+
+<h3 class="section-title">ModbusRtu Setting</h3>
+
+<DxGrid Data="listModbusRtu"
+        PageSize="12"
+        ShowGroupPanel="false"
+        EditMode="GridEditMode.EditCell"
+        EditModelSaving="editModbusRtuConfig"
+        KeyFieldName="@nameof(ModbusRtuConfig.com)">
+
+    <Columns>
+        <DxGridDataColumn FieldName=@nameof(ModbusRtuConfig.com) Caption="ModbusRtu COM" ReadOnly="true" MinWidth="100" />
+        <DxGridDataColumn FieldName=@nameof(ModbusRtuConfig.baudrate) Caption="Baudrate" ReadOnly="false" MinWidth="100" />
+        <DxGridDataColumn FieldName=@nameof(ModbusRtuConfig.parity) Caption="Parity" ReadOnly="false" MinWidth="100" />
+        <DxGridDataColumn FieldName=@nameof(ModbusRtuConfig.dataBits) Caption="DataBits" ReadOnly="false" MinWidth="100" />
+        <DxGridDataColumn FieldName=@nameof(ModbusRtuConfig.stopBits) Caption="StopBits" ReadOnly="false" MinWidth="100" />
+        <DxGridDataColumn FieldName=@nameof(ModbusRtuConfig.enable) Caption="Enalbe" ReadOnly="false" MinWidth="100" />
+    </Columns>
+
+</DxGrid>
+
+<br />
 
 <h3 class="section-title">PLC Setting</h3>
 
 <DxGrid Data="listPlcConfig"
-PageSize="12"
-ShowGroupPanel="false"
-EditMode="GridEditMode.EditCell"
-EditModelSaving="editPlcConfig"
-KeyFieldName="@nameof(PlcConfig.device)">
+        PageSize="12"
+        ShowGroupPanel="false"
+        EditMode="GridEditMode.EditCell"
+        EditModelSaving="editPlcConfig"
+        KeyFieldName="@nameof(PlcConfig.device)">
 
-	<Columns>
-		<DxGridDataColumn FieldName=@nameof(PlcConfig.device) Caption="PLC" ReadOnly="true" MinWidth="150" />
-		<DxGridDataColumn FieldName=@nameof(PlcConfig.master) Caption="ModbusTcp" ReadOnly="false" MinWidth="150" />
-		<DxGridDataColumn FieldName=@nameof(PlcConfig.supplier) Caption="Supplier" ReadOnly="false" MinWidth="150" />
-	</Columns>
+    <Columns>
+        <DxGridDataColumn FieldName=@nameof(PlcConfig.device) Caption="PLC Device" ReadOnly="true" MinWidth="150" />
+        <DxGridDataColumn FieldName=@nameof(PlcConfig.master) Caption="ModbusTcp Master" ReadOnly="false" MinWidth="150" />
+        <DxGridDataColumn FieldName=@nameof(PlcConfig.supplier) Caption="Supplier" ReadOnly="false" MinWidth="150" />
+    </Columns>
 
 </DxGrid>
 
-<div class="text-center mt-3">
-	<button class="btn btn-danger btn-lg" @onclick="initial">初始化連線</button>
+<br />
+
+<h3 class="section-title">UPS Setting</h3>
+
+<DxGrid Data="listUpsConfig"
+        PageSize="12"
+        ShowGroupPanel="false"
+        EditMode="GridEditMode.EditCell"
+        EditModelSaving="editUpsConfig"
+        KeyFieldName="@nameof(UpsConfig.device)">
+
+    <Columns>
+        <DxGridDataColumn FieldName=@nameof(UpsConfig.device) Caption="UPS Device" ReadOnly="true" MinWidth="150" />
+
+        <DxGridDataColumn FieldName=@nameof(UpsConfig.com) Caption="ModbusRtu COM" ReadOnly="false" MinWidth="150">
+            <EditSettings>
+                <DxComboBoxSettings Data="listModbusRtuComList"
+                                    TextFieldName="@nameof(UpsConfig.com)"
+                                    ValueFieldName="@nameof(UpsConfig.com)">
+
+                </DxComboBoxSettings>
+            </EditSettings>
+        </DxGridDataColumn>
+
+        <DxGridDataColumn FieldName=@nameof(UpsConfig.supplier) Caption="Supplier" ReadOnly="false" MinWidth="150" />
+    </Columns>
+
+</DxGrid>
+
+<div class="text-center mt-5">
+    <button class="btn btn-danger btn-lg" @onclick="initial">初始化連線</button>
 </div>
 
 <DxPopup Width="430px"
-HorizontalAlignment="HorizontalAlignment.Center"
-VerticalAlignment="VerticalAlignment.Center"
-@bind-Visible="@popUpSysMsg"
-CloseOnEscape="false"
-CloseOnOutsideClick="false"
-ShowCloseButton="false"
-ShowFooter="true"
-HeaderText="系統訊息">
+         HorizontalAlignment="HorizontalAlignment.Center"
+         VerticalAlignment="VerticalAlignment.Center"
+         @bind-Visible="@popUpSysMsg"
+         CloseOnEscape="false"
+         CloseOnOutsideClick="false"
+         ShowCloseButton="false"
+         ShowFooter="true"
+         HeaderText="系統訊息">
 
-	<BodyContentTemplate>
+    <BodyContentTemplate>
 
-		<h4 class="text-center">@sysmsg</h4>
+        <h4 class="text-center">@sysmsg</h4>
 
-	</BodyContentTemplate>
+    </BodyContentTemplate>
 
-	<FooterTemplate>
-		<DxButton Text="確認" RenderStyle="ButtonRenderStyle.Primary" Click="@clickPopupConfirm" />
-	</FooterTemplate>
+    <FooterTemplate>
+        <DxButton Text="確認" RenderStyle="ButtonRenderStyle.Primary" Click="@clickPopupConfirm" />
+    </FooterTemplate>
 
 </DxPopup>
 
 @code {
 
-	//連線參數
-	List<ModbusTcpMasterConfig> listModbusTcp { get; set; } = new List<ModbusTcpMasterConfig>();
+    //連線參數
+    List<ModbusTcpMasterConfig> listModbusTcp { get; set; } = new List<ModbusTcpMasterConfig>();
+    List<ModbusRtuConfig> listModbusRtu { get; set; } = new List<ModbusRtuConfig>();
+    List<string> listModbusRtuComList = new List<string>();
 
-	List<PlcConfig> listPlcConfig { get; set; } = new List<PlcConfig>();
+    List<PlcConfig> listPlcConfig { get; set; } = new List<PlcConfig>();
+    List<UpsConfig> listUpsConfig { get; set; } = new List<UpsConfig>();
 
-	protected override async Task OnInitializedAsync()
-	{
-		IService.dgInitMsg += updateMsg;
+    protected override async Task OnInitializedAsync()
+    {
+        IService.dgInitMsg += updateMsg;
 
-		await ReadPage();
-	}
+        await ReadPage();
+    }
 
-	async Task ReadPage()
-	{
-		listModbusTcp = await IService.GetModbusTcpConfig();
-		listPlcConfig = await IService.GetPlcConfig();
-	}
+    async Task ReadPage()
+    {
+        listModbusTcp = await IService.GetModbusTcpConfig();
+        listModbusRtu = await IService.GetModbusRtuConfig();
+        listModbusRtuComList = await IService.GetModbusRtuComList();
 
-	public async Task editModbusTcpConfig(GridEditModelSavingEventArgs e)
-	{
-		ModbusTcpMasterConfig editData = (ModbusTcpMasterConfig)e.EditModel;
+        listPlcConfig = await IService.GetPlcConfig();
+        listUpsConfig = await IService.GetUpsConfig();
+    }
 
-		await IService.SetModbusTcpConfig(editData);
+    public async Task editModbusTcpConfig(GridEditModelSavingEventArgs e)
+    {
+        ModbusTcpMasterConfig editData = (ModbusTcpMasterConfig)e.EditModel;
 
-		await ReadPage();
-	}
+        await IService.SetModbusTcpConfig(editData);
 
-	public async Task editPlcConfig(GridEditModelSavingEventArgs e)
-	{
-		PlcConfig editData = (PlcConfig)e.EditModel;
+        await ReadPage();
+    }
 
-		await IService.SetPlcConfig(editData);
+    public async Task editModbusRtuConfig(GridEditModelSavingEventArgs e)
+    {
+        ModbusRtuConfig editData = (ModbusRtuConfig)e.EditModel;
 
-		await ReadPage();
-	}
+        await IService.SetModbusRtuConfig(editData);
 
-	async Task initial()
-	{
-		await IService.Initial();
-	}
+        await ReadPage();
+    }
 
-	//pop up 視窗
-	bool popUpSysMsg { get; set; } = false;
-	string sysmsg { get; set; } = string.Empty;
+    public async Task editPlcConfig(GridEditModelSavingEventArgs e)
+    {
+        PlcConfig editData = (PlcConfig)e.EditModel;
 
-	async Task updateMsg(bool popUp, string msg)
-	{
-		popUpSysMsg = popUp;
-		sysmsg = msg;
-		await InvokeAsync(StateHasChanged);
-	}
+        await IService.SetPlcConfig(editData);
 
-	async Task clickPopupConfirm()
-	{
-		popUpSysMsg = false;
-		await InvokeAsync(StateHasChanged);
-	}
+        await ReadPage();
+    }
+
+    public async Task editUpsConfig(GridEditModelSavingEventArgs e)
+    {
+        UpsConfig editData = (UpsConfig)e.EditModel;
+
+        await IService.SetUpsConfig(editData);
+
+        await ReadPage();
+    }
+
+    async Task initial()
+    {
+        await IService.Initial();
+    }
+
+    //pop up 視窗
+    bool popUpSysMsg { get; set; } = false;
+    string sysmsg { get; set; } = string.Empty;
+
+    async Task updateMsg(bool popUp, string msg)
+    {
+        popUpSysMsg = popUp;
+        sysmsg = msg;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async Task clickPopupConfirm()
+    {
+        popUpSysMsg = false;
+        await InvokeAsync(StateHasChanged);
+    }
 
 }
+
