@@ -48,5 +48,8 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
 
         Task<Dictionary<EPLC, bool>> GetDcPlcAction();
 
+        //UPS
+        event dgUpsStatusInform dgUpsInform;
+
     }
 }

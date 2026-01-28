@@ -28,6 +28,7 @@ namespace NXP_Stocker_BlazorProject.Services
             scope.observerService.AddPierUIObserver(this);
             scope.observerService.AddRobotUIObserver(this);
             scope.observerService.AddPlcRegularUIObserver(this);
+            scope.observerService.AddUpsRegularUIObserver(this);
         }
     }
 
@@ -279,6 +280,18 @@ namespace NXP_Stocker_BlazorProject.Services
         public async Task UpdateWarehouseInform(Dictionary<int, EWhStatus> dcWh)
         {
             dgWhInform?.Invoke(dcWh);
+        }
+    }
+
+    public delegate Task dgUpsStatusInform(UpsInform inform);
+
+    public partial class MachineService : IUpsRegularUIObserver
+    {
+        public event dgUpsStatusInform dgUpsInform;
+
+        public async Task UpdateUpsStatusInform(UpsInform inform)
+        {
+            dgUpsInform?.Invoke(inform);
         }
     }
 }
