@@ -10,15 +10,17 @@ namespace NXP_Stocker_BlazorProject.Tasks
         readonly MissionAsignThreadTask missionAsignThread;
         readonly MissionThreadTask missionThread;
         readonly PlcRegularThreadTask plcRegularThread;
+        readonly UpsRegularThreadTask upsRegularThread;
 
         public MainThreadTask(IThreadTaskPack pack, MissionAsignThreadTask missionAsignThread, MissionThreadTask missionThread,
-                              PlcRegularThreadTask plcRegularThread)
+                              PlcRegularThreadTask plcRegularThread, UpsRegularThreadTask upsRegularThread)
         {
             this.pack = pack;
 
             this.missionAsignThread = missionAsignThread;
             this.missionThread = missionThread;
             this.plcRegularThread = plcRegularThread;
+            this.upsRegularThread = upsRegularThread;
 
             interval = 1;
         }
@@ -31,6 +33,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
         public Task<bool> CheckPlcConnect()
         {
             return pack.CheckPlcConnect();
+        }
+
+        public Task<bool> CheckUpsConnect()
+        {
+            return pack.CheckUpsConnect();
         }
 
         public Task<bool> SetLogConnectFail()
@@ -88,7 +95,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     }
                     else
                     {
-                        Set(30);
+                        Set(40);
                     }
                     break;
 
@@ -99,11 +106,22 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     }
                     else
                     {
-                        Set(30);
+                        Set(40);
                     }
                     break;
 
                 case 20:
+                    if(await CheckUpsConnect())
+                    {
+                        Set(30);
+                    }
+                    else
+                    {
+                        Set(40);
+                    }
+                    break;
+
+                case 30:
                     if(await SetLogInitSuccess())
                     {
                         await UpdateUIMainLog();
@@ -112,16 +130,17 @@ namespace NXP_Stocker_BlazorProject.Tasks
                         missionAsignThread.Set(ES1.Init, EMissionAsignThread.None, 0);
                         missionThread.Set(ES1.Init, EMissionThread.None, 0);
                         plcRegularThread.Set(ES1.Init, EPlcRegularThread.None, 0);
+                        upsRegularThread.Set(ES1.Init, EUpsRegularThread.None, 0);
 
                         Set(ES1.Action, EMainThread.MonitorSubThread, 0);
                     }
                     else
                     {
-                        Set(30);
+                        Set(40);
                     }
                     break;
 
-                case 30:
+                case 40:
                     await SetLogInitFail();
                     await UpdateUIMainLog();
                     await UpdateUIPopInitFail();
@@ -186,6 +205,25 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             if(plcRegularThread.key == EHandshakeKey.Finish)
                             {
                                 if(plcRegularThread.isError)
+                                {
+                                    SaveState();
+                                    Set(ES1.Error, EMainThread.None, 0);
+                                }
+                                else
+                                {
+                                    Set(30);
+                                }
+                            }
+                            else
+                            {
+                                Set(30);
+                            }
+                            break;
+
+                        case 30:
+                            if(upsRegularThread.key == EHandshakeKey.Finish)
+                            {
+                                if(upsRegularThread.isError)
                                 {
                                     SaveState();
                                     Set(ES1.Error, EMainThread.None, 0);

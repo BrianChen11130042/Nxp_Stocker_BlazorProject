@@ -19,6 +19,8 @@ namespace NXP_Stocker_BlazorProject.Scope
 
         public PlcRegularDataService plcRegularDataService;
 
+        public UpsRegularDataService upsRegularDataService;
+
         void createCommonService()
         {
             observerService = provider.GetRequiredService<ObserverService>();
@@ -38,6 +40,8 @@ namespace NXP_Stocker_BlazorProject.Scope
             robotDataService = new RobotDataService(ILogTableOp, IMissionTableOp, observerService);
 
             plcRegularDataService = new PlcRegularDataService(observerService);
+
+            upsRegularDataService = new UpsRegularDataService(observerService);
         }
 
         void initCommonService()

@@ -3,53 +3,53 @@
 namespace NXP_Stocker_BlazorProject.Tasks
 {
 
-    public partial class PlcRegularThreadTask
+    public partial class UpsRegularThreadTask
     {
-        readonly PlcRegularTask plcRegularTask;
+        readonly UpsRegularTask upsRegularTask;
 
-        public PlcRegularThreadTask(PlcRegularTask plcRegularTask)
+        public UpsRegularThreadTask(UpsRegularTask upsRegularTask)
         {
-            this.plcRegularTask = plcRegularTask;
+            this.upsRegularTask = upsRegularTask;
 
             interval = 1;
         }
     }
 
-    public enum EPlcRegularThread
+    public enum EUpsRegularThread
     {
         None,
-        PlcRegular
+        UpsRegular
     }
 
-    public partial class PlcRegularThreadTask : FSMBase<EPlcRegularThread, int>
+    public partial class UpsRegularThreadTask : FSMBase<EUpsRegularThread, int>
     {
         public async override Task Init()
         {
-            plcRegularTask.Set(ES1.Action, EPlcRegular.HeartBeat, 0);
+            upsRegularTask.Set(ES1.Action, EUpsRegular.UpsStatus, 0);
 
-            Set(ES1.Action, EPlcRegularThread.PlcRegular, 0);
+            Set(ES1.Action, EUpsRegularThread.UpsRegular, 0);
         }
 
         public async override Task Action()
         {
             switch(S2)
             {
-                case EPlcRegularThread.None:
-                    Set(ES1.Finish, EPlcRegularThread.None, 0);
+                case EUpsRegularThread.None:
+                    Set(ES1.Finish, EUpsRegularThread.None, 0);
                     break;
 
-                case EPlcRegularThread.PlcRegular:
+                case EUpsRegularThread.UpsRegular:
                     switch(S3)
                     {
                         case 0:
-                            await plcRegularTask.Run();
+                            await upsRegularTask.Run();
 
-                            if(plcRegularTask.key == EHandshakeKey.Finish)
+                            if(upsRegularTask.key == EHandshakeKey.Finish)
                             {
-                                if(plcRegularTask.isError)
+                                if(upsRegularTask.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EPlcRegularThread.None, 0);
+                                    Set(ES1.Error, EUpsRegularThread.None, 0);
                                 }
                                 else
                                 {
@@ -70,14 +70,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             isError = true;
             key = EHandshakeKey.Finish;
-            Set(ES1.Idle, EPlcRegularThread.None, 0);
+            Set(ES1.Idle, EUpsRegularThread.None, 0);
         }
 
         public async override Task Finish()
         {
             isError = false;
             key = EHandshakeKey.Finish;
-            Set(ES1.Idle, EPlcRegularThread.None, 0);
+            Set(ES1.Idle, EUpsRegularThread.None, 0);
         }
 
         public async override Task Idle()
@@ -85,4 +85,5 @@ namespace NXP_Stocker_BlazorProject.Tasks
             //throw new NotImplementedException();
         }
     }
+
 }

@@ -6,6 +6,9 @@ using NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage;
 using NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage;
 using NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage;
 using NXP_Stocker_BlazorProject.Tasks;
+using NXP_Stocker_BlazorProject.DeviceName.UPS;
+using NXP_Stocker_BlazorProject.TaskPackage.UpsRegularTaskPackage;
+using NXP_Stocker_BlazorProject.TaskPackage.UpsRegularTaskPackage.Interface;
 
 namespace NXP_Stocker_BlazorProject.Scope
 {
@@ -64,31 +67,41 @@ namespace NXP_Stocker_BlazorProject.Scope
         }
 
         public PlcRegularTaskPack<EPLC> plcRegularTaskPack;
+        public UpsRegularTaskPack<EUPS> upsRegularTaskPack;
 
         public PlcRegularTask plcRegularTask;
+        public UpsRegularTask upsRegularTask;
 
         void initRegularTask()
         {
             plcRegularTaskPack = new PlcRegularTaskPack<EPLC>(EPLC.Warehouse, EPLC.Heartbeat, plcLibrary,
                                                               plcRegularDataService, observerService);
 
+            upsRegularTaskPack = new UpsRegularTaskPack<EUPS>(EUPS.UPS, upsLibrary, 
+                                                              upsRegularDataService, observerService);
+
             plcRegularTask = new PlcRegularTask(plcRegularTaskPack);
             plcRegularTask.Set(ES1.None, EPlcRegular.None, 0);
+
+            upsRegularTask = new UpsRegularTask(upsRegularTaskPack);
+            upsRegularTask.Set(ES1.None, EUpsRegular.None, 0);
         }
 
 
         public MissionAsignThreadTask missionAsignThreadTask;
         public MissionThreadTask missionThreadTask;
         public PlcRegularThreadTask plcRegularThreadTask;
+        public UpsRegularThreadTask upsRegularThreadTask;
 
-        public ThreadTaskPack<EPLC> mainTaskPack;
+        public ThreadTaskPack<EPLC, EUPS> mainTaskPack;
         public MainThreadTask mainThreadTask;
 
         void initThreadTask()
         {
 
-            mainTaskPack = new ThreadTaskPack<EPLC>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
-                                                    mainDataService, observerService);
+            mainTaskPack = new ThreadTaskPack<EPLC, EUPS>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
+                                                          EUPS.UPS, upsLibrary,
+                                                          mainDataService, observerService);
 
             missionAsignThreadTask = new MissionAsignThreadTask(pier1MissionAsignTask, pier2MissionAsignTask);
             missionAsignThreadTask.Set(ES1.None, EMissionAsignThread.None, 0);
@@ -99,7 +112,11 @@ namespace NXP_Stocker_BlazorProject.Scope
             plcRegularThreadTask = new PlcRegularThreadTask(plcRegularTask);
             plcRegularThreadTask.Set(ES1.None, EPlcRegularThread.None, 0);
 
-            mainThreadTask = new MainThreadTask(mainTaskPack, missionAsignThreadTask, missionThreadTask, plcRegularThreadTask);
+            upsRegularThreadTask = new UpsRegularThreadTask(upsRegularTask);
+            upsRegularThreadTask.Set(ES1.None, EUpsRegularThread.None, 0);
+
+            mainThreadTask = new MainThreadTask(mainTaskPack, missionAsignThreadTask, missionThreadTask, 
+                                                plcRegularThreadTask, upsRegularThreadTask);
             mainThreadTask.Set(ES1.Init, EMainThread.None, 0);
         }
 
@@ -107,11 +124,13 @@ namespace NXP_Stocker_BlazorProject.Scope
         private CancellationTokenSource _ctsMissionAssign;
         private CancellationTokenSource _ctsMission;
         private CancellationTokenSource _ctsPlcRegular;
+        private CancellationTokenSource _ctsUpsRegular;
 
         private Task _mainTask;
         private Task _missionAssignTask;
         private Task _missionTask;
         private Task _plcRegularTask;
+        private Task _upsRegularTask;
 
         public void initThread()
         {
@@ -137,6 +156,12 @@ namespace NXP_Stocker_BlazorProject.Scope
             {
                 _ctsPlcRegular = new CancellationTokenSource();
                 _plcRegularTask = StartLongRunning(async () => await RunPlcRegularAsync(_ctsPlcRegular.Token));
+            }
+
+            if(_upsRegularTask == null || _upsRegularTask.IsCompleted)
+            {
+                _ctsUpsRegular = new CancellationTokenSource();
+                _upsRegularTask = StartLongRunning(async () => await RunUpsRegularAsync(_ctsUpsRegular.Token));
             }
         }
 
@@ -223,11 +248,32 @@ namespace NXP_Stocker_BlazorProject.Scope
             }
         }
 
+        private async Task RunUpsRegularAsync(CancellationToken token)
+        {
+            while(!token.IsCancellationRequested)
+            {
+                try
+                {
+                    await upsRegularThreadTask.Run();
+
+                    await Task.Delay(2000, token);
+                }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ups Regular 例外: {ex}");
+                }
+            }
+        }
+
         public void StopThread()
         {
             _ctsMain?.Cancel();
             _ctsMissionAssign?.Cancel();
             _ctsMission?.Cancel();
+            _ctsPlcRegular?.Cancel();
+            _ctsUpsRegular?.Cancel();
+
         }
 
     }

@@ -6,6 +6,7 @@ using NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage.Interface;
 using NXP_Stocker_BlazorProject.CommonService.Data.Interface;
 using CommonLibraryB_NXP.Tools.LogWritter;
 using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
+using NXP_Stocker_BlazorProject.MachineModel;
 
 namespace NXP_Stocker_BlazorProject.TaskPackage.PlcRegularTaskPackage
 {

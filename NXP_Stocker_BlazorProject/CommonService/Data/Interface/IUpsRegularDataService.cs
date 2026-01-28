@@ -2,9 +2,8 @@
 
 namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 {
-
-    public interface IPlcRegularDataService
+    public interface IUpsRegularDataService
     {
-        Dictionary<int, EWhStatus> DcWarehouse { get; set; }
+        UpsInform UpsInform { get; set; }
     }
 }

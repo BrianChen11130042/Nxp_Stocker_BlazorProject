@@ -6,32 +6,43 @@ using NXP_Stocker_BlazorProject.CommonService.Data.Interface;
 using NXP_Stocker_BlazorProject.CommonService.Observer;
 using NXP_Stocker_BlazorProject.CommonService.Observer.Interface;
 using NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage.Interface;
+using CommonLibraryB_NXP.Library.UPS.Adapter;
+using CommonLibraryB_NXP.Library.UPS;
 
 namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
 {
-    public partial class ThreadTaskPack<EPLC>
+    public partial class ThreadTaskPack<EPLC, EUPS>
     {
-        readonly EPLC Pier1;
-        readonly EPLC Pier2;
-        readonly EPLC Robot;
+        readonly EPLC pier1;
+        readonly EPLC pier2;
+        readonly EPLC robot;
 
         readonly IPlcOperate<EPLC> IPlcOp;
         readonly PlcLibrary<EPLC> plcLib;
+
+        readonly EUPS ups;
+        readonly IUpsOperate<EUPS> IUpsOP;
+        readonly UpsLibrary<EUPS> upsLib;
 
         readonly IMainDataService IDataService;
 
         readonly INLogWritterObservable INLogObser;
         readonly IMainUIObserverable IMainObser;
 
-        public ThreadTaskPack(EPLC pier1, EPLC pier2, EPLC Robot, PlcLibrary<EPLC> plcLib,
+        public ThreadTaskPack(EPLC pier1, EPLC pier2, EPLC robot, PlcLibrary<EPLC> plcLib,
+                              EUPS ups, UpsLibrary<EUPS> upsLib,
                               MainDataService dataService, ObserverService observerService)
         {
-            this.Pier1 = pier1;
-            this.Pier2 = pier2;
-            this.Robot = Robot;
+            this.pier1 = pier1;
+            this.pier2 = pier2;
+            this.robot = robot;
 
             this.IPlcOp = plcLib;
             this.plcLib = plcLib;
+
+            this.ups = ups;
+            this.IUpsOP = upsLib;
+            this.upsLib = upsLib;
 
             this.IDataService = dataService;
 
@@ -54,7 +65,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
         string err { get; set; } = "Error";
     }
 
-    public partial class ThreadTaskPack<EPLC> : IThreadTaskPack
+    public partial class ThreadTaskPack<EPLC, EUPS> : IThreadTaskPack
     {
         public async Task<bool> InitMissionAsignInQue()
         {
@@ -70,13 +81,27 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
 
         public async Task<bool> CheckPlcConnect()
         {
-            if (await IPlcOp.GetDeviceIsReady(Robot))
+            if (await IPlcOp.GetDeviceIsReady(robot))
             {
                 return true;
             }
             else
             {
-                string nlog = plcLib.Packages[Robot].errorLog;
+                string nlog = plcLib.Packages[robot].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public async Task<bool> CheckUpsConnect()
+        {
+            if(await IUpsOP.GetUpsStatus(ups))
+            {
+                return true;
+            }
+            else
+            {
+                string nlog = upsLib.Packages[ups].errorLog;
                 await writeNLogError(nlog);
                 return false;
             }

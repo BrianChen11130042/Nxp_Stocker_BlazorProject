@@ -5,12 +5,13 @@ using NXP_Stocker_BlazorProject.MachineModel;
 
 namespace NXP_Stocker_BlazorProject.CommonService.Data
 {
-    public partial class PlcRegularDataService : IPlcRegularDataService
+
+    public partial class UpsRegularDataService : IUpsRegularDataService
     {
 
         readonly INLogWritterObservable INLogWritter;
 
-        public PlcRegularDataService(ObserverService observerService)
+        public UpsRegularDataService(ObserverService observerService)
         {
             this.INLogWritter = observerService;
         }
@@ -26,19 +27,19 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
         }
     }
 
-    public partial class PlcRegularDataService
+    public partial class UpsRegularDataService
     {
-        Dictionary<int, EWhStatus> _dcWarehouse { get; set; } = new Dictionary<int, EWhStatus>();
+        UpsInform _upsInform { get; set; } = new UpsInform();
 
-        public Dictionary<int, EWhStatus> DcWarehouse
+        public UpsInform UpsInform
         {
             get
             {
-                return _dcWarehouse;
+                return _upsInform;
             }
             set
             {
-                _dcWarehouse = value;
+                _upsInform = value;
             }
         }
     }

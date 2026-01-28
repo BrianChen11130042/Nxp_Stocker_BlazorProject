@@ -297,4 +297,40 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
     }
+
+    public partial class ObserverService : IUpsRegularUIObserverable
+    {
+
+        List<IUpsRegularUIObserver> osUpsRegular { get; set; }
+
+        public void AddUpsRegularUIObserver(IUpsRegularUIObserver o)
+        {
+            if (osUpsRegular == null)
+                osUpsRegular = new List<IUpsRegularUIObserver>();
+
+            if(!osUpsRegular.Contains(o))
+            {
+                osUpsRegular.Add(o);
+            }
+        }
+
+        public void RemoveUpsRegularUIObserver(IUpsRegularUIObserver o)
+        {
+            if(osUpsRegular != null && osUpsRegular.Contains(o))
+            {
+                osUpsRegular.Remove(o);
+            }
+        }
+
+        public async Task NotifyUpsStatusInform(UpsInform inform)
+        {
+            if(osUpsRegular != null)
+            {
+                foreach(var o in osUpsRegular)
+                {
+                    await o.UpdateUpsStatusInform(inform);
+                }
+            }
+        }
+    }
 }

@@ -6,6 +6,8 @@
 
         Task<bool> CheckPlcConnect();
 
+        Task<bool> CheckUpsConnect();
+
         Task<bool> SetLogInitSuccess();
 
         Task<bool> SetLogInitFail();

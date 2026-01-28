@@ -1,5 +1,12 @@
 ﻿namespace NXP_Stocker_BlazorProject.MachineModel
 {
+    public enum EWhStatus
+    {
+        Empty,
+        Small,
+        Large
+    }
+
     public class WarehouseInform
     {
         public int pierNo { get; set; } // 1:pier1 , 2:pier2 
