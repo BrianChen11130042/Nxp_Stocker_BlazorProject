@@ -43,10 +43,13 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
         //倉儲
         event dgWarehouseInform dgWhInform;
 
-        // On <-> off 狀態
-        event dgPlcActionStatus dgPlcAction;
+        // 要砍掉!!!
+        event dgPlcActionStatus dgPlcAction; //要砍掉!!!
+        Task<Dictionary<EPLC, bool>> GetDcPlcAction(); //要砍掉!!!
 
-        Task<Dictionary<EPLC, bool>> GetDcPlcAction();
+        //Machine Unit Status
+
+
 
         //UPS
         event dgUpsStatusInform dgUpsInform;
