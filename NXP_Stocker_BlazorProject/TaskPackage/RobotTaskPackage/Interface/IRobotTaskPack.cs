@@ -17,7 +17,11 @@
 
         Task UpdateUIRobotLog();
 
-        Task UpdateUIRobotAction(bool isRun);
+        Task UpdateUIRobotStop();
+
+        Task UpdateUIRobotIdle();
+
+        Task UpdateUIRobotRunning();
 
         bool IsGetNewMission();
 

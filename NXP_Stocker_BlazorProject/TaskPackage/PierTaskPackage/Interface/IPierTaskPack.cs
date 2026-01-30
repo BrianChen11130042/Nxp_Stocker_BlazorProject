@@ -24,7 +24,11 @@
 
         Task UpdateUIPierLog();
 
-        Task UpdateUIPierAction(bool isRun);
+        Task UpdateUIPierStop();
+
+        Task UpdateUIPierIdle();
+
+        Task UpdateUIPierRunning();
 
         //入大板
         bool IsInputLargeBoard();

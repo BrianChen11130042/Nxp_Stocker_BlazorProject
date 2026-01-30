@@ -2,21 +2,21 @@
 {
     public enum EMachineUnit
     {
-        Pier1,
-        Pier2,
-        Robot,
-        UPS
+        Pier1 = 1,
+        Pier2 = 2,
+        Robot = 3,
+        UPS = 4
     }
 
     public class MachineUnitStatus
     {
-        ERobotStatus robotStatus { get; set; } = ERobotStatus.None;
+        public ERobotStatus robotStatus { get; set; } = ERobotStatus.None;
 
-        EPierStatus pier1Status { get; set; } = EPierStatus.None;
+        public EPierStatus pier1Status { get; set; } = EPierStatus.None;
 
-        EPierStatus pier2Status { get; set; } = EPierStatus.None;
+        public EPierStatus pier2Status { get; set; } = EPierStatus.None;
 
-        EUpsStatus upsStatus { get; set; } = EUpsStatus.None;
+        public EUpsStatus upsStatus { get; set; } = EUpsStatus.None;
     }
 
     public enum ERobotStatus

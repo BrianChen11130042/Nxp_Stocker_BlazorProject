@@ -13,7 +13,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         Task NotifyPierLog(int pier, List<LogTable> list);
 
-        Task NotifyPierAction(int pier, bool isRun);
+        Task NotifyPierAction(int pier, int status);
     }
 
 
@@ -23,6 +23,6 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
 
         Task UpdatePierLog(int pier, List<LogTable> list);
 
-        Task UpdatePierAction(int pier, bool isRun);
+        Task UpdatePierAction(int pier, int status);
     }
 }

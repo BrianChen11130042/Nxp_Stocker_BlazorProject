@@ -25,6 +25,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             interval = 1;
         }
 
+        public Task GetDeviceNo()
+        {
+            return pack.GetDeviceNo();
+        }
+
         public Task<bool> InitMissionAsignInQue()
         {
             return pack.InitMissionAsignInQue();
@@ -89,6 +94,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
             switch(S3)
             {
                 case 0:
+                    await GetDeviceNo();
+
                     if (await InitMissionAsignInQue())
                     {
                         Set(10);

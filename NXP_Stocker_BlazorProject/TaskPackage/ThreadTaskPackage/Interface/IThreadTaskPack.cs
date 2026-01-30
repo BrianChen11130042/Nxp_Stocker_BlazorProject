@@ -2,6 +2,8 @@
 {
     public interface IThreadTaskPack
     {
+        Task GetDeviceNo();
+
         Task<bool> InitMissionAsignInQue();
 
         Task<bool> CheckPlcConnect();

@@ -3,8 +3,12 @@
 
     public interface IUpsRegularTaskPack
     {
+        Task<bool> GetUpsNo();
+
         Task<bool> GetUpsStatus();
 
         Task UpdateUpsStatus();
+
+        Task UpdateUIUpsRunning();
     }
 }

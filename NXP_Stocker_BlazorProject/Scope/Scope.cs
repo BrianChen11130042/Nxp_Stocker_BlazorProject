@@ -23,7 +23,9 @@
 
         public void initAll()
         {
+            notifyInitUnitStatus();
             initCommonService();
+            notifyConnectingUnitStatus();
             initManager();
             initPlc();
             initUps();

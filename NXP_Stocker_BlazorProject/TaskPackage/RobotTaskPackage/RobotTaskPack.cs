@@ -278,9 +278,19 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
             await IRobotObser.NotifyRobotLog(IDataService.RobotNo, IDataService.ListRobotLog);
         }
 
-        public async Task UpdateUIRobotAction(bool isRun)
+        public async Task UpdateUIRobotStop()
         {
-            await IRobotObser.NotifyRobotAction(IDataService.RobotNo, isRun);
+            await IRobotObser.NotifyRobotAction(IDataService.RobotNo, 907);
+        }
+
+        public async Task UpdateUIRobotIdle()
+        {
+            await IRobotObser.NotifyRobotAction(IDataService.RobotNo, 904);
+        }
+
+        public async Task UpdateUIRobotRunning()
+        {
+            await IRobotObser.NotifyRobotAction(IDataService.RobotNo, 905);
         }
     }
 }

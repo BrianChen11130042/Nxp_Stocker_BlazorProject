@@ -48,6 +48,62 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
+        int _pier1No { get; set; } = 0;
+
+        public int Pier1No
+        {
+            get
+            {
+                return _pier1No;
+            }
+            set
+            {
+                _pier1No = value;
+            }
+        }
+
+        int _pier2No { get; set; } = 0;
+
+        public int Pier2No
+        {
+            get
+            {
+                return _pier2No;
+            }
+            set
+            {
+                _pier2No = value;
+            }
+        }
+
+        int _robotNo { get; set; } = 0;
+
+        public int RobotNo
+        {
+            get
+            {
+                return _robotNo;
+            }
+            set
+            {
+                _robotNo = value;
+            }
+        }
+
+        int _upsNo { get; set; } = 0;
+
+        public int UpsNo
+        {
+            get
+            {
+                return _upsNo;
+            }
+            set
+            {
+                _upsNo = value;
+            }
+        }
+
         List<LogTable> _listMainLog { get; set; } = new List<LogTable>();
 
         public List<LogTable> ListMainLog

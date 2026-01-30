@@ -182,92 +182,63 @@ namespace NXP_Stocker_BlazorProject.Services
 
     public partial class MachineService : IMainUIObserver
     {
-        public async Task UpdateMainLog(List<LogTable> list)
-        {
-            //throw new NotImplementedException();
-        }
-
         public event dgInitMessage dgInitMsg;
 
         public async Task UpdatePopUpMessage(bool popUp, string msg)
         {
             dgInitMsg?.Invoke(popUp, msg);
         }
+
+        public async Task UpdateInitUnitStatus(int deviceNo, int status)
+        {
+            await UpdateUnitStatus(deviceNo, status);
+        }
     }
 
-    public delegate Task dgPlcActionStatus(Dictionary<EPLC, bool> dcPlcAction);
+    public delegate Task dgPlcActionStatus(Dictionary<EPLC, bool> dcPlcAction); //要砍掉
+    public delegate Task dgMachineUnitStatus(Dictionary<EMachineUnit, MachineUnitStatus> dcMachineUnitStatus); //取代上面的
 
     public partial class MachineService : IPierUIObserver
     {
-        public event dgPlcActionStatus dgPlcAction;
+        public event dgPlcActionStatus dgPlcAction; //要砍掉
+        public event dgMachineUnitStatus dgMachineUnitStatus; //取代上面的
 
-        Dictionary<EPLC, bool> dcPlcAction { get; set; } = new Dictionary<EPLC, bool>()
+        Dictionary<EPLC, bool> dcPlcAction { get; set; } = new Dictionary<EPLC, bool>() //要砍掉
         {
             { EPLC.Pier1, false},
             { EPLC.Pier2, false},
             { EPLC.Robot, false}
         };
+        Dictionary<EMachineUnit, MachineUnitStatus> dcMachineUnitStatus { get; set; } = new Dictionary<EMachineUnit, MachineUnitStatus>()//取代上面的
+        {
+            { EMachineUnit.Pier1, new MachineUnitStatus() },
+            { EMachineUnit.Pier2, new MachineUnitStatus() },
+            { EMachineUnit.Robot, new MachineUnitStatus() },
+            { EMachineUnit.UPS, new MachineUnitStatus() }
+        };
 
-        public async Task<Dictionary<EPLC, bool>> GetDcPlcAction()
+        public async Task<Dictionary<EPLC, bool>> GetDcPlcAction() //要砍掉
         {
             return dcPlcAction;
         }
-
-        public async Task UpdatePierAction(int pier, bool isRun)
+        public async Task<Dictionary<EMachineUnit, MachineUnitStatus>> GetMachineUnitStatus()//取代上面的
         {
-            switch(pier)
-            {
-                case 1:
-                    if (dcPlcAction[EPLC.Pier1] != isRun)
-                    {
-                        dcPlcAction[EPLC.Pier1] = isRun;
-                        dgPlcAction?.Invoke(dcPlcAction);
-                    }
-                    break;  
-
-                case 2:
-                    if(dcPlcAction[EPLC.Pier2] != isRun)
-                    {
-                        dcPlcAction[EPLC.Pier2] = isRun;
-                        dgPlcAction?.Invoke(dcPlcAction);
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            return dcMachineUnitStatus;
         }
 
-        public async Task UpdatePierLog(int pier, List<LogTable> list)
+        public async Task UpdatePierAction(int pier, int status)
         {
-            //throw new NotImplementedException();
+            await UpdateUnitStatus(pier, status);
         }
 
-        public async Task UpdatePierMission(int pier, PierMissionTable table)
-        {
-            //throw new NotImplementedException();
-        }
     }
 
     public partial class MachineService : IRobotUIObserver
     {
-        public async Task UpdateRobotAction(int robot, bool isRun)
-        {
-            if (dcPlcAction[EPLC.Robot] != isRun)
-            {
-                dcPlcAction[EPLC.Robot] = isRun;
-                dgPlcAction?.Invoke(dcPlcAction);
-            }
-        }
 
-        public async Task UpdateRobotLog(int robot, List<LogTable> list)
+        public async Task UpdateRobotAction(int robot, int status)
         {
-            //throw new NotImplementedException();
-        }
-
-        public async Task UpdateRobotMission(int pier, RobotMissionTable table)
-        {
-            //throw new NotImplementedException();
+            await UpdateUnitStatus(robot, status);
         }
     }
 
@@ -292,6 +263,102 @@ namespace NXP_Stocker_BlazorProject.Services
         public async Task UpdateUpsStatusInform(UpsInform inform)
         {
             dgUpsInform?.Invoke(inform);
+        }
+
+        public async Task UpdateUpsAction(int ups, int status)
+        {
+            await UpdateUnitStatus(ups, status);
+        }
+    }
+
+    public partial class MachineService
+    {
+        async Task UpdateUnitStatus(int deviceNo, int status)
+        {
+            if (Enum.IsDefined(typeof(EMachineUnit), deviceNo))
+            {
+                EMachineUnit unit = (EMachineUnit)deviceNo;
+
+                switch (unit)
+                {
+                    case EMachineUnit.Pier1:
+                        if (Enum.IsDefined(typeof(EPierStatus), status))
+                        {
+                            EPierStatus newP1Status = (EPierStatus)status;
+
+                            if (dcMachineUnitStatus[unit].pier1Status != newP1Status)
+                            {
+                                dcMachineUnitStatus[unit].pier1Status = newP1Status;
+                                dgMachineUnitStatus?.Invoke(dcMachineUnitStatus);
+                            }
+                        }
+                        break;
+
+                    case EMachineUnit.Pier2:
+                        if(Enum.IsDefined(typeof(EPierStatus), status))
+                        {
+                            EPierStatus newP2Status = (EPierStatus)status;
+
+                            if (dcMachineUnitStatus[unit].pier2Status != newP2Status)
+                            {
+                                dcMachineUnitStatus[unit].pier2Status = newP2Status;
+                                dgMachineUnitStatus?.Invoke(dcMachineUnitStatus);
+                            }
+                        }
+                        break;
+
+                    case EMachineUnit.Robot:
+                        if(Enum.IsDefined(typeof(ERobotStatus), status))
+                        {
+                            ERobotStatus newRobotStatus = (ERobotStatus)status;
+
+                            if(dcMachineUnitStatus[unit].robotStatus != newRobotStatus)
+                            {
+                                dcMachineUnitStatus[unit].robotStatus = newRobotStatus;
+                                dgMachineUnitStatus?.Invoke(dcMachineUnitStatus);
+                            }
+                        }
+                        break;
+
+                    case EMachineUnit.UPS:
+                        if(Enum.IsDefined(typeof(EUpsStatus), status))
+                        {
+                            EUpsStatus newUpsStatus = (EUpsStatus)status;
+
+                            if(dcMachineUnitStatus[unit].upsStatus != newUpsStatus)
+                            {
+                                dcMachineUnitStatus[unit].upsStatus = newUpsStatus;
+                                dgMachineUnitStatus?.Invoke(dcMachineUnitStatus);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        public async Task UpdateRobotLog(int robot, List<LogTable> list)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public async Task UpdateRobotMission(int pier, RobotMissionTable table)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public async Task UpdatePierLog(int pier, List<LogTable> list)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public async Task UpdatePierMission(int pier, PierMissionTable table)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public async Task UpdateMainLog(List<LogTable> list)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

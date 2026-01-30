@@ -48,6 +48,21 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.UpsRegularTaskPackage
 
     public partial class UpsRegularTaskPack<EUPS> : IUpsRegularTaskPack
     {
+        public async Task<bool> GetUpsNo()
+        {
+            if(await IUpsOP.GetDeviceNo(ups))
+            {
+                IDataService.UpsNo = upsLib.Packages[ups].property.upsNo;
+                return true;
+            }
+            else
+            {
+                string nlog = upsLib.Packages[ups].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
         public async Task<bool> GetUpsStatus()
         {
             if(await IUpsOP.GetUpsStatus(ups))
@@ -81,6 +96,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.UpsRegularTaskPackage
         public async Task UpdateUpsStatus()
         {
             await IUpsRegularObser.NotifyUpsStatusInform(IDataService.UpsInform);
+        }
+
+        public async Task UpdateUIUpsRunning()
+        {
+            await IUpsRegularObser.NotifyUpsAction(4, 905);
         }
     }
 }

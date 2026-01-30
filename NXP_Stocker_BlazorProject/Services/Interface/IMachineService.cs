@@ -48,7 +48,8 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
         Task<Dictionary<EPLC, bool>> GetDcPlcAction(); //要砍掉!!!
 
         //Machine Unit Status
-
+        event dgMachineUnitStatus dgMachineUnitStatus;
+        Task<Dictionary<EMachineUnit, MachineUnitStatus>> GetMachineUnitStatus();
 
 
         //UPS

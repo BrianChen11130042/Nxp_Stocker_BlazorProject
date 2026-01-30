@@ -67,6 +67,29 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
 
     public partial class ThreadTaskPack<EPLC, EUPS> : IThreadTaskPack
     {
+        public async Task GetDeviceNo()
+        {
+            if(await IPlcOp.GetDeviceNo(pier1))
+            {
+                IDataService.Pier1No = plcLib.Packages[pier1].property.getPier.pierNo;
+            }
+
+            if(await IPlcOp.GetDeviceNo(pier2))
+            {
+                IDataService.Pier2No = plcLib.Packages[pier2].property.getPier.pierNo;
+            }
+
+            if(await IPlcOp.GetDeviceNo(robot))
+            {
+                IDataService.RobotNo = plcLib.Packages[robot].property.getRobot.robotNo;
+            }
+
+            if(await IUpsOP.GetDeviceNo(ups))
+            {
+                IDataService.UpsNo = upsLib.Packages[ups].property.upsNo;
+            }
+        }
+
         public async Task<bool> InitMissionAsignInQue()
         {
             if(await IDataService.InitMissionAsignByInQue())
@@ -151,11 +174,21 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
 
         public async Task UpdateUIPopInitSuccess()
         {
+            await IMainObser.NotifyInitUnitStatus(1, 903);
+            await IMainObser.NotifyInitUnitStatus(2, 903);
+            await IMainObser.NotifyInitUnitStatus(3, 903);
+            await IMainObser.NotifyInitUnitStatus(4, 903);
+
             await IMainObser.NotifyPopUpMessage(true, "初始化成功");
         }
 
         public async Task UpdateUIPopInitFail()
         {
+            await IMainObser.NotifyInitUnitStatus(1, 902);
+            await IMainObser.NotifyInitUnitStatus(2, 902);
+            await IMainObser.NotifyInitUnitStatus(3, 902);
+            await IMainObser.NotifyInitUnitStatus(4, 902);
+
             await IMainObser.NotifyPopUpMessage(true, "初始化失敗");
         }
 

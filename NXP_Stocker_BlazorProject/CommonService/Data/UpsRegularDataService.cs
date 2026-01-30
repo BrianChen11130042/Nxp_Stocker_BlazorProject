@@ -42,5 +42,19 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
                 _upsInform = value;
             }
         }
+
+        int _upsNo { get; set; } = 0;
+
+        public int UpsNo
+        {
+            get
+            {
+                return _upsNo;
+            }
+            set
+            {
+                _upsNo = value;
+            }
+        }
     }
 }

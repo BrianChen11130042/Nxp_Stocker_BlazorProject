@@ -13,6 +13,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         Task NotifyPopUpMessage(bool popUp, string msg);
 
         Task NotifyMainLog(List<LogTable> list);
+
+        Task NotifyInitUnitStatus(int deviceNo, int status);
     }
 
     public interface IMainUIObserver
@@ -20,5 +22,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         Task UpdatePopUpMessage(bool popUp, string msg);
 
         Task UpdateMainLog(List<LogTable> list);
+
+        Task UpdateInitUnitStatus(int deviceNo, int status);
     }
 }

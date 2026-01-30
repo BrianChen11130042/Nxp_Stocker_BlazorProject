@@ -51,5 +51,13 @@ namespace NXP_Stocker_BlazorProject.Scope
                 mainDataService.IsModbusConnect = false;
             }
         }
+
+        void notifyConnectingUnitStatus()
+        {
+            observerService.NotifyInitUnitStatus(1, 901);
+            observerService.NotifyInitUnitStatus(2, 901);
+            observerService.NotifyInitUnitStatus(3, 901);
+            observerService.NotifyInitUnitStatus(4, 901);
+        }
     }
 }

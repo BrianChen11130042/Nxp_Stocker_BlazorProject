@@ -88,13 +88,13 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyPierAction(int pier, bool isRun)
+        public async Task NotifyPierAction(int pier, int status)
         {
             if(osPier != null)
             {
                 foreach (var o in osPier)
                 {
-                    await o.UpdatePierAction(pier, isRun);
+                    await o.UpdatePierAction(pier, status);
                 }
             }
         }
@@ -146,13 +146,13 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyRobotAction(int robot, bool isRun)
+        public async Task NotifyRobotAction(int robot, int status)
         {
             if(osRobot != null)
             {
                 foreach(var o in osRobot)
                 {
-                    await o.UpdateRobotAction(robot, isRun);
+                    await o.UpdateRobotAction(robot, status);
                 }
             }
         }
@@ -260,6 +260,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 }
             }
         }
+
+        public async Task NotifyInitUnitStatus(int deviceNo, int status)
+        {
+            if(osMain != null)
+            {
+                foreach(var o in osMain)
+                {
+                    await o.UpdateInitUnitStatus(deviceNo, status);
+                }
+            }
+        }
     }
 
     public partial class ObserverService : IPlcRegularUIObserverable
@@ -329,6 +340,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 foreach(var o in osUpsRegular)
                 {
                     await o.UpdateUpsStatusInform(inform);
+                }
+            }
+        }
+
+        public async Task NotifyUpsAction(int ups, int status)
+        {
+            if(osUpsRegular != null)
+            {
+                foreach(var o in osUpsRegular)
+                {
+                    await o.UpdateUpsAction(ups, status);
                 }
             }
         }

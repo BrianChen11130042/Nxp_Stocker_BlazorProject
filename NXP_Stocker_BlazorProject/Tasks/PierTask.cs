@@ -170,9 +170,19 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.IsPlcReady();
         }
 
-        public Task UpdateUIPierAction(bool isRun)
+        public Task UpdateUIPierStop()
         {
-            return pack.UpdateUIPierAction(isRun);
+            return pack.UpdateUIPierStop();
+        }
+
+        public Task UpdateUIPierIdle()
+        {
+            return pack.UpdateUIPierIdle();
+        }
+
+        public Task UpdateUIPierRunning()
+        {
+            return pack.UpdateUIPierRunning();
         }
     }
 
@@ -212,7 +222,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
-                                    await UpdateUIPierAction(false);
+                                    await UpdateUIPierStop();
 
                                     Set(0);
                                 }
@@ -234,7 +244,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                                     if (await SetPlcStartInputLargeBoard())
                                     {
-                                        await UpdateUIPierAction(true);
+                                        await UpdateUIPierRunning();
 
                                         Set(EPierAction.InputLargeBoard, 0);
                                     }
@@ -250,7 +260,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                                     if (await SetPlcStartInputSmallBoard())
                                     {
-                                        await UpdateUIPierAction(true);
+                                        await UpdateUIPierRunning();
 
                                         Set(EPierAction.InputSmallBoard, 0);
                                     }
@@ -266,7 +276,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                                     if (await SetPlcStartOutputLargeBoard())
                                     {
-                                        await UpdateUIPierAction(true);
+                                        await UpdateUIPierRunning();
 
                                         Set(EPierAction.OutputLargeBoard, 0);
                                     }
@@ -282,7 +292,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                                     if (await SetPlcStartOutputSmallBoard())
                                     {
-                                        await UpdateUIPierAction(true);
+                                        await UpdateUIPierRunning();
 
                                         Set(EPierAction.OutputSmallBoard, 0);
                                     }
@@ -295,9 +305,9 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 }
                                 else
                                 {
-                                    await UpdateUIPierAction(false);
+                                    await UpdateUIPierIdle();
 
-                                    Set(10);
+                                    Set(0);
                                 }
                             }
                             else

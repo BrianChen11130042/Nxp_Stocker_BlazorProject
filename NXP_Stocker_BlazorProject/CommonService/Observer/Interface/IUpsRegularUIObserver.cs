@@ -9,10 +9,14 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         void RemoveUpsRegularUIObserver(IUpsRegularUIObserver o);
 
         Task NotifyUpsStatusInform(UpsInform inform);
+
+        Task NotifyUpsAction(int ups, int status);
     }
 
     public interface IUpsRegularUIObserver
     {
         Task UpdateUpsStatusInform(UpsInform inform);
+
+        Task UpdateUpsAction(int ups, int status);
     }
 }

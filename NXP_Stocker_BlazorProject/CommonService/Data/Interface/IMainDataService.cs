@@ -10,6 +10,14 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
 
         bool IsModbusConnect { get; set; }
 
+        int Pier1No { get; set; }
+
+        int Pier2No { get; set; }
+
+        int RobotNo { get; set; }
+
+        int UpsNo { get; set; }
+
         //MissionAsignTable
         Task<bool> InitMissionAsignByInQue();
 

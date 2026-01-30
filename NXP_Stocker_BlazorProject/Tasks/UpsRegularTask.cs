@@ -14,9 +14,19 @@ namespace NXP_Stocker_BlazorProject.Tasks
             interval = 1;
         }
 
+        public Task<bool> GetUpsNo()
+        {
+            return pack.GetUpsNo();
+        }
+
         public Task<bool> GetUpsStatus()
         {
             return pack.GetUpsStatus();
+        }
+
+        public Task UpdateUIUpsRunning()
+        {
+            return pack.UpdateUIUpsRunning();
         }
 
         public Task UpdateUpsStatus()
@@ -47,10 +57,12 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            if(await GetUpsStatus())
-                            {
-                                await UpdateUpsStatus();
+                            await GetUpsNo();
 
+                            if (await GetUpsStatus())
+                            {
+                                await UpdateUIUpsRunning();
+                                await UpdateUpsStatus();
                                 Set(0);
                             }
                             else
