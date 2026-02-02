@@ -113,6 +113,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.UpdateUIRobotRunning();
         }
+
+        public Task UpdateUIRobotMotionStatus()
+        {
+            return pack.UpdateUIRobotMotionStatus();
+        }
     }
 
     public enum ERobotAction
@@ -255,12 +260,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdateRobotMissionStatusToInQue();
                                 await UpdateUIRobotMission();
+                                await UpdateUIRobotMotionStatus();
 
                                 if (IsRobotFinish())
                                 {
 
                                     if (await SetTableMissionFinish())
                                     {
+                                        await UpdateUIRobotStop();
                                         await UpdateUIRobotMission();
                                         Set(ERobotAction.Finish, 0);
                                     }

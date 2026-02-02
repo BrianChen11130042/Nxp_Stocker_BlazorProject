@@ -23,6 +23,8 @@
 
         Task UpdateUIRobotRunning();
 
+        Task UpdateUIRobotMotionStatus();
+
         bool IsGetNewMission();
 
         Task<bool> SetPlcRobotMission();

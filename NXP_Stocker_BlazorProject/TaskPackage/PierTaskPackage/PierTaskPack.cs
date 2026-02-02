@@ -207,6 +207,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
         {
             await IPierObser.NotifyPierAction(IDataService.PierNo, 905);
         }
+
+        public async Task UpdateUIPierMotionStatus()
+        {
+            await IPierObser.NotifyPierAction(IDataService.PierNo, IDataService.PierMission.Status);
+        }
     }
 
     #endregion

@@ -30,6 +30,8 @@
 
         Task UpdateUIPierRunning();
 
+        Task UpdateUIPierMotionStatus();
+
         //入大板
         bool IsInputLargeBoard();
 

@@ -184,6 +184,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.UpdateUIPierRunning();
         }
+
+        public Task UpdateUIPierMotionStatus()
+        {
+            return pack.UpdateUIPierMotionStatus();
+        }
     }
 
     public enum EPierAction
@@ -353,12 +358,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
+                                await UpdateUIPierMotionStatus();
 
                                 if (IsInputLargeBoardFinish())
                                 {
 
                                     if (await SetTableMissionFinsih())
                                     {
+                                        await UpdateUIPierStop();
                                         await UpdateUIPierMission();
                                         Set(30);
                                     }
@@ -443,12 +450,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
+                                await UpdateUIPierMotionStatus();
 
                                 if (IsInputSmallBoardFinish())
                                 {
 
                                     if (await SetTableMissionFinsih())
                                     {
+                                        await UpdateUIPierStop();
                                         await UpdateUIPierMission();
                                         Set(30);
                                     }
@@ -532,12 +541,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
+                                await UpdateUIPierMotionStatus();
 
                                 if (IsOutputLargeBoardFinish())
                                 {
 
                                     if (await SetTableMissionFinsih())
                                     {
+                                        await UpdateUIPierStop();
                                         await UpdateUIPierMission();
                                         Set(30);
                                     }
@@ -621,12 +632,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdatePierMissionStatusToInque();
                                 await UpdateUIPierMission();
+                                await UpdateUIPierMotionStatus();
 
                                 if (IsOutputSmallBoardFinish())
                                 {
 
                                     if (await SetTableMissionFinsih())
                                     {
+                                        await UpdateUIPierStop();
                                         await UpdateUIPierMission();
                                         Set(30);
                                     }
