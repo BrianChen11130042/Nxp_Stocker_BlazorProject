@@ -354,12 +354,12 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
 
         public async Task UpdateUIMissionAsign()
         {
-            await IMissionAsignObser.NotifyMissionAsign(IDataService.PierNo, IDataService.MissionAsign);
+            await IMissionAsignObser.NotifyMissionAssign(IDataService.PierNo, IDataService.MissionAsign);
         }
 
         public async Task UpdateUIMissionAsignLog()
         {
-            await IMissionAsignObser.NotifyMissionAsignLog(IDataService.PierNo, IDataService.ListMissionAsignLog);
+            await IMissionAsignObser.NotifyMissionAssignLog(IDataService.PierNo, IDataService.ListMissionAsignLog);
         }
 
         public async Task UpdateUIPickPortWarehouse()

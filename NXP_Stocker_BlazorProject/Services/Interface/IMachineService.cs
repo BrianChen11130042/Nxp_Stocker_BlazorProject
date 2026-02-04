@@ -40,6 +40,8 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
 
         Task<bool> SetMission(MissionInform mission);
 
+        event dgMissionAssignAction dgMissionAssignAction;
+
         //倉儲
         event dgWarehouseInform dgWhInform;
 

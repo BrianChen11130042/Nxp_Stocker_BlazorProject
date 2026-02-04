@@ -29,6 +29,7 @@ namespace NXP_Stocker_BlazorProject.Services
             scope.observerService.AddRobotUIObserver(this);
             scope.observerService.AddPlcRegularUIObserver(this);
             scope.observerService.AddUpsRegularUIObserver(this);
+            scope.observerService.AddMissionAssignUIObserver(this);
         }
     }
 
@@ -195,6 +196,18 @@ namespace NXP_Stocker_BlazorProject.Services
         }
     }
 
+    public delegate Task dgMissionAssignAction(int pierNo, MissionAssignTable missionAsign);
+
+    public partial class MachineService : IMissionAssignUIObserver
+    {
+        public event dgMissionAssignAction dgMissionAssignAction;
+
+        public async Task UpdateMissionAssign(int pier, MissionAssignTable missionAsign)
+        {
+            dgMissionAssignAction?.Invoke(pier, missionAsign);
+        }
+    }
+
     public delegate Task dgPlcActionStatus(Dictionary<EPLC, bool> dcPlcAction); //要砍掉
     public delegate Task dgMachineUnitStatus(Dictionary<EMachineUnit, MachineUnitStatus> dcMachineUnitStatus); //取代上面的
 
@@ -357,6 +370,16 @@ namespace NXP_Stocker_BlazorProject.Services
         }
 
         public async Task UpdateMainLog(List<LogTable> list)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public async Task UpdateMissionAssignLog(int pier, List<LogTable> list)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public async Task UpdateWarehouseInform(int pier, WarehouseInform warehouse)
         {
             //throw new NotImplementedException();
         }

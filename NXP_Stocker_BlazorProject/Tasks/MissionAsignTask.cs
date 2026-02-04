@@ -173,7 +173,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                             if (await GetTableNewMissionAsign())
                             {
-                                await UpdateUIMissionAsign();
+                                //await UpdateUIMissionAsign();
 
                                 if (IsInputWarehouse())
                                 {

@@ -182,24 +182,24 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
             }
         }
 
-        public async Task NotifyMissionAsign(int pier, MissionAssignTable missionAsign)
+        public async Task NotifyMissionAssign(int pier, MissionAssignTable missionAsign)
         {
             if(osMissionAssign != null)
             {
                 foreach(var o in osMissionAssign)
                 {
-                    await o.UpdateMissionAsign(pier, missionAsign);
+                    await o.UpdateMissionAssign(pier, missionAsign);
                 }
             }
         }
 
-        public async Task NotifyMissionAsignLog(int pier, List<LogTable> list)
+        public async Task NotifyMissionAssignLog(int pier, List<LogTable> list)
         {
             if(osMissionAssign != null)
             {
                 foreach(var o in osMissionAssign)
                 {
-                    await o.UpdateMissionAsignLog(pier, list);
+                    await o.UpdateMissionAssignLog(pier, list);
                 }
             }
         }
