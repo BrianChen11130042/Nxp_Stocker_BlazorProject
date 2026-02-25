@@ -40,6 +40,8 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
 
         Task<bool> SetMission(MissionInform mission);
 
+        Task<bool> DeleteMission(Guid id);
+
         event dgMissionAssignAction dgMissionAssignAction;
 
         //倉儲

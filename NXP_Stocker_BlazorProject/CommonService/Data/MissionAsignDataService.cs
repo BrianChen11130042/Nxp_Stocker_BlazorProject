@@ -143,7 +143,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
     {
         public async Task<bool> GetNewMissionAsignTable()
         {
-            var result = await IMissionTableOp.GetNewMissionAsign(false, false, PierNo);
+            var result = await IMissionTableOp.GetNewMissionAsign(false, false, false, PierNo);
 
             if (result.status)
             {

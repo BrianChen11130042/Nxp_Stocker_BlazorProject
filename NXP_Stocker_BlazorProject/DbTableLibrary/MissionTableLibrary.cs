@@ -61,7 +61,7 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         {
             lock(_missionAsignLock)
             {
-                MissionAssignInQueue.RemoveAll(x => x.IsFinish == true);
+                MissionAssignInQueue.RemoveAll(x => x.IsFinish == true || x.IsCancel == true);
             }
 
             MissionAssignInQueueChangedAct?.Invoke();
@@ -140,8 +140,9 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
         }
 
         public async Task<(bool status, string msg, MissionAssignTable table)> GetNewMissionAsign(bool IsStart,
-                                                                                                 bool IsFinish,
-                                                                                                 int PierNo)
+                                                                                                  bool IsFinish,
+                                                                                                  bool IsCancel,
+                                                                                                  int PierNo)
         {
 
             MissionAssignTable table;
@@ -150,8 +151,10 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             {
                 table = MissionAssignInQueue.Where(x => x.PierNo == PierNo
                                                      && x.IsStart == IsStart
-                                                     && x.IsFinish == IsFinish)
-                                            .OrderBy(x => x.EstablishTime)
+                                                     && x.IsFinish == IsFinish
+                                                     && x.IsCancel == IsCancel)
+                                            .OrderByDescending(x => x.Emergency)
+                                            .ThenBy(x => x.EstablishTime)
                                             .FirstOrDefault();
             }
 

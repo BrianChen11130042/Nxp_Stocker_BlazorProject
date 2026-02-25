@@ -20,5 +20,8 @@ namespace NXP_Stocker_BlazorProject.MachineModel
         public int dropZone { get; set; } = 0;
 
         public int dropLayer { get; set; } = 0;
+
+        [Range(0, 1)]
+        public int emergency { get; set; } = 0; // 0:一般單任務 , 1:緊急單任務
     }
 }

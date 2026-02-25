@@ -162,10 +162,38 @@ namespace NXP_Stocker_BlazorProject.Services
                 PickLayer = mission.pickLayer,
                 DropZone = mission.dropZone,
                 DropLayer = mission.dropLayer,
-                EstablishTime = DateTime.Now
+                EstablishTime = DateTime.Now,
+                Emergency = mission.emergency,
+                IsCancel = false
             };
 
             var result = await scope.IMissionTableOp.UpSertMissionAsign(missionAsignTable);
+
+            if (result.status == true)
+            {
+                return true;
+            }
+            else
+            {
+                await scope.observerService.NotifyNLog(EStatus.Error, result.msg);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteMission(Guid id)
+        {
+            List<MissionAssignTable> listInqueueMissionAssign = await scope.IMissionTableOp.GetMissionAssignFromInQueue();
+
+            MissionAssignTable deleteMissionAssign = listInqueueMissionAssign.FirstOrDefault(x => x.Id == id);
+
+            if(deleteMissionAssign == null)
+            {
+                return false;
+            }
+
+            deleteMissionAssign.IsCancel = true;
+
+            var result = await scope.IMissionTableOp.UpSertMissionAsign(deleteMissionAssign);
 
             if (result.status == true)
             {

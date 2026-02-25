@@ -23,6 +23,7 @@
 
         public void initAll()
         {
+            StopThread();
             notifyInitUnitStatus();
             initCommonService();
             notifyConnectingUnitStatus();

@@ -26,6 +26,8 @@ namespace NXP_Stocker_BlazorProject.EFModel
         public int DropLayer { get; set; }
 
         public DateTime EstablishTime { get; set; }
+        [Range(0, 1)]
+        public int Emergency { get; set; }
 
         [NotMapped]
         public bool IsStart => StartTime is not null;

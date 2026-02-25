@@ -8,7 +8,8 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary.Interface
 
         Task<List<MissionAssignTable>> GetMissionAssignFromInQueue();
 
-        Task<(bool status, string msg, MissionAssignTable table)> GetNewMissionAsign(bool IsStart, bool IsFinish, int PierNo);
+        Task<(bool status, string msg, MissionAssignTable table)> GetNewMissionAsign(bool IsStart, bool IsFinish, 
+                                                                                     bool IsCancel, int PierNo);
 
         Task<(bool status, string msg, MissionAssignTable table)> UpSertMissionAsign(MissionAssignTable data);
 
