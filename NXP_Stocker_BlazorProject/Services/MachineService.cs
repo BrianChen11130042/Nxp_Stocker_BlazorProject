@@ -237,7 +237,7 @@ namespace NXP_Stocker_BlazorProject.Services
     }
 
     public delegate Task dgPlcActionStatus(Dictionary<EPLC, bool> dcPlcAction); //要砍掉
-    public delegate Task dgMachineUnitStatus(Dictionary<EMachineUnit, MachineUnitStatus> dcMachineUnitStatus); //取代上面的
+    public delegate Task dgMachineUnitStatus(EMachineUnit unit, int status); //取代上面的
 
     public partial class MachineService : IPierUIObserver
     {
@@ -250,19 +250,19 @@ namespace NXP_Stocker_BlazorProject.Services
             { EPLC.Pier2, false},
             { EPLC.Robot, false}
         };
-        Dictionary<EMachineUnit, MachineUnitStatus> dcMachineUnitStatus { get; set; } = new Dictionary<EMachineUnit, MachineUnitStatus>()//取代上面的
+        Dictionary<EMachineUnit, int> dcMachineUnitStatus { get; set; } = new Dictionary<EMachineUnit, int>()//取代上面的
         {
-            { EMachineUnit.Pier1, new MachineUnitStatus() },
-            { EMachineUnit.Pier2, new MachineUnitStatus() },
-            { EMachineUnit.Robot, new MachineUnitStatus() },
-            { EMachineUnit.UPS, new MachineUnitStatus() }
+            { EMachineUnit.Pier1, 0 },
+            { EMachineUnit.Pier2, 0 },
+            { EMachineUnit.Robot, 0 },
+            { EMachineUnit.UPS, 0 }
         };
 
         public async Task<Dictionary<EPLC, bool>> GetDcPlcAction() //要砍掉
         {
             return dcPlcAction;
         }
-        public async Task<Dictionary<EMachineUnit, MachineUnitStatus>> GetMachineUnitStatus()//取代上面的
+        public async Task<Dictionary<EMachineUnit, int>> GetMachineUnitStatus()//取代上面的
         {
             return dcMachineUnitStatus;
         }
@@ -320,59 +320,10 @@ namespace NXP_Stocker_BlazorProject.Services
             {
                 EMachineUnit unit = (EMachineUnit)deviceNo;
 
-                switch (unit)
+                if (dcMachineUnitStatus[unit] != status)
                 {
-                    case EMachineUnit.Pier1:
-                        if (Enum.IsDefined(typeof(EPierStatus), status))
-                        {
-                            EPierStatus newP1Status = (EPierStatus)status;
-
-                            if (dcMachineUnitStatus[unit].pier1Status != newP1Status)
-                            {
-                                dcMachineUnitStatus[unit].pier1Status = newP1Status;
-                                dgMachineUnitStatus?.Invoke(dcMachineUnitStatus);
-                            }
-                        }
-                        break;
-
-                    case EMachineUnit.Pier2:
-                        if(Enum.IsDefined(typeof(EPierStatus), status))
-                        {
-                            EPierStatus newP2Status = (EPierStatus)status;
-
-                            if (dcMachineUnitStatus[unit].pier2Status != newP2Status)
-                            {
-                                dcMachineUnitStatus[unit].pier2Status = newP2Status;
-                                dgMachineUnitStatus?.Invoke(dcMachineUnitStatus);
-                            }
-                        }
-                        break;
-
-                    case EMachineUnit.Robot:
-                        if(Enum.IsDefined(typeof(ERobotStatus), status))
-                        {
-                            ERobotStatus newRobotStatus = (ERobotStatus)status;
-
-                            if(dcMachineUnitStatus[unit].robotStatus != newRobotStatus)
-                            {
-                                dcMachineUnitStatus[unit].robotStatus = newRobotStatus;
-                                dgMachineUnitStatus?.Invoke(dcMachineUnitStatus);
-                            }
-                        }
-                        break;
-
-                    case EMachineUnit.UPS:
-                        if(Enum.IsDefined(typeof(EUpsStatus), status))
-                        {
-                            EUpsStatus newUpsStatus = (EUpsStatus)status;
-
-                            if(dcMachineUnitStatus[unit].upsStatus != newUpsStatus)
-                            {
-                                dcMachineUnitStatus[unit].upsStatus = newUpsStatus;
-                                dgMachineUnitStatus?.Invoke(dcMachineUnitStatus);
-                            }
-                        }
-                        break;
+                    dcMachineUnitStatus[unit] = status;
+                    dgMachineUnitStatus?.Invoke(unit, dcMachineUnitStatus[unit]);
                 }
             }
         }

@@ -53,7 +53,7 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
 
         //Machine Unit Status
         event dgMachineUnitStatus dgMachineUnitStatus;
-        Task<Dictionary<EMachineUnit, MachineUnitStatus>> GetMachineUnitStatus();
+        Task<Dictionary<EMachineUnit, int>> GetMachineUnitStatus();
 
 
         //UPS
