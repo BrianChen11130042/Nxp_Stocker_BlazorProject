@@ -53,10 +53,10 @@ namespace NXP_Stocker_BlazorProject.Scope
 
         void initMissionAsignTask()
         {
-            pier1MissionAsignTaskPack = new MissionAsignTaskPack<EPLC>(EPLC.Pier1, plcLibrary, 
+            pier1MissionAsignTaskPack = new MissionAsignTaskPack<EPLC>(EPLC.Pier1, plcLibrary,
                                                                        pier1MissionAsignDataService, observerService);
 
-            pier2MissionAsignTaskPack = new MissionAsignTaskPack<EPLC>(EPLC.Pier2, plcLibrary, 
+            pier2MissionAsignTaskPack = new MissionAsignTaskPack<EPLC>(EPLC.Pier2, plcLibrary,
                                                                        pier2MissionAsignDataService, observerService);
 
             pier1MissionAsignTask = new MissionAsignTask(pier1MissionAsignTaskPack);
@@ -77,7 +77,7 @@ namespace NXP_Stocker_BlazorProject.Scope
             plcRegularTaskPack = new PlcRegularTaskPack<EPLC>(EPLC.Warehouse, EPLC.Heartbeat, plcLibrary,
                                                               plcRegularDataService, observerService);
 
-            upsRegularTaskPack = new UpsRegularTaskPack<EUPS>(EUPS.UPS, upsLibrary, 
+            upsRegularTaskPack = new UpsRegularTaskPack<EUPS>(EUPS.UPS, upsLibrary,
                                                               upsRegularDataService, observerService);
 
             plcRegularTask = new PlcRegularTask(plcRegularTaskPack);
@@ -99,7 +99,7 @@ namespace NXP_Stocker_BlazorProject.Scope
         void initThreadTask()
         {
 
-            mainTaskPack = new ThreadTaskPack<EPLC, EUPS>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary, 
+            mainTaskPack = new ThreadTaskPack<EPLC, EUPS>(EPLC.Pier1, EPLC.Pier2, EPLC.Robot, plcLibrary,
                                                           EUPS.UPS, upsLibrary,
                                                           mainDataService, observerService);
 
@@ -115,7 +115,7 @@ namespace NXP_Stocker_BlazorProject.Scope
             upsRegularThreadTask = new UpsRegularThreadTask(upsRegularTask);
             upsRegularThreadTask.Set(ES1.None, EUpsRegularThread.None, 0);
 
-            mainThreadTask = new MainThreadTask(mainTaskPack, missionAsignThreadTask, missionThreadTask, 
+            mainThreadTask = new MainThreadTask(mainTaskPack, missionAsignThreadTask, missionThreadTask,
                                                 plcRegularThreadTask, upsRegularThreadTask);
             mainThreadTask.Set(ES1.Init, EMainThread.None, 0);
         }
@@ -152,13 +152,13 @@ namespace NXP_Stocker_BlazorProject.Scope
                 _missionTask = StartLongRunning(async () => await RunMissionAsync(_ctsMission.Token));
             }
 
-            if(_plcRegularTask == null || _plcRegularTask.IsCompleted)
+            if (_plcRegularTask == null || _plcRegularTask.IsCompleted)
             {
                 _ctsPlcRegular = new CancellationTokenSource();
                 _plcRegularTask = StartLongRunning(async () => await RunPlcRegularAsync(_ctsPlcRegular.Token));
             }
 
-            if(_upsRegularTask == null || _upsRegularTask.IsCompleted)
+            if (_upsRegularTask == null || _upsRegularTask.IsCompleted)
             {
                 _ctsUpsRegular = new CancellationTokenSource();
                 _upsRegularTask = StartLongRunning(async () => await RunUpsRegularAsync(_ctsUpsRegular.Token));
@@ -250,7 +250,7 @@ namespace NXP_Stocker_BlazorProject.Scope
 
         private async Task RunUpsRegularAsync(CancellationToken token)
         {
-            while(!token.IsCancellationRequested)
+            while (!token.IsCancellationRequested)
             {
                 try
                 {
@@ -273,6 +273,11 @@ namespace NXP_Stocker_BlazorProject.Scope
             _ctsMission?.Cancel();
             _ctsPlcRegular?.Cancel();
             _ctsUpsRegular?.Cancel();
+
+            // 強制等待所有 Task 結束，最多等 2 秒，避免死結
+            Task.WaitAll(new[] {_mainTask, _missionAssignTask, _missionTask, _plcRegularTask, _upsRegularTask}
+                        .Where(t => t != null)
+                        .ToArray(), TimeSpan.FromSeconds(60));
 
         }
 

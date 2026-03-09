@@ -184,7 +184,10 @@ namespace NXP_Stocker_BlazorProject.Services
         {
             List<MissionAssignTable> listInqueueMissionAssign = await scope.IMissionTableOp.GetMissionAssignFromInQueue();
 
-            MissionAssignTable deleteMissionAssign = listInqueueMissionAssign.FirstOrDefault(x => x.Id == id);
+            MissionAssignTable deleteMissionAssign = listInqueueMissionAssign.FirstOrDefault(x => x.Id == id
+                                                                                               && x.IsStart == false
+                                                                                               && x.IsFinish == false
+                                                                                               && x.IsCancel == false);
 
             if(deleteMissionAssign == null)
             {
