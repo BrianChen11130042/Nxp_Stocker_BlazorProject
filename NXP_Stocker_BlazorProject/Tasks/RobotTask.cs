@@ -44,6 +44,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.IsRobotFinish();
         }
 
+        public bool IsBarcodeScanError()
+        {
+            return pack.IsBarcodeScanError();
+        }
+
+        public bool IsNotBarcodeScanError()
+        {
+            return pack.IsNotBarcodeScanError();
+        }
+
         public Task<bool> SetLogMissionFinish()
         {
             return pack.SetLogMissionFinish();
@@ -118,6 +128,21 @@ namespace NXP_Stocker_BlazorProject.Tasks
         {
             return pack.UpdateUIRobotMotionStatus();
         }
+
+        public Task<bool> SetTableMissionError()
+        {
+            return pack.SetTableMissionError();
+        }
+
+        public Task<bool> SetLogMissionError()
+        {
+            return pack.SetLogMissionError();
+        }
+
+        public Task<bool> SetPlcRobotRevert()
+        {
+            return pack.SetPlcRobotRevert();
+        }
     }
 
     public enum ERobotAction
@@ -127,6 +152,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
         CheckMission,
         Start,
         GetResult,
+        BarcodeScanFail,
         Finish,
         Error,
     }
@@ -278,9 +304,88 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
 
                                 }
+                                else if(IsBarcodeScanError())
+                                {
+
+                                    if(await SetTableMissionError())
+                                    {
+                                        await UpdateUIRobotMission();
+                                        Set(ERobotAction.BarcodeScanFail, 0);
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, ERobotAction.None, 0);
+                                    }
+
+                                }
                                 else
                                 {
                                     Set(0);
+                                }
+
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case ERobotAction.BarcodeScanFail:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await SetLogMissionError())
+                            {
+                                await UpdateUIRobotLog();
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(await SetPlcRobotRevert())
+                            {
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, ERobotAction.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if (await GetPlcRobotStatus())
+                            {
+                                await UpdateRobotMissionStatusToInQue();
+                                await UpdateUIRobotMission();
+                                await UpdateUIRobotMotionStatus();
+
+                                if(IsNotBarcodeScanError())
+                                {
+
+                                    if (await SetPlcRobotStart())
+                                    {
+                                        Set(ERobotAction.GetResult, 0);
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, ERobotAction.None, 0);
+                                    }
+
+                                }
+                                else
+                                {
+                                    Set(20);
                                 }
                             }
                             else

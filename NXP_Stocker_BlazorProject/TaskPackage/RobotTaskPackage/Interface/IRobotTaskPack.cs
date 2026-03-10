@@ -39,10 +39,20 @@
 
         bool IsRobotFinish();
 
+        bool IsBarcodeScanError();
+
+        bool IsNotBarcodeScanError();
+
         Task<bool> SetPlcRobotFinish();
 
         Task<bool> SetTableMissionFinish();
 
+        Task<bool> SetTableMissionError();
+
+        Task<bool> SetPlcRobotRevert();
+
         Task<bool> SetLogMissionFinish();
+
+        Task<bool> SetLogMissionError();
     }
 }

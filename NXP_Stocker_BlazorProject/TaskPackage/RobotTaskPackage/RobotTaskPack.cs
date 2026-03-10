@@ -204,6 +204,30 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
             }
         }
 
+        public bool IsBarcodeScanError()
+        {
+            if(IDataService.RobotMission.Status == 10)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsNotBarcodeScanError()
+        {
+            if (IDataService.RobotMission.Status != 10)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> SetPlcRobotFinish()
         {
             PlcLib.Packages[robot].property.setRobot.missionFinish = 100;
@@ -235,11 +259,58 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
             }
         }
 
+        public async Task<bool> SetPlcRobotRevert()
+        {
+            PlcLib.Packages[robot].property.setRobot.missionStart = 30;
+
+            if (await IPlcOp.SetRobotMissionStart(robot))
+            {
+                return true;
+            }
+            else
+            {
+                string nlog = PlcLib.Packages[robot].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public async Task<bool> SetTableMissionError()
+        {
+            int _errorCode = IDataService.RobotMission.Status;
+            IDataService.RobotMission.ErrorCode = _errorCode;
+
+            if(await IDataService.SetRobotMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
         public async Task<bool> SetLogMissionStart()
         {
             string temp = "Pier" + IDataService.RobotMission.PierNo.ToString() + "區手臂任務開始";
 
             if(await IDataService.AddLogByRobot(info, temp))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetLogMissionError()
+        {
+            string temp = "Pier" + IDataService.RobotMission.PierNo.ToString() + "區手臂任務錯誤，錯誤代碼:" + 
+                          IDataService.RobotMission.ErrorCode.ToString();
+
+            if (await IDataService.AddLogByRobot(err, temp))
             {
                 return true;
             }
