@@ -371,6 +371,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
                                 if(IsNotBarcodeScanError())
                                 {
+                                    await Task.Delay(10);
 
                                     if (await SetPlcRobotStart())
                                     {
