@@ -30,13 +30,19 @@
 
         Task<bool> SetTableNewPierMission();
 
+        Task<bool> SetTableNewPierOutputMission();
+
         Task<bool> GetTablePierMissionStatus();
 
         bool IsPierMissionFinish();
 
         Task<bool> SetTableMissionAsignStart();
 
+        Task<bool> SetTableMissionAsignError();
+
         Task<bool> SetLogMissionAsignStart();
+
+        Task<bool> SetLogMissionAsignError();
 
         Task<bool> SetTableMissionAsignFinsih();
 
@@ -45,6 +51,8 @@
         Task<bool> SetTableNewRobotMission();
 
         Task<bool> GetTableRobotMissionStatus();
+
+        bool IsRobotMissionBarcodeFail();
 
         bool IsRobotMissionError();
 

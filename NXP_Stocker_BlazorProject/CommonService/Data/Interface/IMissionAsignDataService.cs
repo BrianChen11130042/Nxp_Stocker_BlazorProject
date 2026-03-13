@@ -8,6 +8,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data.Interface
     {
         int PierNo { get; set; }
 
+        int ErrorCode { get; set; }
+
         MissionAssignTable MissionAsign { get; set; }
 
         WarehouseInform PickPort { get; set; }

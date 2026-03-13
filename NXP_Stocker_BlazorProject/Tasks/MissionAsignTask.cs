@@ -58,6 +58,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.SetTableNewPierMission();
         }
 
+        public Task<bool> SetTableNewPierOutputMission()
+        {
+            return pack.SetTableNewPierOutputMission();
+        }
+
         public Task<bool> SetTableMissionAsignStart()
         {
             return pack.SetTableMissionAsignStart();
@@ -66,6 +71,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
         public Task<bool> SetLogMissionAsignStart()
         {
             return pack.SetLogMissionAsignStart();
+        }
+
+        public Task<bool> SetTableMissionAsignError()
+        {
+            return pack.SetTableMissionAsignError();
+        }
+
+        public Task<bool> SetLogMissionAsignError()
+        {
+            return pack.SetLogMissionAsignError();
         }
 
         public Task UpdateUIMissionAsignLog()
@@ -96,6 +111,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
         public Task<bool> GetTableRobotMissionStatus()
         {
             return pack.GetTableRobotMissionStatus();
+        }
+
+        public bool IsRobotMissionBarcodeFail()
+        {
+            return pack.IsRobotMissionBarcodeFail();
         }
 
         public bool IsRobotMissionError()
@@ -148,9 +168,15 @@ namespace NXP_Stocker_BlazorProject.Tasks
     {
         None,
         CheckMission,
+
         InputWarehouse,
+        InputWarehouse_ReturnPier,
+
         OutputWarehouse,
-        TransformWarehouse
+
+        TransformWarehouse,
+
+        MissionError
     }
 
     public partial class MissionAsignTask : FSMBase<EMissionAssign, int>
@@ -315,9 +341,21 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 if(IsRobotMissionFinish())
                                 {
-                                    if(IsRobotMissionError())
+                                    if(IsRobotMissionBarcodeFail())
                                     {
-                                        //後續跟電控討論
+                                        if(await SetTableNewPierOutputMission())
+                                        {
+                                            Set(EMissionAssign.InputWarehouse_ReturnPier, 0);
+                                        }
+                                        else
+                                        {
+                                            SaveState();
+                                            Set(ES1.Error, EMissionAssign.None, 0);
+                                        }
+                                    }
+                                    else if(IsRobotMissionError())
+                                    {
+                                        Set(EMissionAssign.MissionError, 0);
                                     }
                                     else
                                     {
@@ -370,6 +408,85 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     }
                     break;
 
+                case EMissionAssign.InputWarehouse_ReturnPier:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await SetTableMissionAsignError())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(await SetLogMissionAsignError())
+                            {
+                                await UpdateUIMissionAsignLog();
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if(await GetTablePierMissionStatus())
+                            {
+                                if (IsPierMissionFinish())
+                                {
+                                    Set(30);
+                                }
+                                else
+                                {
+                                    Set(20);
+                                }
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 30:
+                            await SetTableWarehouseOutputPickPort();
+                            await UpdateUIPickPortWarehouse();
+
+                            if (await SetTableMissionAsignFinsih())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(40);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 40:
+                            if (await SetLogMissionAsignFinish())
+                            {
+                                await UpdateUIMissionAsignLog();
+                                Set(EMissionAssign.CheckMission, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+                    }
+                    break;
+
                 case EMissionAssign.OutputWarehouse:
                     switch(S3)
                     {
@@ -406,7 +523,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 {
                                     if (IsRobotMissionError())
                                     {
-                                        //後續跟電控討論
+                                        Set(EMissionAssign.MissionError, 0);
                                     }
                                     else
                                     {
@@ -527,7 +644,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 {
                                     if (IsRobotMissionError())
                                     {
-                                        //後續跟電控討論
+                                        Set(EMissionAssign.MissionError, 0);
                                     }
                                     else
                                     {
@@ -566,6 +683,63 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 40:
+                            if (await SetLogMissionAsignFinish())
+                            {
+                                await UpdateUIMissionAsignLog();
+                                Set(EMissionAssign.CheckMission, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case EMissionAssign.MissionError:
+                    switch(S3)
+                    {
+                        case 0:
+                            if (await SetTableMissionAsignError())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if (await SetLogMissionAsignError())
+                            {
+                                await UpdateUIMissionAsignLog();
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if (await SetTableMissionAsignFinsih())
+                            {
+                                await UpdateUIMissionAsign();
+                                Set(30);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EMissionAssign.None, 0);
+                            }
+                            break;
+
+                        case 30:
                             if (await SetLogMissionAsignFinish())
                             {
                                 await UpdateUIMissionAsignLog();

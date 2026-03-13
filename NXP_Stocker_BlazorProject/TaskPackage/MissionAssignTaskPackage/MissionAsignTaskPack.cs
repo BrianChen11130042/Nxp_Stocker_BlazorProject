@@ -175,6 +175,33 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
+        public async Task<bool> SetTableNewPierOutputMission()
+        {
+            int pierActionCode = getPierActionCode(2, IDataService.MissionAsign.BoardSize);
+
+            PierMissionTable pier = new PierMissionTable()
+            {
+                Id = new Guid(),
+                AsignId = IDataService.MissionAsign.Id,
+
+                PierNo = IDataService.MissionAsign.PierNo,
+                Barcode = IDataService.MissionAsign.Barcode,
+                ActionCode = pierActionCode,
+                EstablishTime = DateTime.Now,
+            };
+
+            IDataService.PierMission = pier;
+
+            if (await IDataService.SetNewPierMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         int getPierActionCode(int missionAsignActionCode, int boardSize)
         {
             switch(missionAsignActionCode)
@@ -271,9 +298,36 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
+        public bool IsRobotMissionBarcodeFail()
+        {
+            if(IDataService.RobotMission.ErrorCode == 10)
+            {
+                IDataService.ErrorCode = IDataService.RobotMission.ErrorCode;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        int[] _arrayErrorcode = new int[] { 10 };
+
         public bool IsRobotMissionError()
         {
-            return false; //待跟電控討論
+            int _errorCode = IDataService.RobotMission.ErrorCode;
+
+            if (_arrayErrorcode.Contains(_errorCode))
+            {
+                IDataService.ErrorCode = _errorCode;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool IsRobotMissionFinish()
@@ -294,6 +348,20 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             IDataService.MissionAsign.StartTime = DateTime.Now;
 
             if (await IDataService.SetMissionAsignTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetTableMissionAsignError()
+        {
+            IDataService.MissionAsign.ErrorCode = IDataService.ErrorCode;
+
+            if(await IDataService.SetMissionAsignTable())
             {
                 return true;
             }
@@ -326,6 +394,24 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
                           + dcMissionAssign[IDataService.MissionAsign.ActionCode] + "_任務開始";
 
             if(await IDataService.AddLogByMissionAsign(info, temp))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetLogMissionAsignError()
+        {
+            string temp = "Pier"
+                         + IDataService.MissionAsign.PierNo.ToString()
+                         + dcBoardSize[IDataService.MissionAsign.BoardSize]
+                         + dcMissionAssign[IDataService.MissionAsign.ActionCode] + "_任務異常，錯誤代碼："
+                         + IDataService.MissionAsign.ErrorCode.ToString();
+
+            if (await IDataService.AddLogByMissionAsign(err, temp))
             {
                 return true;
             }

@@ -54,6 +54,20 @@ namespace NXP_Stocker_BlazorProject.CommonService.Data
             }
         }
 
+        int _errorCode { get; set; } = 0;
+
+        public int ErrorCode
+        {
+            get
+            {
+                return _errorCode;
+            }
+            set
+            {
+                _errorCode = value;
+            }
+        }
+
         MissionAssignTable _missionAsign { get; set; } = new MissionAssignTable();
 
         public MissionAssignTable MissionAsign
