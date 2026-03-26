@@ -67,20 +67,19 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.UpsRegularTaskPackage
         {
             if(await IUpsOP.GetUpsStatus(ups))
             {
-                IDataService.UpsInform.InputVoltage = upsLib.Packages[ups].property.InputVoltage;
-                IDataService.UpsInform.InputFaultVoltage = upsLib.Packages[ups].property.InputFaultVoltage;
-                IDataService.UpsInform.OutputVoltage = upsLib.Packages[ups].property.OutputVoltage;
                 IDataService.UpsInform.OutputLoad = upsLib.Packages[ups].property.OutputLoad;
-                IDataService.UpsInform.InputFrequency = upsLib.Packages[ups].property.InputFrequency;
                 IDataService.UpsInform.BatteryVoltage = upsLib.Packages[ups].property.BatteryVoltage;
                 IDataService.UpsInform.Temperature = upsLib.Packages[ups].property.Temperature;
+                IDataService.UpsInform.ChargeInStatus = upsLib.Packages[ups].property.ChargeInStatus;
+                IDataService.UpsInform.RemainBatteryBackupTime = upsLib.Packages[ups].property.RemainBatteryBackupTime;
+
 
                 IDataService.UpsInform.UtilityFail = upsLib.Packages[ups].property.UtilityFail;
                 IDataService.UpsInform.BatteryLow = upsLib.Packages[ups].property.BatteryLow;
                 IDataService.UpsInform.BypassBoostActive = upsLib.Packages[ups].property.BypassBoostActive;
-                IDataService.UpsInform.UpsFault = upsLib.Packages[ups].property.UpsFault;
+                IDataService.UpsInform.UpsFailed = upsLib.Packages[ups].property.UpsFailed;
                 IDataService.UpsInform.UpsType = upsLib.Packages[ups].property.UpsType;
-                IDataService.UpsInform.TestInProgress = upsLib.Packages[ups].property.TestInProgress;
+                IDataService.UpsInform.TestInProcess = upsLib.Packages[ups].property.TestInProcess;
                 IDataService.UpsInform.ShutdownActive = upsLib.Packages[ups].property.ShutdownActive;
 
                 return true;

@@ -118,7 +118,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
 
         public async Task<bool> CheckUpsConnect()
         {
-            if(await IUpsOP.GetUpsStatus(ups))
+            if(await IUpsOP.InitDevice(ups))
             {
                 return true;
             }
