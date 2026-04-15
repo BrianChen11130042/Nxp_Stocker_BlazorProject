@@ -80,6 +80,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.SetLogMissionFinish();
         }
 
+        public Task<bool> SetLogMissionError()
+        {
+            return pack.SetLogMissionError();
+        }
+
         public Task<bool> SetLogMissionStart()
         {
             return pack.SetLogMissionStart();
@@ -130,6 +135,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.SetTableMissionStart();
         }
 
+        public Task<bool> SetTableMissionError()
+        {
+            return pack.SetTableMissionError();
+        }
+
         public Task UpdateUIPierLog()
         {
             return pack.UpdateUIPierLog();
@@ -165,9 +175,19 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.GetPlcIsReady();
         }
 
+        public Task<bool> GetPlcIsPierError()
+        {
+            return pack.GetPlcIsPierError();
+        }
+
         public bool IsPlcReady()
         {
             return pack.IsPlcReady();
+        }
+
+        public bool IsPierError()
+        {
+            return pack.IsPierError();
         }
 
         public Task UpdateUIPierStop()
@@ -199,6 +219,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
         InputSmallBoard,
         OutputLargeBoard,
         OutputSmallBoard,
+        Error
     }
 
     public partial class PierTask : FSMBase<EPierAction, int>
@@ -354,31 +375,59 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if(await GetPlcInputLargeBoardStatus())
+                            if(await GetPlcIsPierError())
                             {
-                                await UpdatePierMissionStatusToInque();
-                                await UpdateUIPierMission();
-                                await UpdateUIPierMotionStatus();
-
-                                if (IsInputLargeBoardFinish())
+                                if(IsPierError())
                                 {
+                                    await UpdatePierMissionStatusToInque();
+                                    await UpdateUIPierMission();
+                                    await UpdateUIPierMotionStatus();
 
-                                    if (await SetTableMissionFinsih())
+                                    if(await SetTableMissionError())
                                     {
-                                        await UpdateUIPierStop();
                                         await UpdateUIPierMission();
-                                        Set(30);
+                                        Set(EPierAction.Error, 0);
                                     }
                                     else
                                     {
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
-
                                 }
                                 else
                                 {
-                                    Set(20);
+                                    if (await GetPlcInputLargeBoardStatus())
+                                    {
+                                        await UpdatePierMissionStatusToInque();
+                                        await UpdateUIPierMission();
+                                        await UpdateUIPierMotionStatus();
+
+                                        if (IsInputLargeBoardFinish())
+                                        {
+
+                                            if (await SetTableMissionFinsih())
+                                            {
+                                                await UpdateUIPierStop();
+                                                await UpdateUIPierMission();
+                                                Set(30);
+                                            }
+                                            else
+                                            {
+                                                SaveState();
+                                                Set(ES1.Error, EPierAction.None, 0);
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            Set(20);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EPierAction.None, 0);
+                                    }
                                 }
                             }
                             else
@@ -446,31 +495,59 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if(await GetPlcInputSmallBoardStatus())
+                            if(await GetPlcIsPierError())
                             {
-                                await UpdatePierMissionStatusToInque();
-                                await UpdateUIPierMission();
-                                await UpdateUIPierMotionStatus();
-
-                                if (IsInputSmallBoardFinish())
+                                if(IsPierError())
                                 {
+                                    await UpdatePierMissionStatusToInque();
+                                    await UpdateUIPierMission();
+                                    await UpdateUIPierMotionStatus();
 
-                                    if (await SetTableMissionFinsih())
+                                    if (await SetTableMissionError())
                                     {
-                                        await UpdateUIPierStop();
                                         await UpdateUIPierMission();
-                                        Set(30);
+                                        Set(EPierAction.Error, 0);
                                     }
                                     else
                                     {
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
-
                                 }
                                 else
                                 {
-                                    Set(20);
+                                    if (await GetPlcInputSmallBoardStatus())
+                                    {
+                                        await UpdatePierMissionStatusToInque();
+                                        await UpdateUIPierMission();
+                                        await UpdateUIPierMotionStatus();
+
+                                        if (IsInputSmallBoardFinish())
+                                        {
+
+                                            if (await SetTableMissionFinsih())
+                                            {
+                                                await UpdateUIPierStop();
+                                                await UpdateUIPierMission();
+                                                Set(30);
+                                            }
+                                            else
+                                            {
+                                                SaveState();
+                                                Set(ES1.Error, EPierAction.None, 0);
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            Set(20);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EPierAction.None, 0);
+                                    }
                                 }
                             }
                             else
@@ -537,31 +614,59 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if(await GetPlcOutputLargeBoardStatus())
+                            if(await GetPlcIsPierError())
                             {
-                                await UpdatePierMissionStatusToInque();
-                                await UpdateUIPierMission();
-                                await UpdateUIPierMotionStatus();
-
-                                if (IsOutputLargeBoardFinish())
+                                if(IsPierError())
                                 {
+                                    await UpdatePierMissionStatusToInque();
+                                    await UpdateUIPierMission();
+                                    await UpdateUIPierMotionStatus();
 
-                                    if (await SetTableMissionFinsih())
+                                    if (await SetTableMissionError())
                                     {
-                                        await UpdateUIPierStop();
                                         await UpdateUIPierMission();
-                                        Set(30);
+                                        Set(EPierAction.Error, 0);
                                     }
                                     else
                                     {
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
-
                                 }
                                 else
                                 {
-                                    Set(20);
+                                    if (await GetPlcOutputLargeBoardStatus())
+                                    {
+                                        await UpdatePierMissionStatusToInque();
+                                        await UpdateUIPierMission();
+                                        await UpdateUIPierMotionStatus();
+
+                                        if (IsOutputLargeBoardFinish())
+                                        {
+
+                                            if (await SetTableMissionFinsih())
+                                            {
+                                                await UpdateUIPierStop();
+                                                await UpdateUIPierMission();
+                                                Set(30);
+                                            }
+                                            else
+                                            {
+                                                SaveState();
+                                                Set(ES1.Error, EPierAction.None, 0);
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            Set(20);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EPierAction.None, 0);
+                                    }
                                 }
                             }
                             else
@@ -628,31 +733,59 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if(await GetPlcOutputSmallBoardStatus())
+                            if(await GetPlcIsPierError())
                             {
-                                await UpdatePierMissionStatusToInque();
-                                await UpdateUIPierMission();
-                                await UpdateUIPierMotionStatus();
-
-                                if (IsOutputSmallBoardFinish())
+                                if(IsPierError())
                                 {
+                                    await UpdatePierMissionStatusToInque();
+                                    await UpdateUIPierMission();
+                                    await UpdateUIPierMotionStatus();
 
-                                    if (await SetTableMissionFinsih())
+                                    if (await SetTableMissionError())
                                     {
-                                        await UpdateUIPierStop();
                                         await UpdateUIPierMission();
-                                        Set(30);
+                                        Set(EPierAction.Error, 0);
                                     }
                                     else
                                     {
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
-
                                 }
                                 else
                                 {
-                                    Set(20);
+                                    if (await GetPlcOutputSmallBoardStatus())
+                                    {
+                                        await UpdatePierMissionStatusToInque();
+                                        await UpdateUIPierMission();
+                                        await UpdateUIPierMotionStatus();
+
+                                        if (IsOutputSmallBoardFinish())
+                                        {
+
+                                            if (await SetTableMissionFinsih())
+                                            {
+                                                await UpdateUIPierStop();
+                                                await UpdateUIPierMission();
+                                                Set(30);
+                                            }
+                                            else
+                                            {
+                                                SaveState();
+                                                Set(ES1.Error, EPierAction.None, 0);
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            Set(20);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        SaveState();
+                                        Set(ES1.Error, EPierAction.None, 0);
+                                    }
                                 }
                             }
                             else
@@ -679,6 +812,69 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 await UpdateUIPierLog();
                                 Set(EPierAction.CheckMission, 0);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+                    }
+                    break;
+
+                case EPierAction.Error:
+                    switch(S3)
+                    {
+                        case 0:
+                            if(await SetLogMissionError())
+                            {
+                                await UpdateUIPierLog();
+                                Set(10);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 10:
+                            if(await SetTableMissionFinsih())
+                            {
+                                await UpdateUIPierMission();
+                                Set(20);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 20:
+                            if(await SetLogMissionFinish())
+                            {
+                                await UpdateUIPierLog();
+                                Set(30);
+                            }
+                            else
+                            {
+                                SaveState();
+                                Set(ES1.Error, EPierAction.None, 0);
+                            }
+                            break;
+
+                        case 30:
+                            if(await GetPlcIsPierError())
+                            {
+                                if(IsPierError())
+                                {
+                                    Set(30);
+                                }
+                                else
+                                {
+                                    Set(EPierAction.CheckMission, 0);
+                                }
                             }
                             else
                             {

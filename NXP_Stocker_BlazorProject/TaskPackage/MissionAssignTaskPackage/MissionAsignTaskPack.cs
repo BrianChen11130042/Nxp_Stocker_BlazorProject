@@ -257,6 +257,20 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
+        public bool IsPierMissionError()
+        {
+            if(IDataService.PierMission.IsError == true)
+            {
+                IDataService.ErrorCode = IDataService.PierMission.ErrorCode;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> SetTableNewRobotMission()
         {
             RobotMissionTable robot = new RobotMissionTable()
@@ -312,15 +326,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.MissionAssignTaskPackage
             }
         }
 
-        int[] _arrayErrorcode = new int[] { 10 };
-
         public bool IsRobotMissionError()
         {
-            int _errorCode = IDataService.RobotMission.ErrorCode;
-
-            if (_arrayErrorcode.Contains(_errorCode))
+            if (IDataService.RobotMission.IsError == true)
             {
-                IDataService.ErrorCode = _errorCode;
+                IDataService.ErrorCode = IDataService.RobotMission.ErrorCode;
 
                 return true;
             }

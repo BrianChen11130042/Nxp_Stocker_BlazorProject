@@ -108,6 +108,33 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             }
         }
 
+        public async Task<bool> GetPlcIsPierError()
+        {
+            if(await IPlcOp.GetDeviceIsError(pier))
+            {
+                IDataService.PierMission.Status = plcLib.Packages[pier].property.getPier.errorCode;
+                return true;
+            }
+            else
+            {
+                string nlog = plcLib.Packages[pier].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public bool IsPierError()
+        {
+            if(IDataService.PierMission.Status != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> GetTableNewMission()
         {
             if(await IDataService.GetNewPierMissionTable())
@@ -126,6 +153,21 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             IDataService.PierMission.StartTime = DateTime.Now;
 
             if(await IDataService.SetPierMissionTable())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetTableMissionError()
+        {
+            int _errorCode = IDataService.PierMission.Status;
+            IDataService.PierMission.ErrorCode = _errorCode;
+
+            if (await IDataService.SetPierMissionTable())
             {
                 return true;
             }
@@ -155,6 +197,21 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             string temp = "Pier" + IDataService.PierNo.ToString() + dcPierMission[IDataService.PierMission.ActionCode] + "_任務開始";
 
             if (await IDataService.AddLogByPier(info, temp))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SetLogMissionError()
+        {
+            string temp = "Pier" + IDataService.PierNo.ToString() + dcPierMission[IDataService.PierMission.ActionCode] + "_任務異常，錯誤碼：" + 
+                           IDataService.PierMission.ErrorCode.ToString();
+
+            if (await IDataService.AddLogByPier(err, temp))
             {
                 return true;
             }

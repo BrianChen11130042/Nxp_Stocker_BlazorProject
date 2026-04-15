@@ -177,6 +177,33 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
             }
         }
 
+        public async Task<bool> GetPlcIsRobotError()
+        {
+            if (await IPlcOp.GetDeviceIsError(robot))
+            {
+                IDataService.RobotMission.Status = PlcLib.Packages[robot].property.getRobot.errorCode;
+                return true;
+            }
+            else
+            {
+                string nlog = PlcLib.Packages[robot].errorLog;
+                await writeNLogError(nlog);
+                return false;
+            }
+        }
+
+        public bool IsRobotError()
+        {
+            if (IDataService.RobotMission.Status != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> GetPlcRobotStatus()
         {
             if(await IPlcOp.GetRobotStatus(robot))

@@ -6,13 +6,21 @@
 
         Task<bool> GetPlcIsReady();
 
+        Task<bool> GetPlcIsPierError();
+
         bool IsPlcReady();
+
+        bool IsPierError();
 
         Task<bool> GetTableNewMission();
 
         Task<bool> SetTableMissionStart();
 
         Task<bool> SetLogMissionStart();
+
+        Task<bool> SetTableMissionError();
+
+        Task<bool> SetLogMissionError();
 
         Task<bool> SetTableMissionFinsih();
 

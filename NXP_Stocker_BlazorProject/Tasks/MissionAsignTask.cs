@@ -93,6 +93,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.GetTablePierMissionStatus();
         }
 
+        public bool IsPierMissionError()
+        {
+            return pack.IsPierMissionError();
+        }
+
         public bool IsPierMissionFinish()
         {
             return pack.IsPierMissionFinish();
@@ -309,20 +314,25 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 if (IsPierMissionFinish())
                                 {
-
-                                    await SetTableWarehouseInputPickPort();
-                                    await UpdateUIPickPortWarehouse();
-
-                                    if (await SetTableNewRobotMission())
+                                    if(IsPierMissionError())
                                     {
-                                        Set(30);
+                                        Set(EMissionAssign.MissionError, 0);
                                     }
                                     else
                                     {
-                                        SaveState();
-                                        Set(ES1.Error, EMissionAssign.None, 0);
-                                    }
+                                        await SetTableWarehouseInputPickPort();
+                                        await UpdateUIPickPortWarehouse();
 
+                                        if (await SetTableNewRobotMission())
+                                        {
+                                            Set(30);
+                                        }
+                                        else
+                                        {
+                                            SaveState();
+                                            Set(ES1.Error, EMissionAssign.None, 0);
+                                        }
+                                    }
                                 }
                                 else
                                 {
@@ -442,7 +452,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 if (IsPierMissionFinish())
                                 {
-                                    Set(30);
+                                    if(IsPierMissionError())
+                                    {
+                                        Set(EMissionAssign.MissionError, 0);
+                                    }
+                                    else
+                                    {
+                                        Set(30);
+                                    }
                                 }
                                 else
                                 {
@@ -563,7 +580,14 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             {
                                 if (IsPierMissionFinish())
                                 {
-                                    Set(40);
+                                    if(IsPierMissionError())
+                                    {
+                                        Set(EMissionAssign.MissionError, 0);
+                                    }
+                                    else
+                                    {
+                                        Set(40);
+                                    }
                                 }
                                 else
                                 {

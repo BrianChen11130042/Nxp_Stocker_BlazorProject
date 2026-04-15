@@ -36,6 +36,8 @@
 
         bool IsPierMissionFinish();
 
+        bool IsPierMissionError();
+
         Task<bool> SetTableMissionAsignStart();
 
         Task<bool> SetTableMissionAsignError();

@@ -37,7 +37,11 @@
 
         Task<bool> GetPlcRobotStatus();
 
+        Task<bool> GetPlcIsRobotError();
+
         bool IsRobotFinish();
+
+        bool IsRobotError();
 
         bool IsBarcodeScanError();
 
