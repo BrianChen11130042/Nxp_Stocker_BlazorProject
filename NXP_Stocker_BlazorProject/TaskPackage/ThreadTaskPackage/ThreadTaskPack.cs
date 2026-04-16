@@ -174,11 +174,6 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
 
         public async Task UpdateUIPopInitSuccess()
         {
-            await IMainObser.NotifyInitUnitStatus(1, 903);
-            await IMainObser.NotifyInitUnitStatus(2, 903);
-            await IMainObser.NotifyInitUnitStatus(3, 903);
-            await IMainObser.NotifyInitUnitStatus(4, 903);
-
             await IMainObser.NotifyPopUpMessage(true, "初始化成功");
         }
 
@@ -195,6 +190,7 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.ThreadTaskPackage
         public async Task UpdateUIPopConnectFail()
         {
             await IMainObser.NotifyPopUpMessage(true, "連線失敗");
+            await IMainObser.NotifySysDisconnect();
         }
 
         public async Task UpdateUIMainLog()

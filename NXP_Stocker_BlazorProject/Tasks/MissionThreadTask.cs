@@ -42,6 +42,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         public async override Task Action()
         {
+            key = EHandshakeKey.Run;
+
             switch(S2)
             {
                 case EMissionThread.None:
@@ -59,17 +61,13 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 if (pier1Task.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EMissionThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(10);
+
+                                    isError = true;
                                 }
                             }
-                            else
-                            {
-                                Set(10);
-                            }
+
+                            Set(10);
+
                             break;
 
                         case 10:
@@ -80,17 +78,13 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 if (pier2Task.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EMissionThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(20);
+
+                                    isError = true;
                                 }
                             }
-                            else
-                            {
-                                Set(20);
-                            }
+
+                            Set(20);
+
                             break;
 
                         case 20:
@@ -101,17 +95,13 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 if (robotTask.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EMissionThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(0);
+
+                                    isError = true;
                                 }
                             }
-                            else
-                            {
-                                Set(0);
-                            }
+
+                            Set(0);
+
                             break;
                     }
                     break; 
@@ -120,9 +110,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         public async override Task Error()
         {
-            isError = true;
-            key = EHandshakeKey.Finish;
-            Set(ES1.Idle, EMissionThread.None, 0);
+            //throw new NotImplementedException();
         }
 
         public async override Task Finish()

@@ -32,6 +32,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         public async override Task Action()
         {
+            key = EHandshakeKey.Run;
+
             switch(S2)
             {
                 case EUpsRegularThread.None:
@@ -49,17 +51,13 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 if(upsRegularTask.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EUpsRegularThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(0);
+
+                                    isError = true;
                                 }
                             }
-                            else
-                            {
-                                Set(0);
-                            }
+
+                            Set(0);
+
                             break;
                     }
                     break;
@@ -68,16 +66,12 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         public async override Task Error()
         {
-            isError = true;
-            key = EHandshakeKey.Finish;
-            Set(ES1.Idle, EUpsRegularThread.None, 0);
+            //throw new NotImplementedException();
         }
 
         public async override Task Finish()
         {
-            isError = false;
-            key = EHandshakeKey.Finish;
-            Set(ES1.Idle, EUpsRegularThread.None, 0);
+            //throw new NotImplementedException();
         }
 
         public async override Task Idle()

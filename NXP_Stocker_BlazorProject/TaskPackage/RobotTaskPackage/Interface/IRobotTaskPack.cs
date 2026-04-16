@@ -17,6 +17,8 @@
 
         Task UpdateUIRobotLog();
 
+        Task UpdateUIRobotDisconnect();
+
         Task UpdateUIRobotStop();
 
         Task UpdateUIRobotIdle();

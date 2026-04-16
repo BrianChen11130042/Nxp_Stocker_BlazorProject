@@ -49,7 +49,7 @@ namespace NXP_Stocker_BlazorProject.Scope
             observerService.AddNLogWritterObserver(logger);
         }
 
-        void notifyInitUnitStatus()
+        void NotifyStartInitial()
         {
             observerService.NotifyInitUnitStatus(1, 900);
             observerService.NotifyInitUnitStatus(2, 900);

@@ -376,6 +376,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.RobotTaskPackage
             await IRobotObser.NotifyRobotLog(IDataService.RobotNo, IDataService.ListRobotLog);
         }
 
+        public async Task UpdateUIRobotDisconnect()
+        {
+            await IRobotObser.NotifyRobotAction(IDataService.RobotNo, 902);
+        }
+
         public async Task UpdateUIRobotStop()
         {
             await IRobotObser.NotifyRobotAction(IDataService.RobotNo, 907);

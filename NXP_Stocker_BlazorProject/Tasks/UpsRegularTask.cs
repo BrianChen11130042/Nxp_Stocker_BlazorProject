@@ -24,6 +24,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.GetUpsStatus();
         }
 
+        public Task UpdateUIUpsDisconnect()
+        {
+            return pack.UpdateUIUpsDisconnect();
+        }
+
         public Task UpdateUIUpsRunning()
         {
             return pack.UpdateUIUpsRunning();
@@ -67,6 +72,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIUpsDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EUpsRegular.None, 0);
                             }

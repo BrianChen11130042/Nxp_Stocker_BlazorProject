@@ -36,6 +36,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         public async override Task Action()
         {
+            key = EHandshakeKey.Run;
+
             switch(S2)
             {
                 case EMissionAsignThread.None:
@@ -53,17 +55,13 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 if (pier1AsignTask.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EMissionAsignThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(10);
+
+                                    isError = true;
                                 }
                             }
-                            else
-                            {
-                                Set(10);
-                            }
+
+                            Set(10);
+
                             break;
 
                         case 10:
@@ -74,17 +72,13 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                 if (pier2AsignTask.isError)
                                 {
                                     SaveState();
-                                    Set(ES1.Error, EMissionAsignThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(0);
+
+                                    isError = true;
                                 }
                             }
-                            else
-                            {
-                                Set(0);
-                            }
+
+                            Set(0);
+
                             break;
                     }
                     break;
@@ -93,9 +87,7 @@ namespace NXP_Stocker_BlazorProject.Tasks
 
         public async override Task Error()
         {
-            isError = true;
-            key = EHandshakeKey.Finish;
-            Set(ES1.Idle, EMissionAsignThread.None, 0);
+            //throw new NotImplementedException();
         }
 
         public async override Task Finish()

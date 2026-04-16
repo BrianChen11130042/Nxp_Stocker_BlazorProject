@@ -250,6 +250,11 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.PierTaskPackage
             await IPierObser.NotifyPierLog(IDataService.PierNo, IDataService.ListPierLog);
         }
 
+        public async Task UpdateUIPierDisconnect()
+        {
+            await IPierObser.NotifyPierAction(IDataService.PierNo, 902);
+        }
+
         public async Task UpdateUIPierStop()
         {
             await IPierObser.NotifyPierAction(IDataService.PierNo, 907);

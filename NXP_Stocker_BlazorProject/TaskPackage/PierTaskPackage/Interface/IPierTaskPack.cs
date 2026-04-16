@@ -32,6 +32,8 @@
 
         Task UpdateUIPierLog();
 
+        Task UpdateUIPierDisconnect();
+
         Task UpdateUIPierStop();
 
         Task UpdateUIPierIdle();

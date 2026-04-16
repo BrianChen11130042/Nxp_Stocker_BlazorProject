@@ -171,17 +171,10 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     switch(S3)
                     {
                         case 0:
-                            if (missionAsignThread.key == EHandshakeKey.Finish)
+                            if (missionAsignThread.isError)
                             {
-                                if(missionAsignThread.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMainThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(10);
-                                }
+                                SaveState();
+                                Set(ES1.Error, EMainThread.None, 0);
                             }
                             else
                             {
@@ -190,17 +183,10 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 10:
-                            if(missionThread.key == EHandshakeKey.Finish)
+                            if (missionThread.isError)
                             {
-                                if(missionThread.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMainThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(20);
-                                }
+                                SaveState();
+                                Set(ES1.Error, EMainThread.None, 0);
                             }
                             else
                             {
@@ -209,17 +195,10 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 20:
-                            if(plcRegularThread.key == EHandshakeKey.Finish)
+                            if (plcRegularThread.isError)
                             {
-                                if(plcRegularThread.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMainThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(30);
-                                }
+                                SaveState();
+                                Set(ES1.Error, EMainThread.None, 0);
                             }
                             else
                             {
@@ -228,17 +207,10 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             break;
 
                         case 30:
-                            if(upsRegularThread.key == EHandshakeKey.Finish)
+                            if (upsRegularThread.isError)
                             {
-                                if(upsRegularThread.isError)
-                                {
-                                    SaveState();
-                                    Set(ES1.Error, EMainThread.None, 0);
-                                }
-                                else
-                                {
-                                    Set(0);
-                                }
+                                SaveState();
+                                Set(ES1.Error, EMainThread.None, 0);
                             }
                             else
                             {
@@ -262,11 +234,12 @@ namespace NXP_Stocker_BlazorProject.Tasks
                     break;
 
                 case 10:
-                    await UpdateUIMainLog();
-                    await UpdateUIPopConnectFail();
-
+                    isError = true;
                     key = EHandshakeKey.Finish;
                     Set(ES1.Idle, EMainThread.None, 0);
+
+                    await UpdateUIMainLog();
+                    await UpdateUIPopConnectFail();
                     break;
             }
         }

@@ -15,6 +15,8 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         Task NotifyMainLog(List<LogTable> list);
 
         Task NotifyInitUnitStatus(int deviceNo, int status);
+
+        Task NotifySysDisconnect();
     }
 
     public interface IMainUIObserver
@@ -24,5 +26,7 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer.Interface
         Task UpdateMainLog(List<LogTable> list);
 
         Task UpdateInitUnitStatus(int deviceNo, int status);
+
+        Task UpdateSysDisconnect();
     }
 }

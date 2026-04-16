@@ -18,6 +18,11 @@ namespace NXP_Stocker_BlazorProject.Scope
 
         void initManager()
         {
+            observerService.NotifyInitUnitStatus(1, 901);
+            observerService.NotifyInitUnitStatus(2, 901);
+            observerService.NotifyInitUnitStatus(3, 901);
+            observerService.NotifyInitUnitStatus(4, 901);
+
             bool tcp = false;
             bool rtu = false;
 
@@ -45,6 +50,11 @@ namespace NXP_Stocker_BlazorProject.Scope
             if(tcp == rtu == true)
             {
                 mainDataService.IsModbusConnect = true;
+
+                observerService.NotifyInitUnitStatus(1, 903);
+                observerService.NotifyInitUnitStatus(2, 903);
+                observerService.NotifyInitUnitStatus(3, 903);
+                observerService.NotifyInitUnitStatus(4, 903);
             }
             else
             {
@@ -52,12 +62,40 @@ namespace NXP_Stocker_BlazorProject.Scope
             }
         }
 
-        void notifyConnectingUnitStatus()
+        void reconnectModbusTcpManager()
         {
             observerService.NotifyInitUnitStatus(1, 901);
             observerService.NotifyInitUnitStatus(2, 901);
             observerService.NotifyInitUnitStatus(3, 901);
+
+            string logTcp = string.Empty;
+
+            if (modbusTcpMasterManager.Connect(out logTcp))
+            {
+                observerService.NotifyInitUnitStatus(1, 903);
+                observerService.NotifyInitUnitStatus(2, 903);
+                observerService.NotifyInitUnitStatus(3, 903);
+            }
+            else
+            {
+                observerService.NotifyNLog(EStatus.Error, logTcp);
+            }
+        }
+
+        void reconnectModbusRtuManager()
+        {
             observerService.NotifyInitUnitStatus(4, 901);
+
+            string logRtu = string.Empty;
+
+            if (modbusRtuManager.Connect(out logRtu))
+            {
+                observerService.NotifyInitUnitStatus(4, 903);
+            }
+            else
+            {
+                observerService.NotifyNLog(EStatus.Error, logRtu);
+            }
         }
     }
 }

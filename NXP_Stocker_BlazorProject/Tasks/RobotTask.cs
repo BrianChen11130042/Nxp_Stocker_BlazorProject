@@ -119,6 +119,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.GetPlcRobotNo();
         }
 
+        public Task UpdateUIRobotDisconnect()
+        {
+            return pack.UpdateUIRobotDisconnect();
+        }
+
         public Task UpdateUIRobotStop()
         {
             return pack.UpdateUIRobotStop();
@@ -200,6 +205,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIRobotDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, ERobotAction.None, 0);
                             }
@@ -230,12 +237,16 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                         }
                                         else
                                         {
+                                            await UpdateUIRobotDisconnect();
+
                                             SaveState();
                                             Set(ES1.Error, ERobotAction.None, 0);
                                         }
                                     }
                                     else
                                     {
+                                        await UpdateUIRobotDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, ERobotAction.None, 0);
                                     }
@@ -358,6 +369,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIRobotDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, ERobotAction.None, 0);
                                     }
@@ -365,6 +378,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIRobotDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, ERobotAction.None, 0);
                             }
@@ -395,6 +410,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIRobotDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, ERobotAction.None, 0);
                             }
@@ -417,6 +434,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIRobotDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, ERobotAction.None, 0);
                                     }
@@ -429,6 +448,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIRobotDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, ERobotAction.None, 0);
                             }
@@ -492,6 +513,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIRobotDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, ERobotAction.None, 0);
                             }
@@ -509,6 +532,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIRobotDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, ERobotAction.None, 0);
                             }

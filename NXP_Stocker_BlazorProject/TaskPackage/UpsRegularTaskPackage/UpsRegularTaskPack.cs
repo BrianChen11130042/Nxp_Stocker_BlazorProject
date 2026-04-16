@@ -99,7 +99,12 @@ namespace NXP_Stocker_BlazorProject.TaskPackage.UpsRegularTaskPackage
 
         public async Task UpdateUIUpsRunning()
         {
-            await IUpsRegularObser.NotifyUpsAction(4, 905);
+            await IUpsRegularObser.NotifyUpsAction(IDataService.UpsNo, 905);
+        }
+
+        public async Task UpdateUIUpsDisconnect()
+        {
+            await IUpsRegularObser.NotifyUpsAction(IDataService.UpsNo, 902);
         }
     }
 }

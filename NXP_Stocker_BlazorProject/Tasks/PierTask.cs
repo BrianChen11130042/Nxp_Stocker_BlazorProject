@@ -190,6 +190,11 @@ namespace NXP_Stocker_BlazorProject.Tasks
             return pack.IsPierError();
         }
 
+        public Task UpdateUIPierDisconnect()
+        {
+            return pack.UpdateUIPierDisconnect();
+        }
+
         public Task UpdateUIPierStop()
         {
             return pack.UpdateUIPierStop();
@@ -255,6 +260,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -276,6 +283,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIPierDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
@@ -292,6 +301,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIPierDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
@@ -308,6 +319,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIPierDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
@@ -324,6 +337,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIPierDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
@@ -425,6 +440,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIPierDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
@@ -432,6 +449,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -444,6 +463,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -545,6 +566,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIPierDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
@@ -552,6 +575,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -564,6 +589,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -664,6 +691,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIPierDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
@@ -671,6 +700,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -683,6 +714,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -783,6 +816,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                                     }
                                     else
                                     {
+                                        await UpdateUIPierDisconnect();
+
                                         SaveState();
                                         Set(ES1.Error, EPierAction.None, 0);
                                     }
@@ -790,6 +825,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -802,6 +839,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }
@@ -878,6 +917,8 @@ namespace NXP_Stocker_BlazorProject.Tasks
                             }
                             else
                             {
+                                await UpdateUIPierDisconnect();
+
                                 SaveState();
                                 Set(ES1.Error, EPierAction.None, 0);
                             }

@@ -225,6 +225,35 @@ namespace NXP_Stocker_BlazorProject.Services
         {
             await UpdateUnitStatus(deviceNo, status);
         }
+
+        public async Task UpdateSysDisconnect()
+        {
+            Task.Run(() => SysReconnect());
+        }
+
+        async Task SysReconnect()
+        {
+            await Task.Delay(5000);
+
+            if ((dcMachineUnitStatus[EMachineUnit.Pier1] == 902 || dcMachineUnitStatus[EMachineUnit.Pier2] == 902 ||
+                dcMachineUnitStatus[EMachineUnit.Robot] == 902) && dcMachineUnitStatus[EMachineUnit.UPS] == 902)
+            {
+                scope.ReconnectAll();
+            }
+            else if (dcMachineUnitStatus[EMachineUnit.Pier1] == 902 || dcMachineUnitStatus[EMachineUnit.Pier2] == 902 ||
+                    dcMachineUnitStatus[EMachineUnit.Robot] == 902)
+            {
+                scope.ReconnectPlc();
+            }
+            else if (dcMachineUnitStatus[EMachineUnit.UPS] == 902)
+            {
+                scope.ReconnectUps();
+            }
+            else
+            {
+                scope.RetrieveAllTaskState();
+            }
+        }
     }
 
     public delegate Task dgMissionAssignAction(int pierNo, MissionAssignTable missionAsign);

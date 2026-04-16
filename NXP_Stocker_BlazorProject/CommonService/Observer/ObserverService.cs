@@ -271,6 +271,17 @@ namespace NXP_Stocker_BlazorProject.CommonService.Observer
                 }
             }
         }
+
+        public async Task NotifySysDisconnect()
+        {
+            if (osMain != null)
+            {
+                foreach (var o in osMain)
+                {
+                    await o.UpdateSysDisconnect();
+                }
+            }
+        }
     }
 
     public partial class ObserverService : IPlcRegularUIObserverable

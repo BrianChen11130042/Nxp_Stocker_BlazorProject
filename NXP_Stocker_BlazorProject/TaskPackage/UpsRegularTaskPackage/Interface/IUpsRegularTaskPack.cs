@@ -10,5 +10,7 @@
         Task UpdateUpsStatus();
 
         Task UpdateUIUpsRunning();
+
+        Task UpdateUIUpsDisconnect();
     }
 }

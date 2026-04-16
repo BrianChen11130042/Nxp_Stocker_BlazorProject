@@ -24,9 +24,9 @@
         public void initAll()
         {
             StopThread();
-            notifyInitUnitStatus();
+            NotifyStartInitial();
+
             initCommonService();
-            notifyConnectingUnitStatus();
             initManager();
             initPlc();
             initUps();
@@ -36,6 +36,52 @@
             initRegularTask();
             initThreadTask();
             initThread();
+        }
+
+        public async Task ReconnectPlc()
+        {
+            reconnectModbusTcpManager();
+            initPlc();
+
+            await RetrieveAllTaskState();
+        }
+
+        public async Task ReconnectUps()
+        {
+            reconnectModbusRtuManager();
+            initUps();
+
+            await RetrieveAllTaskState();
+        }
+
+        public async Task ReconnectAll()
+        {
+            reconnectModbusTcpManager();
+            reconnectModbusRtuManager();
+
+            initPlc();
+            initUps();
+
+            await RetrieveAllTaskState();
+        }
+
+        public async Task RetrieveAllTaskState()
+        {
+            pier1Task.RetrieveState();
+            pier2Task.RetrieveState();
+            robotTask.RetrieveState();
+
+            pier1MissionAsignTask.RetrieveState();
+            pier2MissionAsignTask.RetrieveState();
+
+            plcRegularTask.RetrieveState();
+            upsRegularTask.RetrieveState();
+
+            missionAsignThreadTask.RetrieveState();
+            missionThreadTask.RetrieveState();
+            plcRegularThreadTask.RetrieveState();
+            upsRegularThreadTask.RetrieveState();
+            mainThreadTask.RetrieveState();
         }
     }
 }
