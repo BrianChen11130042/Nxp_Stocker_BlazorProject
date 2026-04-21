@@ -77,7 +77,8 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             }
         }
 
-        public async Task<(bool status, string msg, List<MissionAssignTable> list)> GetMissionAssignHistory(int pierNo)
+        public async Task<(bool status, string msg, List<MissionAssignTable> list)> GetMissionAssignHistory(DateTime start,
+                                                                                                            DateTime end)
         {
             try
             {
@@ -87,9 +88,8 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
 
                     List<MissionAssignTable> list = await context.MissionAssignTables.Include(x => x.Missions)
                                                                                      .AsNoTracking()
-                                                                                     .Where(x => x.PierNo == pierNo
-                                                                                              && x.StartTime != null 
-                                                                                              && x.FinishTime != null)
+                                                                                     .Where(x => x.EstablishTime >= start
+                                                                                              && x.EstablishTime <= end)
                                                                                      .OrderBy(x => x.EstablishTime)
                                                                                      .ToListAsync();
                     return (true, string.Empty, list);

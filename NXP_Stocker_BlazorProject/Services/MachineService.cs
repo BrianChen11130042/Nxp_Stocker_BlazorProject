@@ -148,9 +148,9 @@ namespace NXP_Stocker_BlazorProject.Services
             return await scope.IMissionTableOp.GetMissionAssignFromInQueue();
         }
 
-        public async Task<List<MissionAssignTable>> GetMissionAssignHistory(int pierNo)
+        public async Task<List<MissionAssignTable>> GetMissionAssignHistory(History condition)
         {
-            var result = await scope.IMissionTableOp.GetMissionAssignHistory(pierNo);
+            var result = await scope.IMissionTableOp.GetMissionAssignHistory(condition.StartTime, condition.EndTime);
 
             if(result.status == true)
             {
