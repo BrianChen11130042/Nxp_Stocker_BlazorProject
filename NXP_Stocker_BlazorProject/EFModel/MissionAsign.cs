@@ -45,6 +45,30 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public bool IsCancel { get; set; }
 
+        [NotMapped]
+        public TimeSpan? PierMissionTimeSpan
+        {
+            get
+            {
+                var mission = Missions.OfType<PierMissionTable>()
+                                      .FirstOrDefault(x => x.StartTime.HasValue && x.FinishTime.HasValue);
+
+                return mission != null ? mission.FinishTime - mission.StartTime : null;
+            }
+        }
+
+        [NotMapped]
+        public TimeSpan? RobotMissionTimeSpan
+        {
+            get
+            {
+                var mission = Missions.OfType<RobotMissionTable>()
+                                      .FirstOrDefault(x => x.StartTime.HasValue && x.FinishTime.HasValue);
+
+                return mission != null ? mission.FinishTime - mission.StartTime : null;
+            }
+        }
+
         public virtual ICollection<MissionBase> Missions { get; set; } = new List<MissionBase>();
     }
 }

@@ -148,6 +148,21 @@ namespace NXP_Stocker_BlazorProject.Services
             return await scope.IMissionTableOp.GetMissionAssignFromInQueue();
         }
 
+        public async Task<List<MissionAssignTable>> GetMissionAssignHistory(int pierNo)
+        {
+            var result = await scope.IMissionTableOp.GetMissionAssignHistory(pierNo);
+
+            if(result.status == true)
+            {
+                return result.list;
+            }
+            else
+            {
+                await scope.observerService.NotifyNLog(EStatus.Error, result.msg);
+                return new List<MissionAssignTable>();
+            }
+        }
+
         public async Task<bool> SetMission(MissionInform mission)
         {
             MissionAssignTable missionAsignTable = new MissionAssignTable()

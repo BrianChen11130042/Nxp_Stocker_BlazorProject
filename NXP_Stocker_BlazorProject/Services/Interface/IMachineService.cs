@@ -38,6 +38,8 @@ namespace NXP_Stocker_BlazorProject.Services.Interface
         //任務
         Task<List<MissionAssignTable>> GetMissionAsignFromInQue();
 
+        Task<List<MissionAssignTable>> GetMissionAssignHistory(int pierNo);
+
         Task<bool> SetMission(MissionInform mission);
 
         Task<bool> DeleteMission(Guid id);

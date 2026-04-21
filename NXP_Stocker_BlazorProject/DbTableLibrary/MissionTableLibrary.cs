@@ -34,12 +34,13 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
                     NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
 
                     List<MissionAssignTable> list = await context.MissionAssignTables.Include(x => x.Missions)
-                                                                                   .AsNoTracking()
-                                                                                   .Where(x => x.FinishTime != null)
-                                                                                   .OrderBy(x => x.EstablishTime)
-                                                                                   .ToListAsync();
+                                                                                     .AsNoTracking()
+                                                                                     .Where(x => x.StartTime == null 
+                                                                                              && x.FinishTime == null)
+                                                                                     .OrderBy(x => x.EstablishTime)
+                                                                                     .ToListAsync();
 
-                    list = list.Where(x => x.IsFinish == false).ToList();
+                    list = list.Where(x => x.IsStart == false && x.IsFinish == false).ToList();
 
                     lock(_missionAsignLock)
                     {
@@ -73,6 +74,30 @@ namespace NXP_Stocker_BlazorProject.DbTableLibrary
             lock(_missionAsignLock)
             {
                 return MissionAssignInQueue.OrderBy(x => x.EstablishTime).ToList();
+            }
+        }
+
+        public async Task<(bool status, string msg, List<MissionAssignTable> list)> GetMissionAssignHistory(int pierNo)
+        {
+            try
+            {
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    NxpMachineDbContext context = scope.ServiceProvider.GetRequiredService<NxpMachineDbContext>();
+
+                    List<MissionAssignTable> list = await context.MissionAssignTables.Include(x => x.Missions)
+                                                                                     .AsNoTracking()
+                                                                                     .Where(x => x.PierNo == pierNo
+                                                                                              && x.StartTime != null 
+                                                                                              && x.FinishTime != null)
+                                                                                     .OrderBy(x => x.EstablishTime)
+                                                                                     .ToListAsync();
+                    return (true, string.Empty, list);
+                }
+            }
+            catch(Exception ex)
+            {
+                return (false, ex.Message, null);
             }
         }
 
