@@ -45,6 +45,15 @@ namespace NXP_Stocker_BlazorProject.EFModel
 
         public bool IsCancel { get; set; }
 
+        [Required]
+        public string EmployeeNo { get; set; } = null!;
+
+        [Required]
+        public string LocationDetail { get; set; } = null!;
+
+        [Required]
+        public string Purpose { get; set; } = null!;
+
         [NotMapped]
         public TimeSpan? PierMissionTimeSpan
         {

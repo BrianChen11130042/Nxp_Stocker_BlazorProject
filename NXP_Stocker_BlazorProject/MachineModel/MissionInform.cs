@@ -23,5 +23,14 @@ namespace NXP_Stocker_BlazorProject.MachineModel
 
         [Range(0, 1)]
         public int emergency { get; set; } = 0; // 0:一般單任務 , 1:緊急單任務
+
+        [Required]
+        public string employeeNo { get; set; } = string.Empty;
+
+        [Required]
+        public string locationDetail { get; set; } = string.Empty;
+
+        [Required]
+        public string purpose { get; set; } = string.Empty;
     }
 }

@@ -179,7 +179,10 @@ namespace NXP_Stocker_BlazorProject.Services
                 DropLayer = mission.dropLayer,
                 EstablishTime = DateTime.Now,
                 Emergency = mission.emergency,
-                IsCancel = false
+                IsCancel = false,
+                EmployeeNo = mission.employeeNo,
+                LocationDetail = mission.locationDetail,
+                Purpose = mission.purpose
             };
 
             var result = await scope.IMissionTableOp.UpSertMissionAsign(missionAsignTable);
