@@ -48,7 +48,7 @@ namespace NXP_Stocker_BlazorProject.EFModel
         [Required]
         public string EmployeeNo { get; set; } = null!;
 
-        [Required]
+        //[Required]
         public string LocationDetail { get; set; } = null!;
 
         [Required]
