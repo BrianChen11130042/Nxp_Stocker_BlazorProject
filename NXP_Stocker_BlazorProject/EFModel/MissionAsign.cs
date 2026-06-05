@@ -48,11 +48,9 @@ namespace NXP_Stocker_BlazorProject.EFModel
         [Required]
         public string EmployeeNo { get; set; } = null!;
 
-        //[Required]
-        public string LocationDetail { get; set; } = null!;
+        public string? LocationDetail { get; set; }
 
-        [Required]
-        public string Purpose { get; set; } = null!;
+        public string? Purpose { get; set; }
 
         [NotMapped]
         public TimeSpan? PierMissionTimeSpan

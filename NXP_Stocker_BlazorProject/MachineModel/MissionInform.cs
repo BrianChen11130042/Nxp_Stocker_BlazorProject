@@ -27,10 +27,8 @@ namespace NXP_Stocker_BlazorProject.MachineModel
         [Required]
         public string employeeNo { get; set; } = string.Empty;
 
-        [Required]
-        public string locationDetail { get; set; } = string.Empty;
+        public string? locationDetail { get; set; }
 
-        [Required]
-        public string purpose { get; set; } = string.Empty;
+        public string? purpose { get; set; }
     }
 }
